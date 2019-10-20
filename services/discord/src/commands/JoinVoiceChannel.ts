@@ -12,5 +12,6 @@ export class JoinVoiceChannel extends AbstractCommand implements Command {
       return;
     }
     await voiceChannel.join();
+    // TODO: Disconnect from the channel if no one is present for > 5mins
   }
 }
