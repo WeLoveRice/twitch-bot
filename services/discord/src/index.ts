@@ -1,3 +1,4 @@
+import { createCommand } from "./commands/Factory";
 import Discord from "discord.js";
 
 const client = new Discord.Client();
@@ -10,13 +11,13 @@ client.on("ready", () => {
   console.log(`Logged in as ${user.tag}!`);
 });
 
-client.on("message", msg => {
-  if (typeof msg.reply !== "function") {
+client.on("message", message => {
+  const command = createCommand(message);
+  if (command === null) {
     return;
   }
-  if (msg.content === "ping") {
-    msg.reply("pong");
-  }
+
+  command.execute(message);
 });
 
 client.login("NjM1NDcwMjg0MTI3ODYyNzk1.Xaxi3Q.NwIPq5f0eucSvLByAZxSJCprmiI");
