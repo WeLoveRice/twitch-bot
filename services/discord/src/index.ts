@@ -1,3 +1,4 @@
+import { createLogger } from './Logger';
 import { createCommand } from "./commands/Factory";
 import Discord from "discord.js";
 
@@ -9,10 +10,12 @@ client.on("ready", () => {
     return;
   }
   console.log(`Logged in as ${user.tag}!`);
+  const logger = createLogger()
+  logger.info('Started')
 });
 
 client.on("message", message => {
-  const command = createCommand(message);
+  const command = createCommand(client, message);
   if (command === null) {
     return;
   }

@@ -2,6 +2,7 @@ import { MessageWrapper } from "./../MessageWrapper";
 import { Command } from "./Command";
 import { Message } from "discord.js";
 import { AbstractCommand } from "./AbstractCommand";
+import { VoiceChannelManager } from "../VoiceChannelManager";
 
 export class JoinVoiceChannel extends AbstractCommand implements Command {
   async execute(message: Message): Promise<void> {
@@ -11,7 +12,8 @@ export class JoinVoiceChannel extends AbstractCommand implements Command {
     if (voiceChannel === null) {
       return;
     }
-    await voiceChannel.join();
-    // TODO: Disconnect from the channel if no one is present for > 5mins
+
+    const voiceChannelManager = new VoiceChannelManager();
+    voiceChannelManager.joinChannel(voiceChannel);
   }
 }

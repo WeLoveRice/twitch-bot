@@ -1,8 +1,9 @@
 import { JoinVoiceChannel } from "./JoinVoiceChannel";
 import { Command } from "./Command";
-import { Message, PartialMessage } from "discord.js";
+import { Message, PartialMessage, Client } from "discord.js";
 
 export const createCommand = (
+  client: Client,
   message: Message | PartialMessage
 ): Command | null => {
   const { content } = message;
@@ -11,7 +12,7 @@ export const createCommand = (
   }
 
   if (content.startsWith("^join")) {
-    return new JoinVoiceChannel();
+    return new JoinVoiceChannel(client);
   }
 
   return null;
