@@ -6,6 +6,9 @@
     { "language": "typescript", "autoFix": true },
     { "language": "typescriptreact", "autoFix": true }
   ],
+  "eslint.workingDirectories": [
+    { "directory": "./services/discord", "changeProcessCWD": true }
+  ],
   "editor.formatOnSave": true,
   "[javascript]": {
     "editor.formatOnSave": false

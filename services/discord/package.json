@@ -4,6 +4,7 @@
   "description": "Twitch bot remade in node",
   "main": "index.js",
   "scripts": {
+    "start:dev": "ts-node-dev --respawn --transpileOnly src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,14 +19,17 @@
   "homepage": "https://github.com/ColinCee/twitch-bot#readme",
   "dependencies": {
     "discord.js": "github:discordjs/discord.js",
+    "ffmpeg-binaries": "^4.0.0",
     "node-opus": "^0.3.3"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.4.0",
     "@typescript-eslint/parser": "^2.4.0",
+    "eslint": "^6.5.1",
     "eslint-config-prettier": "^6.4.0",
     "eslint-plugin-prettier": "^3.1.1",
     "prettier": "^1.18.2",
+    "ts-node-dev": "^1.0.0-pre.43",
     "typescript": "^3.6.4"
   }
 }
