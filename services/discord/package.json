@@ -1,0 +1,26 @@
+{
+  "name": "twitch-bot-v2",
+  "version": "0.0.1",
+  "description": "Twitch bot remade in node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ColinCee/twitch-bot.git"
+  },
+  "author": "Colin Cheung",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ColinCee/twitch-bot/issues"
+  },
+  "homepage": "https://github.com/ColinCee/twitch-bot#readme",
+  "dependencies": {
+    "discord.js": "github:discordjs/discord.js",
+    "node-opus": "^0.3.3"
+  },
+  "devDependencies": {
+    "typescript": "^3.6.4"
+  }
+}
