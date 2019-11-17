@@ -27,12 +27,14 @@ export class VoiceChannelManager {
       if (!members.has('635470284127862795')) {
         this.logger.warning('Bot no longer in channel, clearing interval.')
         this.clearLeaveTimer()
+        return
       }
       // Bot is the only one in channel
       if (members.size === 1) {
         this.logger.info('No one left in channel, now disconnecting.')
         await voiceChannel.leave();
         this.clearLeaveTimer()
+        return
       }
     }, this.INTERVAL_DURATION);
   }
