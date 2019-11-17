@@ -3,7 +3,7 @@ version: '3.7'
 services:
   discord:
     build: 
-      context: .
-      dockerfile: ./services/discord/Dockerfile.dev
+      context: ./services/discord
+      dockerfile: Dockerfile.dev
     volumes:
       - ./services/discord:/usr/local/src
