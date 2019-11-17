@@ -1,12 +1,12 @@
-import { logger } from "./Logger";
 import { Message, GuildMember, VoiceChannel } from "discord.js";
 import { Logger } from "winston";
+import { createLogger } from "./Logger";
 export class MessageWrapper {
   public message: Message;
   private logger: Logger;
   public constructor(message: Message) {
     this.message = message;
-    this.logger = logger;
+    this.logger = createLogger();
   }
 
   public async getMemberVoiceChannel(): Promise<VoiceChannel | null> {

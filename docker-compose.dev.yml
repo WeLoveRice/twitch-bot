@@ -1,7 +1,9 @@
 version: '3.7'
 
 services:
-  twitch-bot:
-    build: services/discord/Dockerfile.dev
+  discord:
+    build: 
+      context: .
+      dockerfile: ./services/discord/Dockerfile.dev
     volumes:
-      - ./services/discord:./
+      - ./services/discord:/usr/local/src

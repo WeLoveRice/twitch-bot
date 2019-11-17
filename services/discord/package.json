@@ -4,6 +4,7 @@
   "description": "Twitch bot remade in node",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "start:dev": "ts-node-dev --respawn --transpileOnly src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -26,6 +27,8 @@
     "winston-daily-rotate-file": "^4.2.1"
   },
   "devDependencies": {
+    "@types/node": "^12.12.8",
+    "@types/ws": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^2.4.0",
     "@typescript-eslint/parser": "^2.4.0",
     "eslint": "^6.5.1",
