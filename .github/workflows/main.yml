@@ -8,11 +8,12 @@ jobs:
     steps:
     # This step checks out a copy of your repository.
     - uses: actions/checkout@v1
-    - name: ESLint checks
+    - name: Setup node
       uses: actions/setup-node@v1
       with:
         node-version: '10.x'
-    - run: |
+    - name: ESLint
+      run: |
         npm install
         npm run lint
       working-directory: services/discord
