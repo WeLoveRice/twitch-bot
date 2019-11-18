@@ -7,11 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     # This step checks out a copy of your repository.
+    - uses: actions/checkout@v1
     - name: ESLint checks
-      uses: actions/checkout@v1
       uses: actions/setup-node@v1
       with:
         node-version: '10.x'
-      run: cd services/discord
-      run: npm install
-      run: npm test
+    - run: cd services/discord
+    - run: npm install
+    - run: npm test
