@@ -12,7 +12,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '10.x'
-      run: |
+    - run: |
         npm install
         npm run lint
       working-directory: services/discord
