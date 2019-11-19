@@ -1,18 +1,32 @@
-import { MessageWrapper } from "./../MessageWrapper";
-import { Command } from "./Command";
-import { Message } from "discord.js";
+import { GuildMember, VoiceChannel } from "discord.js";
 import { AbstractCommand } from "./AbstractCommand";
 import { VoiceChannelManager } from "../VoiceChannelManager";
 
-export class JoinVoiceChannel extends AbstractCommand implements Command {
-  async execute(message: Message): Promise<void> {
-    const wrapper = new MessageWrapper(message);
-    const voiceChannel = await wrapper.getMemberVoiceChannel();
+export class JoinVoiceChannel extends AbstractCommand {
+  private getVoiceChannelFromMessage(): VoiceChannel {
+    const { member } = this.message;
+    const { voiceChannel } = member;
+    return voiceChannel;
+  }
 
-    if (voiceChannel === null) {
-      return;
+  protected async validate(): Promise<boolean> {
+    const { member } = this.message;
+    if (!(member instanceof GuildMember)) {
+      this.logger.error("Expected member of message to be of type GuildMember");
+      return false;
     }
 
+    const { voiceChannel } = member;
+    if (!(voiceChannel instanceof VoiceChannel)) {
+      await this.message.reply("You must be in a voice channel for me to join");
+      return false;
+    }
+
+    return true;
+  }
+
+  protected async run(): Promise<void> {
+    const voiceChannel = this.getVoiceChannelFromMessage();
     const voiceChannelManager = new VoiceChannelManager();
     voiceChannelManager.joinChannel(voiceChannel);
   }

@@ -20,7 +20,7 @@ client.on("message", message => {
     return;
   }
 
-  command.execute(message);
+  command.execute();
 });
 
 client.login("NjM1NDcwMjg0MTI3ODYyNzk1.Xaxi3Q.NwIPq5f0eucSvLByAZxSJCprmiI");

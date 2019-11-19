@@ -1,6 +1,7 @@
 import { Logger } from "winston";
 import { createLogger } from "./Logger";
 import { VoiceChannel } from "discord.js";
+import { Bot } from "./enum/Bot";
 
 export class VoiceChannelManager {
   private logger: Logger;
@@ -24,7 +25,7 @@ export class VoiceChannelManager {
       const { members } = voiceChannel;
 
       // Bot is no longer in the channel
-      if (!members.has("635470284127862795")) {
+      if (!members.has(Bot.USER_ID)) {
         this.logger.warning("Bot no longer in channel, clearing interval.");
         this.clearLeaveTimer();
         return;
