@@ -1,0 +1,10 @@
+FROM node:10.16.3-buster
+
+WORKDIR /usr/local/src
+COPY package-lock.json .
+RUN npm i
+
+COPY . .
+
+ENTRYPOINT ["npm", "run", "start:dev"]
+
