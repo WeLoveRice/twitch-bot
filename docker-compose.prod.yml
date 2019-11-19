@@ -1,5 +1,5 @@
 version: '3.7'
 
 services:
-  twitch-bot:
+  discord:
     build: services/discord
