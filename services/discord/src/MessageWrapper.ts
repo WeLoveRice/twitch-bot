@@ -12,17 +12,16 @@ export class MessageWrapper {
   public async getMemberVoiceChannel(): Promise<VoiceChannel | null> {
     const { member } = this.message;
     if (!(member instanceof GuildMember)) {
-      this.logger.error("Expected message to be of type message");
+      this.logger.error("Expected member of message to be of type GuildMember");
       return null;
     }
 
-    const { voice } = member;
-    const { channel } = voice;
-    if (!(channel instanceof VoiceChannel)) {
-      this.message.reply("You must be in a voice channel");
+    const { voiceChannel } = member;
+    if (!(voiceChannel instanceof VoiceChannel)) {
+      await this.message.reply("You must be in a voice channel for me to join");
       return null;
     }
 
-    return channel;
+    return voiceChannel;
   }
 }

@@ -1,4 +1,2 @@
 **/node_modules/
 .idea
-services/discord/logs
-services/discord/build

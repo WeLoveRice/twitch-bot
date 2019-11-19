@@ -4,7 +4,7 @@ import path from "path";
 
 export const LOG_DIR = path.join(__dirname, "..", "logs");
 
-const dailyRotate = (fileName = "%DATE%"): DailyRotateFile => {
+const dailyRotate = (fileName: string): DailyRotateFile => {
   return new DailyRotateFile({
     filename: `${LOG_DIR}/${fileName}.log`,
     datePattern: "YYYY-MM-DD HH:00",
@@ -14,7 +14,7 @@ const dailyRotate = (fileName = "%DATE%"): DailyRotateFile => {
   });
 };
 
-export const createLogger = (fileName: string): Logger => {
+export const createLogger = (fileName = "%DATE%"): Logger => {
   const { Console } = transports;
 
   return winston.createLogger({
