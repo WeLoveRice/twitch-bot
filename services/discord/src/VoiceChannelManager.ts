@@ -19,20 +19,26 @@ export class VoiceChannelManager {
     await this.startLeaveTimer(voiceChannel);
   }
 
+  private shouldBotLeaveChannel({ members }: VoiceChannel): boolean {
+    if (members.size === 1) {
+      this.logger.info("No one left in channel, now disconnecting.");
+      return true;
+    }
+
+    return false;
+  }
   private async startLeaveTimer(voiceChannel: VoiceChannel): Promise<void> {
+    const { members } = voiceChannel;
     // Disconnect from the channel if no one is present for > 5mins
     this.interval = await setInterval(async () => {
-      const { members } = voiceChannel;
-
       if (!members.has(Bot.USER_ID)) {
         this.logger.warning("Bot no longer in channel, clearing interval.");
         this.clearLeaveTimer();
         return;
       }
 
-      if (members.size === 1) {
-        this.logger.info("No one left in channel, now disconnecting.");
-        await voiceChannel.leave();
+      if (this.shouldBotLeaveChannel(voiceChannel)) {
+        voiceChannel.leave();
         this.clearLeaveTimer();
         return;
       }
