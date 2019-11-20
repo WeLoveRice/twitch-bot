@@ -1,25 +1,31 @@
 import { JoinVoiceChannel } from "./../../src/commands/JoinVoiceChannel";
-import { Message, Client, VoiceChannel, GuildMember } from "discord.js";
+import { Message, VoiceChannel, GuildMember } from "discord.js";
+import { createLogger } from "../../src/Logger";
+
 jest.mock("discord.js");
 jest.mock("./../../src/VoiceChannelManager");
 
-const mockedClient = (Client as unknown) as jest.Mock<Client>;
 const mockedMessage = Message as jest.Mock<Message>;
-
-let client = new mockedClient();
 let message = new mockedMessage();
+let logger = createLogger();
 
 beforeEach(() => {
-  client = new mockedClient();
   message = new mockedMessage();
+  logger = createLogger();
 });
 
 describe("JoinVoiceChannel Test", () => {
   it("returns false when member is not of type GuildMember", async () => {
-    const joinVoiceChannel = new JoinVoiceChannel(client, message);
+    const errorMocked = jest.fn();
+    logger.error = errorMocked;
+    const joinVoiceChannel = new JoinVoiceChannel(message, logger);
 
     const result = await joinVoiceChannel.execute();
     expect(result).toBe(false);
+    expect(errorMocked).toBeCalledTimes(1);
+    expect(errorMocked).toBeCalledWith(
+      "Expected member of message to be of type GuildMember"
+    );
   });
 
   it("returns false when voice channel is not of type VoiceChannel", async () => {
@@ -27,8 +33,9 @@ describe("JoinVoiceChannel Test", () => {
     const guildMember = new mockedMember();
     message.member = guildMember;
 
-    const joinVoiceChannel = new JoinVoiceChannel(client, message);
+    const joinVoiceChannel = new JoinVoiceChannel(message, logger);
     const result = await joinVoiceChannel.execute();
+
     expect(result).toBe(false);
   });
 
@@ -43,7 +50,7 @@ describe("JoinVoiceChannel Test", () => {
     Object.defineProperty(guildMember, "voiceChannel", { value: voiceChannel });
     message.member = guildMember;
 
-    const joinVoiceChannel = new JoinVoiceChannel(client, message);
+    const joinVoiceChannel = new JoinVoiceChannel(message, logger);
     const result = await joinVoiceChannel.execute();
     expect(result).toBe(true);
   });

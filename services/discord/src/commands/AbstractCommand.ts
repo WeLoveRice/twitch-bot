@@ -1,4 +1,3 @@
-import { createLogger } from "./../Logger";
 import { Message } from "discord.js";
 import { Logger } from "winston";
 
@@ -6,9 +5,9 @@ export abstract class AbstractCommand {
   protected message: Message;
   protected logger: Logger;
 
-  public constructor(message: Message) {
+  public constructor(message: Message, logger: Logger) {
     this.message = message;
-    this.logger = createLogger();
+    this.logger = logger;
   }
 
   protected abstract validate(): Promise<boolean>;

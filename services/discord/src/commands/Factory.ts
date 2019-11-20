@@ -1,6 +1,7 @@
 import { JoinVoiceChannel } from "./JoinVoiceChannel";
 import { Message } from "discord.js";
 import { AbstractCommand } from "./AbstractCommand";
+import { createLogger } from "winston";
 
 export const createCommand = (message: Message): AbstractCommand | null => {
   const { content } = message;
@@ -8,8 +9,9 @@ export const createCommand = (message: Message): AbstractCommand | null => {
     return null;
   }
 
+  const logger = createLogger();
   if (content.startsWith("^join")) {
-    return new JoinVoiceChannel(message);
+    return new JoinVoiceChannel(message, logger);
   }
 
   return null;
