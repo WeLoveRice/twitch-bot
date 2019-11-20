@@ -24,13 +24,12 @@ export class VoiceChannelManager {
     this.interval = await setInterval(async () => {
       const { members } = voiceChannel;
 
-      // Bot is no longer in the channel
       if (!members.has(Bot.USER_ID)) {
         this.logger.warning("Bot no longer in channel, clearing interval.");
         this.clearLeaveTimer();
         return;
       }
-      // Bot is the only one in channel
+
       if (members.size === 1) {
         this.logger.info("No one left in channel, now disconnecting.");
         await voiceChannel.leave();

@@ -14,14 +14,14 @@ export abstract class AbstractCommand {
   }
 
   protected abstract validate(): Promise<boolean>;
-  protected abstract run(): Promise<void>;
+  protected abstract run(): Promise<boolean>;
 
-  public async execute(): Promise<void> {
+  public async execute(): Promise<boolean> {
     const isValid = await this.validate();
     if (!isValid) {
-      return;
+      return isValid;
     }
 
-    await this.run();
+    return this.run();
   }
 }
