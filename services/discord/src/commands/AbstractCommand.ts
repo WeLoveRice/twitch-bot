@@ -1,14 +1,12 @@
 import { createLogger } from "./../Logger";
-import { Client, Message } from "discord.js";
+import { Message } from "discord.js";
 import { Logger } from "winston";
 
 export abstract class AbstractCommand {
-  protected client: Client;
   protected message: Message;
   protected logger: Logger;
 
-  public constructor(client: Client, message: Message) {
-    this.client = client;
+  public constructor(message: Message) {
     this.message = message;
     this.logger = createLogger();
   }
@@ -19,7 +17,7 @@ export abstract class AbstractCommand {
   public async execute(): Promise<boolean> {
     const isValid = await this.validate();
     if (!isValid) {
-      return isValid;
+      return false;
     }
 
     return this.run();

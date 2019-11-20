@@ -1,4 +1,4 @@
-import winston, { Logger, format, transports, config } from "winston";
+import winston, { Logger, format, transports } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 import path from "path";
 
@@ -18,8 +18,8 @@ export const createLogger = (fileName = "%DATE%"): Logger => {
   const { Console } = transports;
 
   return winston.createLogger({
-    levels: config.syslog.levels,
     format: format.combine(format.timestamp(), format.json()),
+    // Error messages also go to console
     transports: [new Console({ level: "error" }), dailyRotate(fileName)]
   });
 };
