@@ -17,11 +17,14 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: npm install, lint, and test
-      run: |
-        npm ci
-        npm run lint
-        npm test
+    - name: npm ci
+      run: npm ci
+      working-directory: services/discord 	
+    - name: lint
+      run: npm run lint
+      working-directory: services/discord 	
+    - name: test
+      run: npm test
       working-directory: services/discord 	
       env:
         CI: true
