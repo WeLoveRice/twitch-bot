@@ -11,12 +11,12 @@ export abstract class AbstractCommand {
   }
 
   protected abstract validate(): Promise<boolean>;
-  protected abstract run(): Promise<boolean>;
+  protected abstract run(): Promise<void>;
 
-  public async execute(): Promise<boolean> {
+  public async execute(): Promise<void> {
     const isValid = await this.validate();
     if (!isValid) {
-      return false;
+      return;
     }
 
     return this.run();

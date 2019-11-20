@@ -25,18 +25,15 @@ export class JoinVoiceChannel extends AbstractCommand {
     return true;
   }
 
-  protected async run(): Promise<boolean> {
+  protected async run(): Promise<void> {
     try {
       const voiceChannel = this.getVoiceChannelFromMessage();
       const voiceChannelManager = new VoiceChannelManager();
       voiceChannelManager.joinChannel(voiceChannel);
-
-      return true;
     } catch (e) {
       this.logger.error(
         `Something went wrong when trying to join a voice channel: ${e}`
       );
-      return false;
     }
   }
 }
