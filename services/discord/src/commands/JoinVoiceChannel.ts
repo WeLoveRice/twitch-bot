@@ -1,3 +1,4 @@
+import { Bot } from "./../enum/Bot";
 import { GuildMember, VoiceChannel } from "discord.js";
 import { AbstractCommand } from "./AbstractCommand";
 import { VoiceChannelManager } from "../VoiceChannelManager";
@@ -28,6 +29,11 @@ export class JoinVoiceChannel extends AbstractCommand {
   protected async run(): Promise<void> {
     try {
       const voiceChannel = this.getVoiceChannelFromMessage();
+      if (voiceChannel.members.has(Bot.USER_ID)) {
+        this.message.reply("Already in channel");
+        return;
+      }
+
       const voiceChannelManager = new VoiceChannelManager();
       voiceChannelManager.joinChannel(voiceChannel);
     } catch (e) {
