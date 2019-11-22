@@ -2,15 +2,15 @@ import { PeriodicTask } from ".";
 
 export class Runner {
   private periodicTask: PeriodicTask;
-  private timer: NodeJS.Timeout | null;
+  private _timer: NodeJS.Timeout | null;
 
   constructor(periodicTask: PeriodicTask) {
     this.periodicTask = periodicTask;
-    this.timer = null;
+    this._timer = null;
   }
 
   public start(): void {
-    this.timer = setInterval(async () => {
+    this._timer = setInterval(async () => {
       const shouldStop = await this.periodicTask.execute();
       if (shouldStop) {
         this.stop();
@@ -19,9 +19,13 @@ export class Runner {
   }
 
   public stop(): void {
-    if (this.timer !== null) {
-      clearInterval(this.timer);
-      this.timer = null;
+    if (this._timer !== null) {
+      clearInterval(this._timer);
+      this._timer = null;
     }
+  }
+
+  public get timer(): NodeJS.Timeout | null {
+    return this._timer;
   }
 }
