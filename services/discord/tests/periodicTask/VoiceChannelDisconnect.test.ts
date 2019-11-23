@@ -5,7 +5,6 @@ import { VoiceChannel } from "discord.js";
 jest.mock("discord.js");
 jest.mock("winston", () => ({
   createLogger: jest.fn().mockReturnValue({
-    debug: jest.fn(),
     warning: jest.fn()
   })
 }));
