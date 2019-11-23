@@ -1,6 +1,5 @@
 import { VoiceChannelDisconnect } from "./periodicTask/VoiceChannelDisconnect";
 import { Logger } from "winston";
-import { createLogger } from "./Logger";
 import { VoiceChannel } from "discord.js";
 import { Runner } from "./periodicTask/Runner";
 
@@ -8,8 +7,8 @@ export class VoiceChannelManager {
   private logger: Logger;
   private runner: Runner | null;
 
-  public constructor() {
-    this.logger = createLogger();
+  public constructor(logger: Logger) {
+    this.logger = logger;
     this.runner = null;
   }
 

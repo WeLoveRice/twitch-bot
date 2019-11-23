@@ -34,7 +34,7 @@ export class JoinVoiceChannel extends AbstractCommand {
         return;
       }
 
-      const voiceChannelManager = new VoiceChannelManager();
+      const voiceChannelManager = new VoiceChannelManager(this.logger);
       voiceChannelManager.joinChannel(voiceChannel);
     } catch (e) {
       this.logger.error(
