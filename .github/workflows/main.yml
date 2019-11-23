@@ -6,20 +6,17 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [10.x]
-
-    steps:
+eps:
     - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: npm ci, lint and test
-      run: |
-        npm ci
-        npm run lint
-        npm test
+    - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+    - name: npm ci
+      run: npm ci
+      working-directory: services/discord 	
+    - name: lint
+      run: npm run lint
+      working-directory: services/discord 	
+    - name: test
+      run: npm test
       working-directory: services/discord
