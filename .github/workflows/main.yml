@@ -25,4 +25,8 @@ jobs:
       working-directory: services/discord 	
     - name: test
       run: npm test
-      working-directory: services/discord 	
+      working-directory: services/discord
+    - uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+      working-directory: services/discord
