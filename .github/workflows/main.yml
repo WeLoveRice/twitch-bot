@@ -4,24 +4,19 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [10.x]
 
     steps:
     - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+    - uses: actions/setup-node@v1
       with:
-        node-version: ${{ matrix.node-version }}
-    - name: npm install, build, and test
-      run: |
-        npm ci
-        npm run lint
-        npm test
+        node-version: '10.x'
+    - name: npm ci
+      run: npm ci
       working-directory: services/discord 	
-      env:
-        CI: true
+    - name: lint
+      run: npm run lint
+      working-directory: services/discord 	
+    - name: test
+      run: npm test
+      working-directory: services/discord

@@ -15,12 +15,18 @@ client.on("ready", () => {
 });
 
 client.on("message", message => {
-  const command = createCommand(client, message);
+  const command = createCommand(message);
   if (command === null) {
     return;
   }
 
-  command.execute(message);
+  command.execute();
+});
+
+client.on("error", error => {
+  const logger = createLogger();
+  logger.error(error);
+  process.exit(1);
 });
 
 client.login("NjM1NDcwMjg0MTI3ODYyNzk1.Xaxi3Q.NwIPq5f0eucSvLByAZxSJCprmiI");

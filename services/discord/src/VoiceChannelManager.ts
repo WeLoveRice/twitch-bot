@@ -1,49 +1,29 @@
+import { VoiceChannelDisconnect } from "./periodicTask/VoiceChannelDisconnect";
 import { Logger } from "winston";
-import { createLogger } from "./Logger";
 import { VoiceChannel } from "discord.js";
+import { Runner } from "./periodicTask/Runner";
 
 export class VoiceChannelManager {
   private logger: Logger;
-  private INTERVAL_DURATION = 1 * 60 * 1000;
-  private interval: NodeJS.Timeout | null;
+  private runner: Runner | null;
 
-  public constructor() {
-    this.logger = createLogger();
-    this.interval = null;
+  public constructor(logger: Logger) {
+    this.logger = logger;
+    this.runner = null;
   }
 
   public async joinChannel(voiceChannel: VoiceChannel): Promise<void> {
-    this.clearLeaveTimer();
-    await voiceChannel.join();
-    await this.startLeaveTimer(voiceChannel);
-  }
-
-  private async startLeaveTimer(voiceChannel: VoiceChannel): Promise<void> {
-    // Disconnect from the channel if no one is present for > 5mins
-    this.interval = await setInterval(async () => {
-      const { members } = voiceChannel;
-
-      // Bot is no longer in the channel
-      if (!members.has("635470284127862795")) {
-        this.logger.warning("Bot no longer in channel, clearing interval.");
-        this.clearLeaveTimer();
-        return;
-      }
-      // Bot is the only one in channel
-      if (members.size === 1) {
-        this.logger.info("No one left in channel, now disconnecting.");
-        await voiceChannel.leave();
-        this.clearLeaveTimer();
-        return;
-      }
-    }, this.INTERVAL_DURATION);
-  }
-
-  private clearLeaveTimer(): void {
-    if (this.interval === null) {
-      return;
+    if (this.runner instanceof Runner) {
+      this.runner.stop();
     }
-    clearInterval(this.interval);
-    this.interval = null;
+
+    const voiceConnection = await voiceChannel.join();
+    if (!voiceConnection) {
+      this.logger.error("An error occured when trying to join a voice channel");
+    }
+
+    const periodicTask = new VoiceChannelDisconnect(voiceChannel, this.logger);
+    this.runner = new Runner(periodicTask);
+    this.runner.start();
   }
 }
