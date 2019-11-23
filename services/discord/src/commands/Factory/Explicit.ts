@@ -1,8 +1,8 @@
-import { Command } from "./../enum/Command";
-import { JoinVoiceChannel } from "./JoinVoiceChannel";
+import { Command } from "../../enum/Command";
+import { JoinVoiceChannel } from "../JoinVoiceChannel";
 import { Message } from "discord.js";
-import { AbstractCommand } from "./AbstractCommand";
-import { createLogger } from "winston";
+import { AbstractCommand } from "../AbstractCommand";
+import { createLogger, Logger } from "winston";
 
 const isCommand = (message: Message): boolean => {
   const { content } = message;
@@ -36,12 +36,13 @@ const extractCommandFromContent = ({ content }: Message): string => {
   return command;
 };
 
-export const createCommand = (message: Message): AbstractCommand | null => {
+export const createExplicitCommand = (
+  message: Message,
+  logger: Logger
+): AbstractCommand | null => {
   if (!isCommand(message)) {
     return null;
   }
-
-  const logger = createLogger();
   const command = extractCommandFromContent(message);
 
   switch (command) {

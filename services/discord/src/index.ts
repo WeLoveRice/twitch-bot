@@ -1,5 +1,6 @@
+import { createCommand } from "./commands/Factory/index";
 import { createLogger } from "./Logger";
-import { createCommand } from "./commands/Factory";
+import { createExplicitCommand } from "./commands/Factory/Explicit";
 import Discord from "discord.js";
 
 const client = new Discord.Client();
@@ -15,7 +16,8 @@ client.on("ready", () => {
 });
 
 client.on("message", message => {
-  const command = createCommand(message);
+  const logger = createLogger();
+  const command = createCommand(message, logger);
   if (command === null) {
     return;
   }
