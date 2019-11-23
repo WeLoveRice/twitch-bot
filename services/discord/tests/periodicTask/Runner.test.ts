@@ -16,6 +16,8 @@ beforeEach(() => {
 
 describe("Runner Test", () => {
   it("starts the timer when start is called", () => {
+    // For some reason, can't mock periodic task execute to return a promise
+    // and then assert the runner timer is null
     periodicTask = new mockPeriodicTask();
     runner = new Runner(periodicTask);
 

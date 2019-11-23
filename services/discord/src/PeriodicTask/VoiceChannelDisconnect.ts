@@ -11,7 +11,7 @@ export class VoiceChannelDisconnect implements PeriodicTask {
   public constructor(voiceChannel: VoiceChannel, logger: Logger) {
     this.voiceChannel = voiceChannel;
     this.logger = logger;
-    this.interval = 5 * 1000;
+    this.interval = 60 * 1000;
   }
 
   public async execute(): Promise<boolean> {
@@ -24,7 +24,7 @@ export class VoiceChannelDisconnect implements PeriodicTask {
 
     if (members.size === 1) {
       this.logger.info("No one left in channel, now disconnecting.");
-      await this.voiceChannel.leave();
+      this.voiceChannel.leave();
       return true;
     }
 
