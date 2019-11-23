@@ -4,22 +4,20 @@ import path from "path";
 
 export const LOG_DIR = path.join(__dirname, "..", "logs");
 
-const dailyRotate = (fileName: string): DailyRotateFile => {
-  return new DailyRotateFile({
-    filename: `${LOG_DIR}/${fileName}.log`,
-    datePattern: "YYYY-MM-DD HH:00",
-    zippedArchive: true,
-    maxSize: "20m",
-    maxFiles: "14d"
-  });
-};
+const dailyRotate = new DailyRotateFile({
+  filename: `${LOG_DIR}/%DATE%.log`,
+  datePattern: "YYYY-MM-DD",
+  zippedArchive: true,
+  maxSize: "20m",
+  maxFiles: "14d"
+});
 
-export const createLogger = (fileName = "%DATE%"): Logger => {
+export const createLogger = (): Logger => {
   const { Console } = transports;
 
   return winston.createLogger({
     format: format.combine(format.timestamp(), format.json()),
     // Error messages also go to console
-    transports: [new Console({ level: "error" }), dailyRotate(fileName)]
+    transports: [new Console({ level: "error" }), dailyRotate]
   });
 };
