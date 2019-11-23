@@ -3,6 +3,11 @@ import { Message, VoiceChannel, GuildMember } from "discord.js";
 import { createLogger } from "../../src/Logger";
 
 jest.mock("discord.js");
+jest.mock("../../src/Logger", () => ({
+  createLogger: jest.fn().mockReturnValue({
+    error: jest.fn()
+  })
+}));
 jest.mock("./../../src/VoiceChannelManager");
 
 const mockedMessage = Message as jest.Mock<Message>;
@@ -12,17 +17,16 @@ let logger = createLogger();
 beforeEach(() => {
   message = new mockedMessage();
   logger = createLogger();
+  logger.error = jest.fn();
 });
 
 describe("JoinVoiceChannel Test", () => {
   it("logs error when member is not of type GuildMember", async () => {
-    const errorMocked = jest.fn();
-    logger.error = errorMocked;
     const joinVoiceChannel = new JoinVoiceChannel(message, logger);
 
     await joinVoiceChannel.execute();
-    expect(errorMocked).toBeCalledTimes(1);
-    expect(errorMocked).toBeCalledWith(
+    expect(logger.error).toBeCalledTimes(1);
+    expect(logger.error).toBeCalledWith(
       "Expected member of message to be of type GuildMember"
     );
   });
@@ -47,18 +51,19 @@ describe("JoinVoiceChannel Test", () => {
   it("does not log error when member and voice channel are correct types", async () => {
     const mockedVoiceChannel = VoiceChannel as jest.Mock<VoiceChannel>;
     const voiceChannel = new mockedVoiceChannel();
+    // Can't define normally as voiceChannel.members is a discord class that needs mocked
+    // However this class extends Map so we can use that here instead
+    Object.defineProperty(voiceChannel, "members", { value: new Map() });
 
     const mockedMember = GuildMember as jest.Mock<GuildMember>;
     const guildMember = new mockedMember();
 
-    const errorMocked = jest.fn();
-    logger.error = errorMocked;
     // Can't define normally as guildMember.voiceChannel is a readonly property
     Object.defineProperty(guildMember, "voiceChannel", { value: voiceChannel });
     message.member = guildMember;
 
     const joinVoiceChannel = new JoinVoiceChannel(message, logger);
     await joinVoiceChannel.execute();
-    expect(errorMocked).toBeCalledTimes(0);
+    expect(logger.error).toBeCalledTimes(0);
   });
 });
