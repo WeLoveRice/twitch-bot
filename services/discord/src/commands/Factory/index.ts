@@ -14,6 +14,5 @@ export const createCommand = (
   if (content.startsWith(Command.PREFIX)) {
     return createExplicitCommand(message, logger);
   }
-
   return createImplicitCommand(message, logger);
 };

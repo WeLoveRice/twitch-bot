@@ -1,5 +1,6 @@
+import { Countdown } from "./../PeriodicTask/Countdown";
 import { AbstractCommand } from "./AbstractCommand";
-import { Message } from "discord.js";
+import { Runner } from "../periodicTask/Runner";
 
 export class Timer extends AbstractCommand {
   private parseSecondsToRun(): number | null {
@@ -10,10 +11,6 @@ export class Timer extends AbstractCommand {
     }
 
     const number = parseInt(results[0]);
-    if (number >= 60) {
-      return null;
-    }
-
     if (content.includes("min")) {
       return number * 60;
     }
@@ -25,13 +22,23 @@ export class Timer extends AbstractCommand {
     return null;
   }
 
-  protected validate(): Promise<boolean> {
-    this.message;
-    throw new Error("Method not implemented.");
+  protected async isValid(): Promise<boolean> {
+    const secondsToRun = this.parseSecondsToRun();
+    console.log(`Seconds to run: ${secondsToRun}`);
+    if (secondsToRun === null) {
+      return false;
+    }
+
+    return secondsToRun <= 3600;
   }
 
-  protected run(): Promise<void> {
+  protected async run(): Promise<void> {
     const secondsToRun = this.parseSecondsToRun();
-    throw new Error("Method not implemented.");
+    if (secondsToRun === null) {
+      return;
+    }
+    const countdown = new Countdown(this.message, secondsToRun);
+    const runner = new Runner(countdown);
+    runner.start();
   }
 }

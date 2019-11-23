@@ -21,7 +21,7 @@ client.on("message", message => {
   if (command === null) {
     return;
   }
-
+  console.log(command.constructor.name);
   command.execute();
 });
 
