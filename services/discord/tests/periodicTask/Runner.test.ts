@@ -11,12 +11,14 @@ let runner = new Runner(periodicTask);
 
 beforeEach(() => {
   jest.useFakeTimers();
-  periodicTask = new mockPeriodicTask();
-  runner = new Runner(periodicTask);
+  mockPeriodicTask.mockClear();
 });
 
 describe("Runner Test", () => {
   it("starts the timer when start is called", () => {
+    periodicTask = new mockPeriodicTask();
+    runner = new Runner(periodicTask);
+
     expect(runner.timer).toBe(null);
     runner.start();
 

@@ -12,6 +12,7 @@ export class Runner {
   public start(): void {
     this._timer = setInterval(async () => {
       const shouldStop = await this.periodicTask.execute();
+
       if (shouldStop) {
         this.stop();
       }
