@@ -1,6 +1,6 @@
 import { VoiceChannelManager } from "./../src/VoiceChannelManager";
-import { createLogger } from "winston";
 import { VoiceChannel } from "discord.js";
+import { createLogger } from "winston";
 
 jest.mock("winston", () => ({
   createLogger: jest.fn().mockReturnValue({
@@ -20,9 +20,19 @@ beforeEach(() => {
   voiceChannel = new mockVoiceChannel();
 });
 
-it("starts a periodic start when joinChannel is called", () => {
+it("error is not called when voiceChannel.join() returns true", async () => {
+  voiceChannel.join = jest.fn().mockReturnValue(new mockVoiceChannel());
   const voiceChannelManager = new VoiceChannelManager(logger);
-
-  voiceChannelManager.joinChannel(voiceChannel);
+  await voiceChannelManager.joinChannel(voiceChannel);
   expect(logger.error).toBeCalledTimes(0);
+});
+
+it("logs an error when voiceChannel.join() does not return a voiceChannel", async () => {
+  voiceChannel.join = jest.fn().mockReturnValue(false);
+  const voiceChannelManager = new VoiceChannelManager(logger);
+  await voiceChannelManager.joinChannel(voiceChannel);
+  expect(logger.error).toBeCalledTimes(1);
+  expect(logger.error).toBeCalledWith(
+    "An error occured when trying to join a voice channel"
+  );
 });
