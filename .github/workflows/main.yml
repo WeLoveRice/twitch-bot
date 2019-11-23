@@ -20,9 +20,7 @@ jobs:
     - name: npm ci
       run: npm ci
       working-directory: services/discord 	
-    - name: lint
-      run: npm run lint
-      working-directory: services/discord 	
-    - name: test
-      run: npm test
-      working-directory: services/discord
+    - name: ESLint checks
+      uses: gimenete/eslint-action@1.0
+    - name: Run Jest
+      uses: stefanoeb/jest-action@1.0.0
