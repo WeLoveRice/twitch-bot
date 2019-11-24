@@ -1,8 +1,20 @@
 import { Countdown } from "./../PeriodicTask/Countdown";
-import { AbstractCommand } from "./AbstractCommand";
 import { Runner } from "../periodicTask/Runner";
+import { Command } from "./Command";
+import { Message } from "discord.js";
+import { Logger } from "winston";
 
-export class Timer extends AbstractCommand {
+export class Timer implements Command {
+  private message: Message;
+  private logger: Logger;
+  private runner: Runner;
+
+  public constructor(message: Message, logger: Logger, runner = new Runner()) {
+    this.message = message;
+    this.logger = logger;
+    this.runner = runner;
+  }
+
   private parseSecondsToRun(): number | null {
     const { content } = this.message;
     const results = content.match(/\d+/);
@@ -24,7 +36,6 @@ export class Timer extends AbstractCommand {
 
   public async isValid(): Promise<boolean> {
     const secondsToRun = this.parseSecondsToRun();
-    console.log(`Seconds to run: ${secondsToRun}`);
     if (secondsToRun === null) {
       return false;
     }
@@ -32,13 +43,15 @@ export class Timer extends AbstractCommand {
     return secondsToRun <= 3600;
   }
 
-  protected async run(): Promise<void> {
+  public async execute(): Promise<boolean> {
     const secondsToRun = this.parseSecondsToRun();
     if (secondsToRun === null) {
-      return;
+      return false;
     }
     const countdown = new Countdown(this.message, secondsToRun);
-    const runner = new Runner(countdown);
-    runner.start();
+    this.runner.start(countdown);
+    this.logger.info(`Countdown started for ${secondsToRun} seconds`);
+
+    return true;
   }
 }

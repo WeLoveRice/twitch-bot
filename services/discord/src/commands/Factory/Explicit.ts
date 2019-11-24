@@ -1,4 +1,4 @@
-import { Command } from "../../enum/Command";
+import { Command } from "../../enum/CommandEnum";
 import { JoinVoiceChannel } from "../JoinVoiceChannel";
 import { Message } from "discord.js";
 import { AbstractCommand } from "../AbstractCommand";

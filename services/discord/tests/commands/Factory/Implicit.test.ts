@@ -1,7 +1,8 @@
-import { Timer } from "./../../../src/commands/Timer";
 import { createImplicitCommand } from "./../../../src/commands/Factory/Implicit";
 import { Message } from "discord.js";
 import { createLogger, Logger } from "winston";
+import { Timer } from "../../../src/commands/Timer";
+
 jest.mock("discord.js");
 jest.mock("winston", () => ({
   createLogger: jest.fn().mockReturnValue({
