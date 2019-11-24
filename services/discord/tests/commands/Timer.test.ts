@@ -57,7 +57,7 @@ it.each([
   "10m",
   "10 years",
   "500"
-])("command is valid when message content is %s", async (content: string) => {
+])("command is invalid when message content is %s", async (content: string) => {
   message.content = content;
   const timer = new Timer(message, logger);
   const isValid = await timer.isValid();
