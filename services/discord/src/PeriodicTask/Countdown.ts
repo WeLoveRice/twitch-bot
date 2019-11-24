@@ -41,7 +41,6 @@ export class Countdown implements PeriodicTask {
   private async updateCountdownMessage(): Promise<void> {
     const embed = this.createEmbedForRemainingTime();
     if (this.countDownMessage === null) {
-      this.startTime = moment();
       const { channel } = this.message;
       this.countDownMessage = await channel.sendEmbed(embed);
     } else {
