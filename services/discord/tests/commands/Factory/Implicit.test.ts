@@ -10,14 +10,15 @@ jest.mock("winston", () => ({
 }));
 
 const MockedMessage = Message as jest.Mock<Message>;
-const mockWinston = createLogger as jest.Mock<Logger>;
+const mockCreateLogger = createLogger as jest.Mock<Logger>;
 
 let message = new MockedMessage();
 let logger = createLogger();
 
 beforeEach(() => {
+  MockedMessage.mockClear();
+  mockCreateLogger.mockClear();
   message = new MockedMessage();
-  mockWinston.mockClear();
   logger = createLogger();
 });
 

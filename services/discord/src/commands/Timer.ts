@@ -22,7 +22,7 @@ export class Timer extends AbstractCommand {
     return null;
   }
 
-  protected async isValid(): Promise<boolean> {
+  public async isValid(): Promise<boolean> {
     const secondsToRun = this.parseSecondsToRun();
     console.log(`Seconds to run: ${secondsToRun}`);
     if (secondsToRun === null) {

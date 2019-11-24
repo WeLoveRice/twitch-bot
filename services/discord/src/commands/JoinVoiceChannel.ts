@@ -10,7 +10,7 @@ export class JoinVoiceChannel extends AbstractCommand {
     return voiceChannel;
   }
 
-  protected async isValid(): Promise<boolean> {
+  public async isValid(): Promise<boolean> {
     const { member } = this.message;
     if (!(member instanceof GuildMember)) {
       this.logger.error("Expected member of message to be of type GuildMember");

@@ -10,7 +10,7 @@ export abstract class AbstractCommand {
     this.logger = logger;
   }
 
-  protected abstract isValid(): Promise<boolean>;
+  public abstract isValid(): Promise<boolean>;
   protected abstract run(): Promise<void>;
 
   public async execute(): Promise<void> {
@@ -20,6 +20,6 @@ export abstract class AbstractCommand {
       return;
     }
 
-    return this.run();
+    await this.run();
   }
 }
