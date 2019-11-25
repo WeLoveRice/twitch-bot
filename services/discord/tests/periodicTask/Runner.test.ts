@@ -7,7 +7,7 @@ const mockPeriodicTask = VoiceChannelDisconnect as jest.Mock<
   VoiceChannelDisconnect
 >;
 let periodicTask = new mockPeriodicTask();
-let runner = new Runner(periodicTask);
+let runner = new Runner();
 
 beforeEach(() => {
   jest.useFakeTimers();
@@ -19,10 +19,10 @@ describe("Runner Test", () => {
     // For some reason, can't mock periodic task execute to return a promise
     // and then assert the runner timer is null
     periodicTask = new mockPeriodicTask();
-    runner = new Runner(periodicTask);
+    runner = new Runner();
 
     expect(runner.timer).toBe(null);
-    runner.start();
+    runner.start(periodicTask);
 
     jest.runOnlyPendingTimers();
     expect(runner.timer).not.toBe(null);

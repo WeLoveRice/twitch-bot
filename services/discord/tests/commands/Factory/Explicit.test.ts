@@ -20,6 +20,9 @@ beforeEach(() => {
 });
 
 it.each([
+  "",
+  "5",
+  "''",
   "hello",
   "test",
   Command.PREFIX,
