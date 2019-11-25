@@ -19,5 +19,5 @@ jobs:
       working-directory: services/discord 	
     - name: test
       run: |
-      cd services/discord
-      npm test
+        cd services/discord
+        npm test
