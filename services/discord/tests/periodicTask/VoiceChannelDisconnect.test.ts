@@ -1,4 +1,4 @@
-import { VoiceChannelDisconnect } from "./../../src/PeriodicTask/VoiceChannelDisconnect";
+import { VoiceChannelDisconnect } from "../../src/periodicTask/VoiceChannelDisconnect";
 import { createLogger } from "winston";
 import { VoiceChannel, GuildMember } from "discord.js";
 import { Bot } from "../../src/enum/Bot";

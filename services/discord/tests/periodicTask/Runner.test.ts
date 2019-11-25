@@ -1,4 +1,4 @@
-import { VoiceChannelDisconnect } from "./../../src/PeriodicTask/VoiceChannelDisconnect";
+import { VoiceChannelDisconnect } from "../../src/periodicTask/VoiceChannelDisconnect";
 import { Runner } from "../../src/periodicTask/Runner";
 
 jest.mock("./../../src/PeriodicTask/VoiceChannelDisconnect");

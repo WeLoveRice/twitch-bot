@@ -1,6 +1,5 @@
 import { createCommand } from "./commands/Factory/index";
 import { createLogger } from "./Logger";
-import { createExplicitCommand } from "./commands/Factory/Explicit";
 import Discord from "discord.js";
 
 const client = new Discord.Client();

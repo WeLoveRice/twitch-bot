@@ -1,4 +1,4 @@
-import { Countdown } from "./../PeriodicTask/Countdown";
+import { Countdown } from "../periodicTask/Countdown";
 import { Runner } from "../periodicTask/Runner";
 import { Command } from "./Command";
 import { Message } from "discord.js";
