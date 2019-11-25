@@ -23,7 +23,7 @@ export class VoiceChannelManager {
     }
 
     const periodicTask = new VoiceChannelDisconnect(voiceChannel, this.logger);
-    this.runner = new Runner(periodicTask);
-    this.runner.start();
+    this.runner = new Runner();
+    this.runner.start(periodicTask);
   }
 }
