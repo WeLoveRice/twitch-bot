@@ -11,8 +11,8 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: '10.x'
-    - name: npm install
-      run: npm install
+    - name: npm ci
+      run: npm ci
       working-directory: services/discord 	
     - name: lint
       run: npm run lint
