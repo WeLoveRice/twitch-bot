@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Jest Tests",
+        "type": "node",
+        "request": "launch",
+        "runtimeArgs": [
+          "--inspect-brk",
+          "${workspaceRoot}/services/discord/node_modules/.bin/jest",
+          "--runInBand",
+          "--rootDir",
+          "${workspaceRoot}/services/discord/",
+          "--config",
+          "${workspaceRoot}/services/discord/jest.config.js"
+        ],
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "port": 9229
+      }
+    ]
+  }

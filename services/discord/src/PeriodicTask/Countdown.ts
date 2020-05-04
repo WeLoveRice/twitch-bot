@@ -1,4 +1,4 @@
-import { Message, RichEmbed } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 import { PeriodicTask } from ".";
 import moment, { Moment } from "moment";
 
@@ -25,9 +25,9 @@ export class Countdown implements PeriodicTask {
     return this.endTime.diff(moment(), "seconds");
   }
 
-  private createEmbedForRemainingTime(): RichEmbed {
+  private createEmbedForRemainingTime(): MessageEmbed {
     const remainingTime = this.getRemainingTime();
-    const embed = new RichEmbed()
+    const embed = new MessageEmbed()
       // Set the title of the field
       .setTitle("A slick little embed")
       // Set the color of the embed
@@ -42,7 +42,7 @@ export class Countdown implements PeriodicTask {
     const embed = this.createEmbedForRemainingTime();
     if (this.countDownMessage === null) {
       const { channel } = this.message;
-      this.countDownMessage = await channel.sendEmbed(embed);
+      this.countDownMessage = await channel.send(embed);
     } else {
       this.countDownMessage = await this.countDownMessage.edit(embed);
     }

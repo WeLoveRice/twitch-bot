@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, User } from "discord.js";
 import { createLogger, Logger } from "winston";
 import { Timer } from "../../src/commands/Timer";
 
@@ -9,16 +9,11 @@ jest.mock("winston", () => ({
   })
 }));
 
-const MockedMessage = Message as jest.Mock<Message>;
-const mockCreateLogger = createLogger as jest.Mock<Logger>;
-
-let message = new MockedMessage();
+let message = new (Message as jest.Mock<Message>)();
 let logger = createLogger();
 
 beforeEach(() => {
-  MockedMessage.mockClear();
-  mockCreateLogger.mockClear();
-  message = new MockedMessage();
+  message = new (Message as jest.Mock<Message>)();
   logger = createLogger();
 });
 
@@ -43,6 +38,9 @@ it.each([
   "brb 05 mins"
 ])("command is valid when message content is %s", async (content: string) => {
   message.content = content;
+  message.author = new (User as jest.Mock<User>)();
+  message.author.bot = false;
+
   const timer = new Timer(message, logger);
   const isValid = await timer.isValid();
 
@@ -60,6 +58,20 @@ it.each([
   "500"
 ])("command is invalid when message content is %s", async (content: string) => {
   message.content = content;
+  message.author = new (User as jest.Mock<User>)();
+  message.author.bot = false;
+
+  const timer = new Timer(message, logger);
+  const isValid = await timer.isValid();
+
+  expect(isValid).toBe(false);
+});
+
+it("Ignores bot user", async () => {
+  message.content = "Test";
+  message.author = new (User as jest.Mock<User>)();
+  message.author.bot = false;
+
   const timer = new Timer(message, logger);
   const isValid = await timer.isValid();
 

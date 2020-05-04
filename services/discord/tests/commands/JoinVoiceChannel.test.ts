@@ -34,7 +34,8 @@ describe("JoinVoiceChannel Test", () => {
   it("replies with message when voice channel is not of type VoiceChannel", async () => {
     const mockedMember = GuildMember as jest.Mock<GuildMember>;
     const guildMember = new mockedMember();
-    message.member = guildMember;
+    Object.defineProperty(guildMember, "voice", { value: { channel: null } });
+    Object.defineProperty(message, "member", { value: guildMember });
 
     const mockedReply = jest.fn();
     message.reply = mockedReply;
@@ -48,7 +49,7 @@ describe("JoinVoiceChannel Test", () => {
     );
   });
 
-  it("does not log error when member and voice channel are correct types", async () => {
+  it("is successful when member and voice channel are correct types", async () => {
     const mockedVoiceChannel = VoiceChannel as jest.Mock<VoiceChannel>;
     const voiceChannel = new mockedVoiceChannel();
     // Can't define normally as voiceChannel.members is a discord class that needs mocked
@@ -59,8 +60,10 @@ describe("JoinVoiceChannel Test", () => {
     const guildMember = new mockedMember();
 
     // Can't define normally as guildMember.voiceChannel is a readonly property
-    Object.defineProperty(guildMember, "voiceChannel", { value: voiceChannel });
-    message.member = guildMember;
+    Object.defineProperty(guildMember, "voice", {
+      value: { channel: voiceChannel }
+    });
+    Object.defineProperty(message, "member", { value: guildMember });
 
     const joinVoiceChannel = new JoinVoiceChannel(message, logger);
     await joinVoiceChannel.execute();
