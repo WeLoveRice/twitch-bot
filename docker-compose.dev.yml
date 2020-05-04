@@ -6,4 +6,5 @@ services:
       context: ./services/discord
       dockerfile: Dockerfile.dev
     volumes:
-      - ./services/discord:/usr/local/src
+      - ./services/discord:/usr/local/src/twitch-bot
+      - /usr/local/src/twitch-bot/node_modules
