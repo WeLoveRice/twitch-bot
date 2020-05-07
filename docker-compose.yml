@@ -1,0 +1,7 @@
+version: '3.7'
+
+services:
+  discord:
+    build: 
+      context: ./services/discord
+
