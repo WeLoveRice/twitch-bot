@@ -1,14 +1,16 @@
 import { Message, User } from "discord.js";
-import { createLogger, Logger } from "winston";
+import { createLogger } from "winston";
 import { Timer } from "../../src/commands/Timer";
 
 jest.mock("discord.js");
 jest.mock("winston", () => ({
   createLogger: jest.fn().mockReturnValue({
-    warning: jest.fn()
+    warning: jest.fn(),
+    info: jest.fn()
   })
 }));
 jest.mock("../../src/periodicTask/Runner");
+jest.mock("../../src/periodicTask/Countdown");
 
 let message = new (Message as jest.Mock<Message>)();
 let logger = createLogger();
