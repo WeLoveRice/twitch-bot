@@ -30,4 +30,4 @@ client.on("error", error => {
   process.exit(1);
 });
 
-client.login("NjM1NDcwMjg0MTI3ODYyNzk1.Xaxi3Q.NwIPq5f0eucSvLByAZxSJCprmiI");
+client.login(process.env.DISCORD_TOKEN);

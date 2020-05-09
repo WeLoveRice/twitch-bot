@@ -8,6 +8,7 @@ jest.mock("winston", () => ({
     warning: jest.fn()
   })
 }));
+jest.mock("../../src/periodicTask/Runner");
 
 let message = new (Message as jest.Mock<Message>)();
 let logger = createLogger();
@@ -43,6 +44,7 @@ it.each([
 
   const timer = new Timer(message, logger);
   const isValid = await timer.isValid();
+  timer.execute();
 
   expect(isValid).toBe(true);
 });
@@ -74,6 +76,5 @@ it("Ignores bot user", async () => {
 
   const timer = new Timer(message, logger);
   const isValid = await timer.isValid();
-
   expect(isValid).toBe(false);
 });
