@@ -1,9 +1,11 @@
 FROM node:12.16.3-buster-slim
 
-WORKDIR /usr/local/src/twitch-bot
+RUN mkdir -p /home/node/twitch-bot/node_modules && chown -R node:node /home/node/twitch-bot
+WORKDIR /home/node/twitch-bot
+USER node
 COPY package.json .
-RUN npm i
+RUN npm install 
 
-COPY . .
+COPY --chown=node:node . .
 
 CMD ["npm", "run", "start"]

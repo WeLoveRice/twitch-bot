@@ -1,2 +1,5 @@
 node_modules
-jest.config.js
+npm-debug.log
+Dockerfile
+.dockerignore
+.package-lock.json

@@ -7,6 +7,6 @@ services:
     env_file: 
       ./services/discord/.env
     volumes:
-      - ./services/discord:/usr/local/src/twitch-bot
-      - /usr/local/src/twitch-bot/node_modules
+      - ./services/discord:/home/node/twitch-bot
+      - /home/node/twitch-bot/node_modules
     command: npm run start:dev
