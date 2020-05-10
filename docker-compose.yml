@@ -4,4 +4,6 @@ services:
   discord:
     build: 
       context: ./services/discord
+    env_file: 
+      ./services/discord/.env
 

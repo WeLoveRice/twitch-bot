@@ -7,6 +7,7 @@
     "format": "eslint --fix **/*.ts",
     "lint": "eslint **/*.ts",
     "build": "tsc",
+    "start": "node build/src/index.js",
     "start:dev": "ts-node-dev --respawn --transpileOnly src/index.ts",
     "test": "jest",
     "coverage": "jest --collectCoverage"
