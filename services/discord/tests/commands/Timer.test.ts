@@ -1,6 +1,7 @@
 import { Message, User } from "discord.js";
 import { createLogger } from "winston";
 import { Timer } from "../../src/commands/Timer";
+import * as Countdown from "../../src/periodicTask/Countdown";
 
 jest.mock("discord.js");
 jest.mock("winston", () => ({
@@ -12,12 +13,12 @@ jest.mock("winston", () => ({
 jest.mock("../../src/periodicTask/Runner");
 jest.mock("../../src/periodicTask/Countdown");
 
-let message = new (Message as jest.Mock<Message>)();
-let logger = createLogger();
+const countdownMock = Countdown as jest.Mocked<typeof Countdown>;
+const message = new (Message as jest.Mock<Message>)();
+const logger = createLogger();
 
-beforeEach(() => {
-  message = new (Message as jest.Mock<Message>)();
-  logger = createLogger();
+afterEach(() => {
+  jest.resetAllMocks();
 });
 
 it.each([
@@ -71,12 +72,21 @@ it.each([
   expect(isValid).toBe(false);
 });
 
-it("Ignores bot user", async () => {
+it("ignores bot user", async () => {
   message.content = "Test";
   message.author = new (User as jest.Mock<User>)();
-  message.author.bot = false;
+  message.author.bot = true;
 
   const timer = new Timer(message, logger);
   const isValid = await timer.isValid();
   expect(isValid).toBe(false);
+});
+
+it("does not run when parseSecondsToRun is null", async () => {
+  const timer = new Timer(message, logger);
+
+  jest.spyOn(timer, "parseSecondsToRun").mockReturnValue(null);
+  timer.execute();
+
+  expect(countdownMock.Countdown.mock.instances[0]).toBeUndefined;
 });

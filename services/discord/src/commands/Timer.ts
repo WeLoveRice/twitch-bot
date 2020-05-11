@@ -12,7 +12,7 @@ export class Timer extends AbstractCommand {
     this.runner = new Runner();
   }
 
-  private parseSecondsToRun(): number | null {
+  public parseSecondsToRun(): number | null {
     const { content } = this.message;
     const results = content.match(/\d+/);
     if (results === null) {
