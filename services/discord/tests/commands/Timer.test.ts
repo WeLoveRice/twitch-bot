@@ -85,6 +85,7 @@ it("ignores bot user", async () => {
 it("does not run when parseSecondsToRun is null", async () => {
   const timer = new Timer(message, logger);
 
+  jest.spyOn(timer, "isValid").mockReturnValue(Promise.resolve(true));
   jest.spyOn(timer, "parseSecondsToRun").mockReturnValue(null);
   timer.execute();
 
