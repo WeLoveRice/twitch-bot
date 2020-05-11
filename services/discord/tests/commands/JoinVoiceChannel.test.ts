@@ -2,7 +2,7 @@ import { JoinVoiceChannel } from "./../../src/commands/JoinVoiceChannel";
 import { Message, VoiceChannel, GuildMember } from "discord.js";
 import { createLogger } from "../../src/Logger";
 import { Bot } from "../../src/enum/Bot";
-import * as VoiceChannelManager from "../../src/VoiceChannelManager";
+import * as VCM from "../../src/VoiceChannelManager";
 
 jest.mock("discord.js");
 jest.mock("../../src/Logger", () => ({
@@ -12,9 +12,7 @@ jest.mock("../../src/Logger", () => ({
 }));
 jest.mock("../../src/VoiceChannelManager");
 
-const voiceChannelManagerMock = VoiceChannelManager as jest.Mocked<
-  typeof VoiceChannelManager
->;
+const VCMMock = VCM as jest.Mocked<typeof VCM>;
 let message = new (Message as jest.Mock<Message>)();
 const logger = createLogger();
 
@@ -89,7 +87,34 @@ it("does not join channel again when the bot is already in the channel", async (
   await joinVoiceChannel.execute();
   expect(logger.error).toBeCalledTimes(0);
   expect(message.reply).toHaveBeenCalledWith("Already in channel");
-  expect(
-    voiceChannelManagerMock.VoiceChannelManager.mock.instances[0]
-  ).toBeUndefined();
+  expect(VCMMock.VoiceChannelManager.mock.instances[0]).toBeUndefined();
+});
+
+it("logs error when an exception is thrown", async () => {
+  const voiceChannel = new (VoiceChannel as jest.Mock<VoiceChannel>)();
+  // Can't define normally as voiceChannel.members is a discord class that needs mocked
+  // However this class extends Map so we can use that here instead
+  Object.defineProperty(voiceChannel, "members", {
+    value: new Map()
+  });
+  JoinVoiceChannel.prototype.getVoiceChannelFromMessage = jest
+    .fn()
+    .mockReturnValue(voiceChannel);
+  VCMMock.VoiceChannelManager.mockImplementation(() => {
+    const voiceChannelManager = new (jest.fn() as jest.Mock<
+      VCM.VoiceChannelManager
+    >)();
+
+    voiceChannelManager.joinChannel = jest.fn().mockImplementation(() => {
+      throw new Error("Test");
+    });
+
+    return voiceChannelManager;
+  });
+  const joinVoiceChannel = new JoinVoiceChannel(message, logger);
+  jest.spyOn(joinVoiceChannel, "isValid").mockImplementation(async () => true);
+  await joinVoiceChannel.execute();
+  expect(logger.error).toBeCalledWith(
+    "Something went wrong when trying to join a voice channel: Error: Test"
+  );
 });

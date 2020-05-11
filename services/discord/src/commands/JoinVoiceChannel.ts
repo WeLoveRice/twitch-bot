@@ -4,7 +4,7 @@ import { AbstractCommand } from "./AbstractCommand";
 import { VoiceChannelManager } from "../VoiceChannelManager";
 
 export class JoinVoiceChannel extends AbstractCommand {
-  private getVoiceChannelFromMessage(): VoiceChannel {
+  public getVoiceChannelFromMessage(): VoiceChannel {
     if (!this.message.member?.voice?.channel) {
       throw new ReferenceError(
         "member or voice does does not exist on message"
