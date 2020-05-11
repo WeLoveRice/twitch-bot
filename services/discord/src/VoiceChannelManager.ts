@@ -12,15 +12,16 @@ export class VoiceChannelManager {
     this.runner = null;
   }
 
+  /**
+   * @param {VoiceChannel} voiceChannel
+   * @throws {Error}
+   */
   public async joinChannel(voiceChannel: VoiceChannel): Promise<void> {
     if (this.runner instanceof Runner) {
       this.runner.stop();
     }
 
-    const voiceConnection = await voiceChannel.join();
-    if (!voiceConnection) {
-      this.logger.error("An error occured when trying to join a voice channel");
-    }
+    await voiceChannel.join();
 
     const periodicTask = new VoiceChannelDisconnect(voiceChannel, this.logger);
     this.runner = new Runner();

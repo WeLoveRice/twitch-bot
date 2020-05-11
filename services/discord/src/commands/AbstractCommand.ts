@@ -14,9 +14,7 @@ export abstract class AbstractCommand {
   protected abstract run(): Promise<void>;
 
   public async execute(): Promise<void> {
-    const isValid = await this.isValid();
-    console.log(`IS valid: ${isValid}`);
-    if (!isValid) {
+    if (!(await this.isValid())) {
       return;
     }
 

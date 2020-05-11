@@ -5,16 +5,13 @@ import { VoiceChannelManager } from "../VoiceChannelManager";
 
 export class JoinVoiceChannel extends AbstractCommand {
   private getVoiceChannelFromMessage(): VoiceChannel {
-    const { member } = this.message;
-    if (!(member instanceof GuildMember)) {
-      throw new Error("Could not find member from message");
+    if (!this.message.member?.voice?.channel) {
+      throw new ReferenceError(
+        "member or voice does does not exist on message"
+      );
     }
 
-    if (member.voice.channel === null) {
-      throw new Error("Could not find voice channel from message");
-    }
-
-    return member.voice.channel;
+    return this.message.member.voice.channel;
   }
 
   public async isValid(): Promise<boolean> {
