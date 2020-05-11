@@ -3,8 +3,8 @@ import { PeriodicTask } from ".";
 import moment, { Moment } from "moment";
 
 export class Countdown implements PeriodicTask {
-  public interval = 2000;
-  private message: Message;
+  interval = 2000;
+  message: Message;
 
   private endTime: Moment | null;
   private secondsToCountdown: number;
