@@ -9,15 +9,10 @@ jest.mock("winston", () => ({
   createLogger: jest.fn()
 }));
 
-const MockedMessage = Message as jest.Mock<Message>;
+const message = new (Message as jest.Mock<Message>)();
+const logger = createLogger();
 
-let message = new MockedMessage();
-let logger = createLogger();
-
-beforeEach(() => {
-  message = new MockedMessage();
-  logger = createLogger();
-});
+afterEach(() => jest.resetAllMocks());
 
 it.each([
   "",
@@ -34,8 +29,11 @@ it.each([
   expect(command).toBe(null);
 });
 
-it(`returns voice when command is ${Command.PREFIX}${Command.JOIN}`, () => {
-  message.content = `${Command.PREFIX}${Command.JOIN}`;
-  const command = createExplicitCommand(message, logger);
-  expect(command).toBeInstanceOf(JoinVoiceChannel);
-});
+it.each([[Command.JOIN, JoinVoiceChannel]])(
+  `returns voice when command is ${Command.PREFIX} %s`,
+  (commandString, commandClass) => {
+    message.content = `${Command.PREFIX}${commandString}`;
+    const command = createExplicitCommand(message, logger);
+    expect(command).toBeInstanceOf(commandClass);
+  }
+);

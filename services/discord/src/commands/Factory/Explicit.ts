@@ -22,18 +22,10 @@ const isCommand = (message: Message): boolean => {
   return true;
 };
 
-const extractCommandFromContent = ({ content }: Message): string => {
+const extractCommandFromContent = ({ content }: Message): string | null => {
   const splitString = content.split(" ");
-  if (splitString.length === 0) {
-    throw Error(`Expected to be able to split the string: ${splitString}`);
-  }
 
-  const command = splitString[0];
-  if (command.charAt(0) === Command.PREFIX) {
-    return command.substr(1);
-  }
-
-  return command;
+  return splitString[0].substr(1);
 };
 
 export const createExplicitCommand = (
