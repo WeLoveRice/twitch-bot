@@ -34,10 +34,11 @@ describe("execute", () => {
     async remainingTime => {
       const countdown = new Countdown(message, 60);
       countdown.getRemainingTime = jest.fn().mockReturnValue(remainingTime);
-      countdown.updateCountdownMessage = jest.fn();
+      countdown.sendFinalMessage = jest.fn();
+
       const shouldStop = await countdown.execute();
       expect(shouldStop).toBe(true);
-      expect(countdown.updateCountdownMessage).toBeCalled();
+      expect(countdown.sendFinalMessage).toBeCalled();
     }
   );
 });
@@ -69,6 +70,18 @@ describe("updateCountdownMessage", () => {
   });
 });
 
+describe("sendFinalMessage", () => {
+  it("sends the correct messages", async () => {
+    const countdown = new Countdown(message, 60);
+    const embed = jest.fn();
+    countdown.createEmbedForRemainingTime = jest.fn().mockReturnValue(embed);
+    countdown["countDownMessage"] = new (Message as jest.Mock<Message>)();
+
+    countdown.updateCountdownMessage();
+    expect(countdown["countDownMessage"].edit).toBeCalledWith(embed);
+  });
+});
+
 describe("getRemainingTime", () => {
   it("calls moment.diff()", () => {
     const countdown = new Countdown(message, 60);
@@ -76,6 +89,13 @@ describe("getRemainingTime", () => {
 
     countdown.getRemainingTime();
     expect(countdown.endTime.diff).toBeCalledWith(momentMock, "seconds");
+  });
+
+  it("returns 0 when moment.diff returns < 0", () => {
+    const countdown = new Countdown(message, 0);
+    countdown.endTime = moment() as jest.Mocked<moment.Moment>;
+
+    expect(countdown.getRemainingTime()).toBe(0);
   });
 });
 

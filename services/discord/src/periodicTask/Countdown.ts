@@ -18,7 +18,9 @@ export class Countdown implements PeriodicTask {
   }
 
   getRemainingTime(): number {
-    return this.endTime.diff(moment(), "seconds");
+    const diff = this.endTime.diff(moment(), "seconds");
+
+    return diff > 0 ? diff : 0;
   }
 
   getFormattedRemainingTime(): string {
@@ -50,6 +52,10 @@ export class Countdown implements PeriodicTask {
     }
   }
 
+  async sendFinalMessage() {
+    return;
+  }
+
   async execute(): Promise<boolean> {
     const remainingTime = this.getRemainingTime();
     if (remainingTime === null) {
@@ -57,11 +63,11 @@ export class Countdown implements PeriodicTask {
     }
 
     if (remainingTime <= 0) {
-      this.updateCountdownMessage();
+      await this.sendFinalMessage();
       return true;
     }
 
-    this.updateCountdownMessage();
+    await this.updateCountdownMessage();
     return false;
   }
 }
