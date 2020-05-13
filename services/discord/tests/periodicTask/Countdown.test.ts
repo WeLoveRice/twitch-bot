@@ -19,11 +19,27 @@ const message = new (Message as jest.Mock<Message>)();
 
 afterEach(() => jest.resetAllMocks());
 
-it("can call execute", async () => {
-  const countdown = new Countdown(message, 60);
-  countdown.getRemainingTime = jest.fn();
-  countdown.updateCountdownMessage = jest.fn();
-  await countdown.execute();
+describe("execute", () => {
+  it("is sucessfull when remaining time is > 0 ", async () => {
+    const countdown = new Countdown(message, 60);
+    countdown.getRemainingTime = jest.fn();
+    countdown.updateCountdownMessage = jest.fn();
+    const shouldStop = await countdown.execute();
+    expect(shouldStop).toBe(false);
+    expect(countdown.updateCountdownMessage).toBeCalled();
+  });
+
+  it.each([0, -1, -10])(
+    "calls updateCountdownMessage when remaining time is <= 0 ",
+    async remainingTime => {
+      const countdown = new Countdown(message, 60);
+      countdown.getRemainingTime = jest.fn().mockReturnValue(remainingTime);
+      countdown.updateCountdownMessage = jest.fn();
+      const shouldStop = await countdown.execute();
+      expect(shouldStop).toBe(true);
+      expect(countdown.updateCountdownMessage).toBeCalled();
+    }
+  );
 });
 
 describe("updateCountdownMessage", () => {
@@ -79,6 +95,7 @@ describe("createEmbedForRemainingTime", () => {
 
 describe("getFormattedRemainingTime", () => {
   it.each([
+    [0, "0m 00s"],
     [30, "0m 30s"],
     [45, "0m 45s"],
     [60, "1m 00s"],

@@ -52,7 +52,12 @@ export class Countdown implements PeriodicTask {
 
   async execute(): Promise<boolean> {
     const remainingTime = this.getRemainingTime();
-    if (remainingTime === null || remainingTime <= 0) {
+    if (remainingTime === null) {
+      return true;
+    }
+
+    if (remainingTime <= 0) {
+      this.updateCountdownMessage();
       return true;
     }
 
