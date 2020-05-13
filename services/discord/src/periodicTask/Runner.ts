@@ -1,22 +1,20 @@
 import { PeriodicTask } from ".";
 
 export class Runner {
-  private periodicTask: PeriodicTask;
   private _timer: NodeJS.Timeout | null;
 
-  constructor(periodicTask: PeriodicTask) {
-    this.periodicTask = periodicTask;
+  constructor() {
     this._timer = null;
   }
 
-  public start(): void {
+  public start(periodicTask: PeriodicTask): void {
     this._timer = setInterval(async () => {
-      const shouldStop = await this.periodicTask.execute();
+      const shouldStop = await periodicTask.execute();
 
       if (shouldStop) {
         this.stop();
       }
-    }, this.periodicTask.interval);
+    }, periodicTask.interval);
   }
 
   public stop(): void {

@@ -4,6 +4,9 @@ services:
   discord:
     build: 
       context: ./services/discord
-      dockerfile: Dockerfile.dev
+    env_file: 
+      ./services/discord/.env
     volumes:
-      - ./services/discord:/usr/local/src
+      - ./services/discord:/home/node/twitch-bot
+      - /home/node/twitch-bot/node_modules
+    command: npm run start:dev

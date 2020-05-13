@@ -10,15 +10,14 @@ export abstract class AbstractCommand {
     this.logger = logger;
   }
 
-  protected abstract validate(): Promise<boolean>;
+  public abstract isValid(): Promise<boolean>;
   protected abstract run(): Promise<void>;
 
   public async execute(): Promise<void> {
-    const isValid = await this.validate();
-    if (!isValid) {
+    if (!(await this.isValid())) {
       return;
     }
 
-    return this.run();
+    await this.run();
   }
 }

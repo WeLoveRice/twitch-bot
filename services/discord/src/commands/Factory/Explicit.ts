@@ -1,8 +1,8 @@
-import { Command } from "./../enum/Command";
-import { JoinVoiceChannel } from "./JoinVoiceChannel";
+import { Command } from "../../enum/CommandEnum";
+import { JoinVoiceChannel } from "../JoinVoiceChannel";
 import { Message } from "discord.js";
-import { AbstractCommand } from "./AbstractCommand";
-import { createLogger } from "winston";
+import { AbstractCommand } from "../AbstractCommand";
+import { createLogger, Logger } from "winston";
 
 const isCommand = (message: Message): boolean => {
   const { content } = message;
@@ -22,26 +22,19 @@ const isCommand = (message: Message): boolean => {
   return true;
 };
 
-const extractCommandFromContent = ({ content }: Message): string => {
+const extractCommandFromContent = ({ content }: Message): string | null => {
   const splitString = content.split(" ");
-  if (splitString.length === 0) {
-    throw Error(`Expected to be able to split the string: ${splitString}`);
-  }
 
-  const command = splitString[0];
-  if (command.charAt(0) === Command.PREFIX) {
-    return command.substr(1);
-  }
-
-  return command;
+  return splitString[0].substr(1);
 };
 
-export const createCommand = (message: Message): AbstractCommand | null => {
+export const createExplicitCommand = (
+  message: Message,
+  logger: Logger
+): AbstractCommand | null => {
   if (!isCommand(message)) {
     return null;
   }
-
-  const logger = createLogger();
   const command = extractCommandFromContent(message);
 
   switch (command) {
