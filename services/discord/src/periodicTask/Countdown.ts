@@ -33,8 +33,8 @@ export class Countdown implements PeriodicTask {
   createEmbedForRemainingTime(): MessageEmbed {
     const embed = new MessageEmbed();
 
-    embed.setTitle("A slick little embed");
-    embed.setColor(0xff0000);
+    embed.setTitle("Countdown timer");
+    embed.setColor(0xa8ffa8);
     embed.setDescription(`Remaining time: ${this.getFormattedRemainingTime()}`);
 
     return embed;

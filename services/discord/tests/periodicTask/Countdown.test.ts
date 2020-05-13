@@ -71,8 +71,8 @@ describe("createEmbedForRemainingTime", () => {
     countdown.getFormattedRemainingTime = jest.fn().mockReturnValue("1m 05s");
     const embed = countdown.createEmbedForRemainingTime();
 
-    expect(embed.setTitle).toBeCalledWith("A slick little embed");
-    expect(embed.setColor).toBeCalledWith(0xff0000);
+    expect(embed.setTitle).toBeCalledWith("Countdown timer");
+    expect(embed.setColor).toBeCalledWith(0xa8ffa8);
     expect(embed.setDescription).toBeCalledWith("Remaining time: 1m 05s");
   });
 });
