@@ -1,7 +1,23 @@
 import { Bot } from "./../enum/Bot";
-import { GuildMember, VoiceChannel } from "discord.js";
+import { GuildMember, VoiceChannel, Message } from "discord.js";
 import { AbstractCommand } from "./AbstractCommand";
 import { VoiceChannelManager } from "../VoiceChannelManager";
+
+export const isMemberInVoiceChannel = async (
+  message: Message
+): Promise<boolean> => {
+  if (!message.member) {
+    return false;
+  }
+
+  const { channel } = message.member.voice;
+  if (!(channel instanceof VoiceChannel)) {
+    await message.reply("You must be in a voice channel for me to join");
+    return false;
+  }
+
+  return true;
+};
 
 export class JoinVoiceChannel extends AbstractCommand {
   public getVoiceChannelFromMessage(): VoiceChannel {
@@ -15,19 +31,7 @@ export class JoinVoiceChannel extends AbstractCommand {
   }
 
   public async isValid(): Promise<boolean> {
-    const { member } = this.message;
-    if (!(member instanceof GuildMember)) {
-      this.logger.error("Expected member of message to be of type GuildMember");
-      return false;
-    }
-
-    const { channel } = member.voice;
-    if (!(channel instanceof VoiceChannel)) {
-      await this.message.reply("You must be in a voice channel for me to join");
-      return false;
-    }
-
-    return true;
+    return isMemberInVoiceChannel(this.message);
   }
 
   protected async run(): Promise<void> {

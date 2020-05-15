@@ -21,16 +21,6 @@ afterEach(() => {
   message = new (Message as jest.Mock<Message>)();
 });
 
-it("logs error when member is not of type GuildMember", async () => {
-  const joinVoiceChannel = new JoinVoiceChannel(message, logger);
-
-  await joinVoiceChannel.execute();
-  expect(logger.error).toBeCalledTimes(1);
-  expect(logger.error).toBeCalledWith(
-    "Expected member of message to be of type GuildMember"
-  );
-});
-
 it("replies with message when voice channel is not of type VoiceChannel", async () => {
   const guildMember = new (GuildMember as jest.Mock<GuildMember>)();
   Object.defineProperty(guildMember, "voice", { value: { channel: null } });
