@@ -5,10 +5,10 @@ import { Message } from "discord.js";
 import { AbstractCommand } from "../AbstractCommand";
 import { Logger } from "winston";
 
-export const createCommand = (
+export const createCommand = async (
   message: Message,
   logger: Logger
-): AbstractCommand | null => {
+): Promise<AbstractCommand | null> => {
   const { content } = message;
 
   if (content.startsWith(Command.PREFIX)) {

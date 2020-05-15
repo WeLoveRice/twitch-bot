@@ -1,10 +1,8 @@
 import * as Implicit from "./../../../src/commands/Factory/Implicit";
 import { Message } from "discord.js";
 import { createLogger, Logger } from "winston";
-import { Timer } from "../../../src/commands/Timer";
-import { Sound } from "../../../src/commands/Sound";
-import path from "path";
-import * as fs from "mz/fs";
+import * as TimerMocked from "../../../src/commands/Timer";
+import * as SoundMocked from "../../../src/commands/Sound";
 
 jest.mock("discord.js");
 jest.mock("winston", () => ({
@@ -13,8 +11,8 @@ jest.mock("winston", () => ({
   })
 }));
 
-jest.mock("path");
-jest.mock("mz/fs");
+jest.mock("../../../src/commands/Timer");
+jest.mock("../../../src/commands/Sound");
 
 const message = new (Message as jest.Mock<Message>)();
 const logger = (createLogger as jest.Mock<Logger>)();
@@ -66,61 +64,27 @@ describe("Timer tests", () => {
   );
 });
 
-describe("Sound tests", () => {
-  it.each(["test", "one", "two"])(
-    "plays sound for files that exist",
-    async (content: string) => {
-      message.content = content;
-
-      const doesSoundExist = await Implicit.doesSoundExist(message);
-      expect(doesSoundExist).toBe(true);
-      expect(path.join).toBeCalledWith(
-        expect.stringMatching(
-          /\/twitch-bot\/services\/discord\/src\/commands\/Factory/
-        ),
-        "..",
-        "..",
-        "..",
-        "sounds",
-        `${content}.mp3`
-      );
-    }
-  );
-
-  it.each(["null", "nonexist", "zero"])(
-    "does not play sound for files that don't exist",
-    async (content: string) => {
-      message.content = content;
-      jest.spyOn(fs, "access").mockImplementation(() => {
-        throw new Error("test");
-      });
-      const doesSoundExist = await Implicit.doesSoundExist(message);
-      expect(doesSoundExist).toBe(false);
-    }
-  );
-});
-
 describe("Factory Tests", () => {
   it("returns Timer command when isTimer returns true", async () => {
     jest.spyOn(Implicit, "isTimer").mockReturnValue(true);
     const command = await Implicit.createImplicitCommand(message, logger);
 
-    expect(command).toBeInstanceOf(Timer);
+    expect(command).toBeInstanceOf(TimerMocked.Timer);
   });
 
   it("returns Sound command when doesExist returns true", async () => {
     jest
-      .spyOn(Implicit, "doesSoundExist")
+      .spyOn(SoundMocked, "doesSoundExist")
       .mockReturnValue(Promise.resolve(true));
 
     const command = await Implicit.createImplicitCommand(message, logger);
-    expect(command).toBeInstanceOf(Sound);
+    expect(command).toBeInstanceOf(SoundMocked.Sound);
   });
 
   it("returns null when all not matching anything", async () => {
     jest.spyOn(Implicit, "isTimer").mockReturnValue(false);
     jest
-      .spyOn(Implicit, "doesSoundExist")
+      .spyOn(SoundMocked, "doesSoundExist")
       .mockReturnValue(Promise.resolve(false));
 
     const command = await Implicit.createImplicitCommand(message, logger);
