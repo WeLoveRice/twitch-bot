@@ -25,11 +25,13 @@
   "dependencies": {
     "discord.js": "^12.2.0",
     "moment": "^2.25.3",
+    "mz": "^2.7.0",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^4.4.2"
   },
   "devDependencies": {
     "@types/jest": "^24.9.1",
+    "@types/mz": "^2.7.0",
     "@types/node": "^12.12.37",
     "@types/ws": "^6.0.4",
     "@typescript-eslint/eslint-plugin": "^2.30.0",
