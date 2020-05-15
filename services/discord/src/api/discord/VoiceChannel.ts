@@ -44,6 +44,5 @@ export const getBotVoiceConnection = async (
   if (!botMember) {
     return null;
   }
-
   return botMember.voice.connection;
 };

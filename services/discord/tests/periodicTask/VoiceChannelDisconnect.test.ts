@@ -7,7 +7,7 @@ jest.mock("discord.js");
 jest.mock("winston", () => ({
   createLogger: jest.fn().mockReturnValue({
     info: jest.fn(),
-    warning: jest.fn()
+    warn: jest.fn()
   })
 }));
 
@@ -22,7 +22,7 @@ beforeEach(() => {
   voiceChannel = new MockedVoiceChannel();
   logger = createLogger();
   logger.info = jest.fn();
-  logger.warning = jest.fn();
+  logger.warn = jest.fn();
 });
 
 it("returns true when no one is left in channel", async () => {
@@ -31,8 +31,8 @@ it("returns true when no one is left in channel", async () => {
   const shouldStop = await voiceChannelDisconnect.execute();
 
   expect(shouldStop).toBe(true);
-  expect(logger.warning).toBeCalledTimes(1);
-  expect(logger.warning).toBeCalledWith("Bot no longer in channel");
+  expect(logger.warn).toBeCalledTimes(1);
+  expect(logger.warn).toBeCalledWith("Bot no longer in channel");
 });
 
 it("leaves the voice channel when no members are present", async () => {
@@ -45,7 +45,7 @@ it("leaves the voice channel when no members are present", async () => {
   let shouldStop = await voiceChannelDisconnect.execute();
 
   expect(shouldStop).toBe(false);
-  expect(logger.warning).toBeCalledTimes(0);
+  expect(logger.warn).toBeCalledTimes(0);
 
   members.delete("Test");
   shouldStop = await voiceChannelDisconnect.execute();
@@ -66,7 +66,7 @@ it("Does not leave the voice channel when members are still present", async () =
   let shouldStop = await voiceChannelDisconnect.execute();
 
   expect(shouldStop).toBe(false);
-  expect(logger.warning).toBeCalledTimes(0);
+  expect(logger.warn).toBeCalledTimes(0);
   expect(logger.info).toBeCalledTimes(0);
 
   shouldStop = await voiceChannelDisconnect.execute();

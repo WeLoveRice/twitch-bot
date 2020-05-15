@@ -69,6 +69,6 @@ export class Sound extends AbstractCommand {
       return;
     }
 
-    this.playSound(voiceConnection);
+    await this.playSound(voiceConnection);
   }
 }

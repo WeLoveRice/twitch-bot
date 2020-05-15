@@ -13,11 +13,7 @@ import * as VC from "../../src/api/discord/VoiceChannel";
 import { createMock } from "ts-auto-mock";
 
 jest.mock("discord.js");
-jest.mock("winston", () => ({
-  createLogger: jest.fn().mockReturnValue({
-    warning: jest.fn()
-  })
-}));
+jest.mock("winston");
 
 jest.mock("path");
 jest.mock("mz/fs");

@@ -5,11 +5,7 @@ import * as TimerMocked from "../../../src/commands/Timer";
 import * as SoundMocked from "../../../src/commands/Sound";
 
 jest.mock("discord.js");
-jest.mock("winston", () => ({
-  createLogger: jest.fn().mockReturnValue({
-    warning: jest.fn()
-  })
-}));
+jest.mock("winston");
 
 jest.mock("../../../src/commands/Timer");
 jest.mock("../../../src/commands/Sound");
