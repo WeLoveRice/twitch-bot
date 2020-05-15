@@ -1,17 +1,28 @@
-import { Message, GuildMember, VoiceChannel, VoiceState } from "discord.js";
+import {
+  Message,
+  GuildMember,
+  VoiceChannel,
+  VoiceState,
+  Guild,
+  ClientUser,
+  User
+} from "discord.js";
 import {
   isMemberInVoiceChannel,
   getVoiceChannelFromMessage,
-  isBotInMemberChannel
+  isBotInMemberChannel,
+  getBotVoiceConnection
 } from "../../../src/api/discord/VoiceChannel";
 import { Bot } from "../../../src/enum/Bot";
+import { mocked } from "ts-jest/utils";
 
 jest.mock("discord.js");
 
-const message = new (Message as jest.Mock<Message>)();
+let message = new (Message as jest.Mock<Message>)();
 
 afterEach(() => {
   jest.resetAllMocks();
+  message = new (Message as jest.Mock<Message>)();
 });
 
 const createMessageWithMember = () => {
@@ -33,15 +44,6 @@ const createMessageWithChannel = () => {
   const message = createMessageWithVoice();
   const channel = new (VoiceChannel as jest.Mock<VoiceChannel>)();
   Object.defineProperty(message?.member?.voice, "channel", { value: channel });
-
-  return message;
-};
-
-const createMessageWithBotInSameChannel = () => {
-  const message = createMessageWithChannel();
-  Object.defineProperty(message?.member?.voice.channel, "members", {
-    value: new Map([[Bot.USER_ID, true]])
-  });
 
   return message;
 };
@@ -73,14 +75,67 @@ describe("getVoiceChannelFromMessage", () => {
 });
 
 describe("isBotInMemberChannel", () => {
+  const createMessageWithBotInSameChannel = () => {
+    const message = createMessageWithChannel();
+    Object.defineProperty(message?.member?.voice.channel, "members", {
+      value: new Map([[Bot.USER_ID, true]])
+    });
+
+    return message;
+  };
+
   it.each([
     [message, false],
     [createMessageWithMember(), false],
     [createMessageWithVoice(), false],
     [createMessageWithChannel(), false],
     [createMessageWithBotInSameChannel(), true]
-  ])("returns false message is invalid", async (input, expected) => {
+  ])("returns false when message is invalid", async (input, expected) => {
     const result = await isBotInMemberChannel(input);
     expect(result).toBe(expected);
+  });
+});
+
+describe("getBotVoiceConnection", () => {
+  it("returns false when user doesn't exist", async () => {
+    Object.defineProperty(message, "client", { value: jest.fn() });
+    Object.defineProperty(message.client, "user", {
+      value: jest.fn().mockReturnValue(null)
+    });
+
+    const result = await getBotVoiceConnection(message);
+    expect(result).toBeNull();
+  });
+
+  it("returns false when can't find bot's guild member", async () => {
+    Object.defineProperty(message, "client", { value: jest.fn() });
+
+    message.client.user = new (User as jest.Mock<ClientUser>)();
+    Object.defineProperty(message, "guild", { value: jest.fn() });
+    Object.defineProperty(message.guild, "member", {
+      value: jest.fn().mockReturnValue(null)
+    });
+
+    const result = await getBotVoiceConnection(message);
+    expect(result).toBeNull();
+  });
+
+  it("returns an instance of VoiceConnection when message is valid", async () => {
+    Object.defineProperty(message, "client", { value: jest.fn() });
+    Object.defineProperty(message.client, "user", {
+      value: jest.fn().mockReturnValue(true)
+    });
+
+    const connection = jest.fn();
+    const voiceState = new (VoiceState as jest.Mock<VoiceState>)();
+    Object.defineProperty(voiceState, "connection", { value: connection });
+    const botMember = new (GuildMember as jest.Mock<GuildMember>)();
+    Object.defineProperty(botMember, "voice", { value: voiceState });
+    const guild = new (Guild as jest.Mock<Guild>)();
+    guild.member = jest.fn().mockReturnValue(botMember);
+    Object.defineProperty(message, "guild", { value: guild });
+
+    const result = await getBotVoiceConnection(message);
+    expect(result).toBe(connection);
   });
 });
