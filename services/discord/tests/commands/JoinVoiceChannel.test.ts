@@ -39,24 +39,6 @@ it("is successful when member and voice channel are correct types", async () => 
   expect(logger.error).toBeCalledTimes(0);
 });
 
-it("does not join channel again when the bot is already in the channel", async () => {
-  jest
-    .spyOn(joinVoiceChannel, "isValid")
-    .mockReturnValue(Promise.resolve(true));
-
-  const channel = new (VoiceChannel as jest.Mock<VoiceChannel>)();
-  Object.defineProperty(channel, "members", {
-    value: new Map([[Bot.USER_ID, true]])
-  });
-
-  jest.spyOn(VC, "getVoiceChannelFromMessage").mockReturnValue(channel);
-
-  await joinVoiceChannel.execute();
-  expect(logger.error).toBeCalledTimes(0);
-  expect(message.reply).toHaveBeenCalledWith("Already in channel");
-  expect(VCM.VoiceChannelManager.prototype.joinChannel).toBeCalledTimes(0);
-});
-
 it("logs error when an exception is thrown", async () => {
   jest
     .spyOn(joinVoiceChannel, "isValid")

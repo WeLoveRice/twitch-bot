@@ -22,11 +22,6 @@ export class JoinVoiceChannel extends AbstractCommand {
         return;
       }
 
-      if (channel.members.has(Bot.USER_ID)) {
-        await this.message.reply("Already in channel");
-        return;
-      }
-
       const voiceChannelManager = new VoiceChannelManager(this.logger);
       voiceChannelManager.joinChannel(channel);
     } catch (e) {
