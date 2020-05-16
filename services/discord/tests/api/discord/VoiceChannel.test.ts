@@ -14,7 +14,6 @@ import {
   getBotVoiceConnection
 } from "../../../src/api/discord/VoiceChannel";
 import { Bot } from "../../../src/enum/Bot";
-import { mocked } from "ts-jest/utils";
 
 jest.mock("discord.js");
 
