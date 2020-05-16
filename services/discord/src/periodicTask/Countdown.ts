@@ -35,9 +35,11 @@ export class Countdown implements PeriodicTask {
   createEmbedForRemainingTime(): MessageEmbed {
     const embed = new MessageEmbed();
 
-    embed.setTitle("Countdown timer");
+    embed.setURL("https://github.com/ColinCee/twitch-bot");
+    embed.setTitle("Check me out on GitHub!");
+    embed.setDescription("A countdown because people can't keep track of time");
+    embed.addField("Remaining time", this.getFormattedRemainingTime());
     embed.setColor(0xa8ffa8);
-    embed.setDescription(`Remaining time: ${this.getFormattedRemainingTime()}`);
 
     return embed;
   }

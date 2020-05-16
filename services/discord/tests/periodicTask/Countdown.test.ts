@@ -107,9 +107,15 @@ describe("createEmbedForRemainingTime", () => {
     countdown.getFormattedRemainingTime = jest.fn().mockReturnValue("1m 05s");
     const embed = countdown.createEmbedForRemainingTime();
 
-    expect(embed.setTitle).toBeCalledWith("Countdown timer");
+    expect(embed.setURL).toBeCalledWith(
+      "https://github.com/ColinCee/twitch-bot"
+    );
+    expect(embed.setTitle).toBeCalledWith("Check me out on GitHub!");
     expect(embed.setColor).toBeCalledWith(0xa8ffa8);
-    expect(embed.setDescription).toBeCalledWith("Remaining time: 1m 05s");
+    expect(embed.setDescription).toBeCalledWith(
+      "A countdown because people can't keep track of time"
+    );
+    expect(embed.addField).toBeCalledWith("Remaining time", "1m 05s");
   });
 });
 
