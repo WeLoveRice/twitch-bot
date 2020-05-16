@@ -14,14 +14,13 @@ client.on("ready", () => {
   logger.info("Started");
 });
 
-client.on("message", message => {
+client.on("message", async message => {
   const logger = createLogger();
-  const command = createCommand(message, logger);
+  const command = await createCommand(message, logger);
   if (command === null) {
     return;
   }
-  console.log(command.constructor.name);
-  command.execute();
+  await command.execute();
 });
 
 client.on("error", error => {

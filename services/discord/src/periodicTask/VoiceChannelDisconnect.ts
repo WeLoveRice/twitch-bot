@@ -18,7 +18,7 @@ export class VoiceChannelDisconnect implements PeriodicTask {
     const { members } = this.voiceChannel;
     // Disconnect from the channel if no one is present for > 5mins
     if (!members.has(Bot.USER_ID)) {
-      this.logger.warning("Bot no longer in channel");
+      this.logger.warn("Bot no longer in channel");
       return true;
     }
 

@@ -1,41 +1,24 @@
 import { Bot } from "./../enum/Bot";
-import { GuildMember, VoiceChannel } from "discord.js";
+import { Message } from "discord.js";
 import { AbstractCommand } from "./AbstractCommand";
 import { VoiceChannelManager } from "../VoiceChannelManager";
+import {
+  isMemberInVoiceChannel,
+  getVoiceChannelFromMessage
+} from "../api/discord/VoiceChannel";
 
 export class JoinVoiceChannel extends AbstractCommand {
-  public getVoiceChannelFromMessage(): VoiceChannel {
-    if (!this.message.member?.voice?.channel) {
-      throw new ReferenceError(
-        "member or voice does does not exist on message"
-      );
-    }
-
-    return this.message.member.voice.channel;
-  }
-
   public async isValid(): Promise<boolean> {
-    const { member } = this.message;
-    if (!(member instanceof GuildMember)) {
-      this.logger.error("Expected member of message to be of type GuildMember");
-      return false;
-    }
-
-    const { channel } = member.voice;
-    if (!(channel instanceof VoiceChannel)) {
-      await this.message.reply("You must be in a voice channel for me to join");
-      return false;
-    }
-
-    return true;
+    return isMemberInVoiceChannel(this.message);
   }
 
   protected async run(): Promise<void> {
     try {
-      const channel = this.getVoiceChannelFromMessage();
-
-      if (channel.members.has(Bot.USER_ID)) {
-        this.message.reply("Already in channel");
+      const channel = getVoiceChannelFromMessage(this.message);
+      if (!channel) {
+        await this.message.reply(
+          "You must be in a voice channel for me to join"
+        );
         return;
       }
 

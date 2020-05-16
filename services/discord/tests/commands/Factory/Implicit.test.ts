@@ -1,29 +1,23 @@
-import { createImplicitCommand } from "./../../../src/commands/Factory/Implicit";
+import * as Implicit from "./../../../src/commands/Factory/Implicit";
 import { Message } from "discord.js";
 import { createLogger, Logger } from "winston";
-import { Timer } from "../../../src/commands/Timer";
+import * as TimerMocked from "../../../src/commands/Timer";
+import * as SoundMocked from "../../../src/commands/Sound";
 
 jest.mock("discord.js");
-jest.mock("winston", () => ({
-  createLogger: jest.fn().mockReturnValue({
-    warning: jest.fn()
-  })
-}));
+jest.mock("winston");
 
-const MockedMessage = Message as jest.Mock<Message>;
-const mockCreateLogger = createLogger as jest.Mock<Logger>;
+jest.mock("../../../src/commands/Timer");
+jest.mock("../../../src/commands/Sound");
 
-let message = new MockedMessage();
-let logger = createLogger();
+const message = new (Message as jest.Mock<Message>)();
+const logger = (createLogger as jest.Mock<Logger>)();
 
-beforeEach(() => {
-  MockedMessage.mockClear();
-  mockCreateLogger.mockClear();
-  message = new MockedMessage();
-  logger = createLogger();
+afterEach(() => {
+  jest.resetAllMocks();
 });
 
-describe("Timer test", () => {
+describe("Timer tests", () => {
   it.each([
     "1sec",
     "2secs",
@@ -43,10 +37,9 @@ describe("Timer test", () => {
     "Can't start 2 mins",
     "Wait 2 mins I go shower",
     "brb 05 mins"
-  ])("should return timer when message content is %s", (content: string) => {
+  ])("should return true when message content is %s", (content: string) => {
     message.content = content;
-    const implicitCommand = createImplicitCommand(message, logger);
-    expect(implicitCommand).toBeInstanceOf(Timer);
+    expect(Implicit.isTimer(message)).toBe(true);
   });
 
   it.each([
@@ -59,11 +52,38 @@ describe("Timer test", () => {
     "10 years",
     "500"
   ])(
-    "should not return timer when message content is %s",
+    "should not return false when message content is %s",
     (content: string) => {
       message.content = content;
-      const implicitCommand = createImplicitCommand(message, logger);
-      expect(implicitCommand).not.toBeInstanceOf(Timer);
+      expect(Implicit.isTimer(message)).toBe(false);
     }
   );
+});
+
+describe("Factory Tests", () => {
+  it("returns Timer command when isTimer returns true", async () => {
+    jest.spyOn(Implicit, "isTimer").mockReturnValue(true);
+    const command = await Implicit.createImplicitCommand(message, logger);
+
+    expect(command).toBeInstanceOf(TimerMocked.Timer);
+  });
+
+  it("returns Sound command when doesExist returns true", async () => {
+    jest
+      .spyOn(SoundMocked, "doesSoundExist")
+      .mockReturnValue(Promise.resolve(true));
+
+    const command = await Implicit.createImplicitCommand(message, logger);
+    expect(command).toBeInstanceOf(SoundMocked.Sound);
+  });
+
+  it("returns null when all not matching anything", async () => {
+    jest.spyOn(Implicit, "isTimer").mockReturnValue(false);
+    jest
+      .spyOn(SoundMocked, "doesSoundExist")
+      .mockReturnValue(Promise.resolve(false));
+
+    const command = await Implicit.createImplicitCommand(message, logger);
+    expect(command).toBeNull();
+  });
 });

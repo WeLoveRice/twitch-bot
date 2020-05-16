@@ -6,7 +6,6 @@ import * as Countdown from "../../src/periodicTask/Countdown";
 jest.mock("discord.js");
 jest.mock("winston", () => ({
   createLogger: jest.fn().mockReturnValue({
-    warning: jest.fn(),
     info: jest.fn()
   })
 }));

@@ -2,18 +2,24 @@ import { Message } from "discord.js";
 import { Logger } from "winston";
 import { Timer } from "../Timer";
 import { AbstractCommand } from "../AbstractCommand";
+import { Sound, doesSoundExist } from "../Sound";
 
-const isTimer = ({ content }: Message): boolean => {
+export const isTimer = ({ content }: Message): boolean => {
   const regex = /(\d{1,2}\s?(sec|min))/;
   return regex.test(content);
 };
 
-export const createImplicitCommand = (
+export const createImplicitCommand = async (
   message: Message,
   logger: Logger
-): AbstractCommand | null => {
+): Promise<AbstractCommand | null> => {
   if (isTimer(message)) {
     return new Timer(message, logger);
   }
+
+  if (await doesSoundExist(message)) {
+    return new Sound(message, logger);
+  }
+
   return null;
 };
