@@ -8,7 +8,7 @@
     "lint": "eslint **/*.ts",
     "build": "tsc",
     "postbuild": "cp -r sounds build/sounds",
-    "start": "node build/src/index.js",
+    "start": "pm2-runtime ecosystem.config.js",
     "start:dev": "ts-node-dev --respawn --transpileOnly src/index.ts",
     "test": "jest",
     "coverage": "jest --collectCoverage"
@@ -30,7 +30,6 @@
     "moment": "^2.25.3",
     "mz": "^2.7.0",
     "pm2": "^4.4.0",
-    "ttypescript": "^1.5.10",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^4.4.2"
   },
@@ -51,6 +50,7 @@
     "ts-auto-mock": "^2.0.0",
     "ts-jest": "^25.4.0",
     "ts-node-dev": "^1.0.0-pre.44",
+    "ttypescript": "^1.5.10",
     "typescript": "^3.9.2"
   }
 }
