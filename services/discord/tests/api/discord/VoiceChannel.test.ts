@@ -107,6 +107,16 @@ describe("getBotVoiceConnection", () => {
     expect(result).toBeNull();
   });
 
+  it("returns false when guild doesn't exist", async () => {
+    Object.defineProperty(message, "client", { value: jest.fn() });
+
+    message.client.user = new (User as jest.Mock<ClientUser>)();
+    Object.defineProperty(message, "guild", { value: null });
+
+    const result = await getBotVoiceConnection(message);
+    expect(result).toBeNull();
+  });
+
   it("returns false when can't find bot's guild member", async () => {
     Object.defineProperty(message, "client", { value: jest.fn() });
 

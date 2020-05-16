@@ -37,7 +37,21 @@ describe("isValid", () => {
     }
   );
 });
+
 describe("execute", () => {
+  it("does not run when isValid is false", async () => {
+    jest
+      .spyOn(joinVoiceChannel, "isValid")
+      .mockReturnValue(Promise.resolve(false));
+
+    const getVoiceChannelFromMessage = jest.spyOn(
+      VC,
+      "getVoiceChannelFromMessage"
+    );
+    await joinVoiceChannel.execute();
+    expect(getVoiceChannelFromMessage).not.toBeCalled();
+  });
+
   it("replies when user is not in a voice channel", async () => {
     jest
       .spyOn(joinVoiceChannel, "isValid")
