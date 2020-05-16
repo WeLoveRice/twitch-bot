@@ -97,10 +97,10 @@ describe("isBotInMemberChannel", () => {
 });
 
 describe("getBotVoiceConnection", () => {
-  it("returns false when user doesn't exist", async () => {
+  it("returns null when user doesn't exist", async () => {
     Object.defineProperty(message, "client", { value: jest.fn() });
     Object.defineProperty(message.client, "user", {
-      value: jest.fn().mockReturnValue(null)
+      value: null
     });
 
     const result = await getBotVoiceConnection(message);

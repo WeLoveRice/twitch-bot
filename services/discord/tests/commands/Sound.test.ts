@@ -121,7 +121,6 @@ describe("playSound", () => {
 
     sound.playSound(voiceConnection);
     expect(voiceConnection.play).toBeCalledWith(file);
-    expect(event.on).toBeCalledWith("finish", expect.any(Function));
   });
 });
 
