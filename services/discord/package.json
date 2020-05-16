@@ -29,6 +29,7 @@
     "ffmpeg-static": "^4.2.1",
     "moment": "^2.25.3",
     "mz": "^2.7.0",
+    "pm2": "^4.4.0",
     "ttypescript": "^1.5.10",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^4.4.2"
