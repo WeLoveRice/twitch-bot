@@ -3,9 +3,9 @@ const logger = {
   warn: jest.fn()
 };
 
-import { VoiceChannelDisconnect } from "../../src/periodicTask/VoiceChannelDisconnect";
 import { VoiceChannel } from "discord.js";
 import { Bot } from "../../src/enum/Bot";
+import { VoiceChannelDisconnect } from "../../src/periodicTask/VoiceChannelDisconnect";
 
 jest.mock("discord.js");
 jest.mock("../../src/Logger", () => ({
@@ -18,6 +18,7 @@ afterEach(() => {
 });
 
 it("returns true when no one is left in channel", async () => {
+  const voiceChannel = new (VoiceChannel as jest.Mock<VoiceChannel>)();
   Object.defineProperty(voiceChannel, "members", { value: new Map() });
   const voiceChannelDisconnect = new VoiceChannelDisconnect(voiceChannel);
 
