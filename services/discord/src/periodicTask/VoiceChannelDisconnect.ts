@@ -2,15 +2,16 @@ import { Logger } from "winston";
 import { PeriodicTask } from ".";
 import { VoiceChannel } from "discord.js";
 import { Bot } from "../enum/Bot";
+import { createLogger } from "../Logger";
 
 export class VoiceChannelDisconnect implements PeriodicTask {
   public readonly interval: number;
-  private voiceChannel: VoiceChannel;
-  private logger: Logger;
+  voiceChannel: VoiceChannel;
+  logger: Logger;
 
-  public constructor(voiceChannel: VoiceChannel, logger: Logger) {
+  public constructor(voiceChannel: VoiceChannel) {
     this.voiceChannel = voiceChannel;
-    this.logger = logger;
+    this.logger = createLogger();
     this.interval = 60 * 1000;
   }
 

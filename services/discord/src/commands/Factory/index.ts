@@ -6,13 +6,12 @@ import { AbstractCommand } from "../AbstractCommand";
 import { Logger } from "winston";
 
 export const createCommand = async (
-  message: Message,
-  logger: Logger
+  message: Message
 ): Promise<AbstractCommand | null> => {
   const { content } = message;
 
   if (content.startsWith(Command.PREFIX)) {
-    return createExplicitCommand(message, logger);
+    return createExplicitCommand(message);
   }
-  return createImplicitCommand(message, logger);
+  return createImplicitCommand(message);
 };

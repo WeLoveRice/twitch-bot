@@ -15,8 +15,7 @@ client.on("ready", () => {
 });
 
 client.on("message", async message => {
-  const logger = createLogger();
-  const command = await createCommand(message, logger);
+  const command = await createCommand(message);
   if (command === null) {
     return;
   }

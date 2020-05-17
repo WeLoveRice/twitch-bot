@@ -4,9 +4,9 @@ import path from "path";
 import fs from "mz/fs";
 import {
   isMemberInVoiceChannel,
-  getBotVoiceConnection
+  getBotVoiceConnection,
+  joinVoiceChannel
 } from "../api/discord/VoiceChannel";
-import { JoinVoiceChannel } from "./JoinVoiceChannel";
 
 export const getSoundPath = (content: string): string => {
   return path.join(__dirname, "..", "..", "sounds", `${content}.mp3`);
@@ -35,24 +35,13 @@ export class Sound extends AbstractCommand {
     return doesSoundExist(this.message);
   }
 
-  async joinVoiceChannel(): Promise<VoiceConnection | null> {
-    const voiceConnection = await getBotVoiceConnection(this.message);
-    if (!voiceConnection) {
-      const command = new JoinVoiceChannel(this.message, this.logger);
-      await command.execute();
-      return getBotVoiceConnection(this.message);
-    }
-
-    return voiceConnection;
-  }
-
   async playSound(voiceConnection: VoiceConnection): Promise<void> {
     const file = getSoundPath(this.message.content);
     voiceConnection.play(file);
   }
 
   protected async run(): Promise<void> {
-    const voiceConnection = await this.joinVoiceChannel();
+    const voiceConnection = await joinVoiceChannel(this.message);
     if (!voiceConnection) {
       return;
     }

@@ -8,14 +8,9 @@ import { Message, TextChannel } from "discord.js";
 import moment from "moment";
 import { Sound } from "../../src/commands/Sound";
 
-jest.mock("winston", () => ({
-  createLogger: jest.fn().mockReturnValue({
-    error: jest.fn()
-  })
-}));
-
 jest.mock("discord.js");
 jest.mock("moment", () => () => momentMock);
+jest.mock("../../src/Logger");
 jest.mock("../../src/commands/Sound");
 
 const message = new (Message as jest.Mock<Message>)();

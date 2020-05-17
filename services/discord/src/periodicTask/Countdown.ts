@@ -7,13 +7,11 @@ export class Countdown implements PeriodicTask {
   message: Message;
 
   endTime: Moment;
-  private secondsToCountdown: number;
   private countDownMessage: Message | null;
 
   constructor(message: Message, secondsToCountdown: number) {
     this.message = message;
     this.endTime = moment().add(secondsToCountdown, "seconds");
-    this.secondsToCountdown = secondsToCountdown;
     this.countDownMessage = null;
   }
 

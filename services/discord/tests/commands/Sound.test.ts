@@ -8,12 +8,11 @@ import { createLogger, Logger } from "winston";
 import * as Sound from "../../src/commands/Sound";
 import path from "path";
 import fs from "mz/fs";
-import * as JVC from "../../src/commands/JoinVoiceChannel";
 import * as VC from "../../src/api/discord/VoiceChannel";
 import { createMock } from "ts-auto-mock";
 
 jest.mock("discord.js");
-jest.mock("winston");
+jest.mock("../../src/Logger");
 
 jest.mock("path");
 jest.mock("mz/fs");
@@ -22,11 +21,11 @@ jest.mock("../../src/commands/JoinVoiceChannel");
 
 const message = new (Message as jest.Mock<Message>)();
 const logger = (createLogger as jest.Mock<Logger>)();
-let sound = new Sound.Sound(message, logger);
+let sound = new Sound.Sound(message);
 
 afterEach(() => {
   jest.resetAllMocks();
-  sound = new Sound.Sound(message, logger);
+  sound = new Sound.Sound(message);
 });
 
 describe("doesSoundExist", () => {
@@ -84,32 +83,6 @@ describe("isValid", () => {
   });
 });
 
-describe("joinVoiceChannel", () => {
-  const sound = new Sound.Sound(message, logger);
-  it("rejoins when voiceconnection is null but the bot is present in the voice channel", async () => {
-    const voiceConnection = createMock<VoiceConnection>();
-    jest
-      .spyOn(VC, "getBotVoiceConnection")
-      .mockReturnValueOnce(Promise.resolve(null))
-      .mockReturnValueOnce(Promise.resolve(voiceConnection));
-
-    const result = await sound.joinVoiceChannel();
-    expect(JVC.JoinVoiceChannel.prototype.execute).toBeCalled();
-    expect(result).toBe(voiceConnection);
-  });
-
-  it("returns a voiceconnection when it exists", async () => {
-    const voiceConnection = createMock<VoiceConnection>();
-    jest
-      .spyOn(VC, "getBotVoiceConnection")
-      .mockReturnValueOnce(Promise.resolve(voiceConnection));
-
-    const result = await sound.joinVoiceChannel();
-    expect(JVC.JoinVoiceChannel.prototype.execute).not.toBeCalled();
-    expect(result).toBe(voiceConnection);
-  });
-});
-
 describe("playSound", () => {
   it("plays sound", async () => {
     const event = createMock<StreamDispatcher>();
@@ -130,9 +103,7 @@ describe("run", () => {
   });
 
   it("does not play anything if voiceconnection is null", async () => {
-    jest
-      .spyOn(sound, "joinVoiceChannel")
-      .mockReturnValue(Promise.resolve(null));
+    jest.spyOn(VC, "joinVoiceChannel").mockReturnValue(Promise.resolve(null));
     const playSound = jest.spyOn(sound, "playSound");
     await sound.execute();
     expect(playSound).not.toBeCalled();
@@ -143,7 +114,7 @@ describe("run", () => {
     voiceConnection.speaking = createMock<Speaking>();
     jest.spyOn(voiceConnection.speaking, "has").mockReturnValue(true);
     jest
-      .spyOn(sound, "joinVoiceChannel")
+      .spyOn(VC, "joinVoiceChannel")
       .mockReturnValue(Promise.resolve(voiceConnection));
     const playSound = jest.spyOn(sound, "playSound");
 
@@ -157,7 +128,7 @@ describe("run", () => {
     voiceConnection.speaking = createMock<Speaking>();
     jest.spyOn(voiceConnection.speaking, "has").mockReturnValue(false);
     jest
-      .spyOn(sound, "joinVoiceChannel")
+      .spyOn(VC, "joinVoiceChannel")
       .mockReturnValue(Promise.resolve(voiceConnection));
     const playSound = jest.spyOn(sound, "playSound");
 

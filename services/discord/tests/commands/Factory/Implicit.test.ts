@@ -63,7 +63,7 @@ describe("Timer tests", () => {
 describe("Factory Tests", () => {
   it("returns Timer command when isTimer returns true", async () => {
     jest.spyOn(Implicit, "isTimer").mockReturnValue(true);
-    const command = await Implicit.createImplicitCommand(message, logger);
+    const command = await Implicit.createImplicitCommand(message);
 
     expect(command).toBeInstanceOf(TimerMocked.Timer);
   });
@@ -73,7 +73,7 @@ describe("Factory Tests", () => {
       .spyOn(SoundMocked, "doesSoundExist")
       .mockReturnValue(Promise.resolve(true));
 
-    const command = await Implicit.createImplicitCommand(message, logger);
+    const command = await Implicit.createImplicitCommand(message);
     expect(command).toBeInstanceOf(SoundMocked.Sound);
   });
 
@@ -83,7 +83,7 @@ describe("Factory Tests", () => {
       .spyOn(SoundMocked, "doesSoundExist")
       .mockReturnValue(Promise.resolve(false));
 
-    const command = await Implicit.createImplicitCommand(message, logger);
+    const command = await Implicit.createImplicitCommand(message);
     expect(command).toBeNull();
   });
 });

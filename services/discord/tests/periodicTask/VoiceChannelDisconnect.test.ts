@@ -1,53 +1,50 @@
+const logger = {
+  info: jest.fn(),
+  warn: jest.fn()
+};
+
 import { VoiceChannelDisconnect } from "../../src/periodicTask/VoiceChannelDisconnect";
-import { createLogger } from "winston";
-import { VoiceChannel, GuildMember } from "discord.js";
+import { VoiceChannel } from "discord.js";
 import { Bot } from "../../src/enum/Bot";
 
 jest.mock("discord.js");
-jest.mock("winston", () => ({
-  createLogger: jest.fn().mockReturnValue({
-    info: jest.fn(),
-    warn: jest.fn()
-  })
+jest.mock("../../src/Logger", () => ({
+  createLogger: jest.fn(() => logger)
 }));
 
-const MockedGuildMember = GuildMember as jest.Mock<GuildMember>;
-
-let voiceChannel = new (VoiceChannel as jest.Mock<VoiceChannel>)();
-const logger = createLogger();
-let voiceChannelDisconnect = new VoiceChannelDisconnect(voiceChannel, logger);
-
 afterEach(() => {
-  jest.resetAllMocks();
-  voiceChannel = new (VoiceChannel as jest.Mock<VoiceChannel>)();
+  logger.info.mockReset();
+  logger.warn.mockReset();
 });
 
 it("returns true when no one is left in channel", async () => {
   Object.defineProperty(voiceChannel, "members", { value: new Map() });
-  voiceChannelDisconnect = new VoiceChannelDisconnect(voiceChannel, logger);
+  const voiceChannelDisconnect = new VoiceChannelDisconnect(voiceChannel);
+
   const shouldStop = await voiceChannelDisconnect.execute();
 
   expect(shouldStop).toBe(true);
-  expect(logger.warn).toBeCalledTimes(1);
   expect(logger.warn).toBeCalledWith("Bot no longer in channel");
 });
 
 it("leaves the voice channel when no members are present", async () => {
   const members = new Map();
-  members.set(Bot.USER_ID, new MockedGuildMember());
-  members.set("Test", new MockedGuildMember());
-  Object.defineProperty(voiceChannel, "members", { value: members });
+  members.set(Bot.USER_ID, true);
+  members.set("Test", true);
+  const voiceChannel = new (VoiceChannel as jest.Mock<VoiceChannel>)();
+  Object.defineProperty(voiceChannel, "members", {
+    value: members
+  });
+  const voiceChannelDisconnect = new VoiceChannelDisconnect(voiceChannel);
 
-  voiceChannelDisconnect = new VoiceChannelDisconnect(voiceChannel, logger);
   let shouldStop = await voiceChannelDisconnect.execute();
 
-  expect(shouldStop).toBe(false);
   expect(logger.warn).toBeCalledTimes(0);
+  expect(shouldStop).toBe(false);
 
   members.delete("Test");
   shouldStop = await voiceChannelDisconnect.execute();
   expect(shouldStop).toBe(true);
-  expect(logger.info).toBeCalledTimes(1);
   expect(logger.info).toBeCalledWith(
     "No one left in channel, now disconnecting."
   );
@@ -55,11 +52,14 @@ it("leaves the voice channel when no members are present", async () => {
 
 it("Does not leave the voice channel when members are still present", async () => {
   const members = new Map();
-  members.set(Bot.USER_ID, new MockedGuildMember());
-  members.set("Test", new MockedGuildMember());
-  Object.defineProperty(voiceChannel, "members", { value: members });
+  members.set(Bot.USER_ID, true);
+  members.set("Test", true);
+  const voiceChannel = new (VoiceChannel as jest.Mock<VoiceChannel>)();
+  Object.defineProperty(voiceChannel, "members", {
+    value: members
+  });
+  const voiceChannelDisconnect = new VoiceChannelDisconnect(voiceChannel);
 
-  voiceChannelDisconnect = new VoiceChannelDisconnect(voiceChannel, logger);
   let shouldStop = await voiceChannelDisconnect.execute();
 
   expect(shouldStop).toBe(false);
