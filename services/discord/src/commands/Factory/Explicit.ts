@@ -21,8 +21,7 @@ const extractCommandFromContent = ({ content }: Message): string | null => {
 };
 
 export const createExplicitCommand = (
-  message: Message,
-  logger: Logger
+  message: Message
 ): AbstractCommand | null => {
   if (!isCommand(message)) {
     return null;
@@ -31,9 +30,9 @@ export const createExplicitCommand = (
 
   switch (command) {
     case Command.JOIN:
-      return new JoinVoiceChannel(message, logger);
+      return new JoinVoiceChannel(message);
     case Command.SOUNDS:
-      return new SoundList(message, logger);
+      return new SoundList(message);
     default:
       return null;
   }

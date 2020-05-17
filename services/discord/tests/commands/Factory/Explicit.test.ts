@@ -2,16 +2,14 @@ import { JoinVoiceChannel } from "../../../src/commands/JoinVoiceChannel";
 import { createExplicitCommand } from "../../../src/commands/Factory/Explicit";
 import { Message } from "discord.js";
 import { Command } from "../../../src/enum/CommandEnum";
-import { createLogger } from "winston";
 import { SoundList } from "../../../src/commands/SoundList";
 
 jest.mock("discord.js");
-jest.mock("winston", () => ({
+jest.mock("../../../src/Logger", () => ({
   createLogger: jest.fn()
 }));
 
 const message = new (Message as jest.Mock<Message>)();
-const logger = createLogger();
 
 afterEach(() => jest.resetAllMocks());
 
@@ -27,7 +25,7 @@ it.each([
   Command.SOUNDS
 ])("returns null when message content is %s", content => {
   message.content = content;
-  const command = createExplicitCommand(message, logger);
+  const command = createExplicitCommand(message);
   expect(command).toBe(null);
 });
 
@@ -38,7 +36,7 @@ it.each([
   `when command is ${Command.PREFIX}%s returns %s`,
   (commandString, commandClass) => {
     message.content = `${Command.PREFIX}${commandString}`;
-    const command = createExplicitCommand(message, logger);
+    const command = createExplicitCommand(message);
     expect(command).toBeInstanceOf(commandClass);
   }
 );

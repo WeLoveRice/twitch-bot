@@ -1,10 +1,9 @@
 import { Message, User } from "discord.js";
-import { createLogger } from "winston";
 import { Timer } from "../../src/commands/Timer";
 import * as Countdown from "../../src/periodicTask/Countdown";
 
 jest.mock("discord.js");
-jest.mock("winston", () => ({
+jest.mock("../../src/Logger", () => ({
   createLogger: jest.fn().mockReturnValue({
     info: jest.fn()
   })

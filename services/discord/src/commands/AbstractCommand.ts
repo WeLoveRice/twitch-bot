@@ -1,5 +1,6 @@
 import { Message } from "discord.js";
-import { Logger, createLogger } from "winston";
+import { Logger } from "winston";
+import { createLogger } from "../Logger";
 
 export abstract class AbstractCommand {
   protected message: Message;

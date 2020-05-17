@@ -1,15 +1,13 @@
 import { SoundList } from "../../src/commands/SoundList";
 import { Message } from "discord.js";
-import { createLogger, Logger } from "winston";
 import fs from "mz/fs";
 
 jest.mock("discord.js");
-jest.mock("winston");
 jest.mock("mz/fs");
+jest.mock("../../src/Logger");
 
 const message = new (Message as jest.Mock<Message>)();
-const logger = (createLogger as jest.Mock<Logger>)();
-const soundList = new SoundList(message, logger);
+const soundList = new SoundList(message);
 
 afterEach(() => {
   jest.resetAllMocks();
