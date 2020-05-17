@@ -11,18 +11,15 @@ jest.mock("winston", () => ({
   })
 }));
 
-const MockedVoiceChannel = VoiceChannel as jest.Mock<VoiceChannel>;
 const MockedGuildMember = GuildMember as jest.Mock<GuildMember>;
 
-let voiceChannel = new MockedVoiceChannel();
-let logger = createLogger();
+let voiceChannel = new (VoiceChannel as jest.Mock<VoiceChannel>)();
+const logger = createLogger();
 let voiceChannelDisconnect = new VoiceChannelDisconnect(voiceChannel, logger);
 
-beforeEach(() => {
-  voiceChannel = new MockedVoiceChannel();
-  logger = createLogger();
-  logger.info = jest.fn();
-  logger.warn = jest.fn();
+afterEach(() => {
+  jest.resetAllMocks();
+  voiceChannel = new (VoiceChannel as jest.Mock<VoiceChannel>)();
 });
 
 it("returns true when no one is left in channel", async () => {
