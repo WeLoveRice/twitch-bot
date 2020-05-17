@@ -2,24 +2,16 @@ import { Command } from "../../enum/CommandEnum";
 import { JoinVoiceChannel } from "../JoinVoiceChannel";
 import { Message } from "discord.js";
 import { AbstractCommand } from "../AbstractCommand";
-import { createLogger, Logger } from "winston";
+import { Logger } from "winston";
+import { SoundList } from "../../commands/SoundList";
 
 const isCommand = (message: Message): boolean => {
   const { content } = message;
-  if (typeof content !== "string" || content === "") {
-    return false;
-  }
-
   if (!content.startsWith(Command.PREFIX)) {
     return false;
   }
 
-  // When the message string is just the command prefix
-  if (content.length === 1) {
-    return false;
-  }
-
-  return true;
+  return content.length > 1;
 };
 
 const extractCommandFromContent = ({ content }: Message): string | null => {
@@ -40,6 +32,8 @@ export const createExplicitCommand = (
   switch (command) {
     case Command.JOIN:
       return new JoinVoiceChannel(message, logger);
+    case Command.SOUNDS:
+      return new SoundList(message, logger);
     default:
       return null;
   }

@@ -1,7 +1,6 @@
 import { JoinVoiceChannel } from "./../../src/commands/JoinVoiceChannel";
 import { Message, VoiceChannel } from "discord.js";
 import { createLogger } from "../../src/Logger";
-import { Bot } from "../../src/enum/Bot";
 import * as VCM from "../../src/VoiceChannelManager";
 import * as VC from "../../src/api/discord/VoiceChannel";
 
@@ -22,32 +21,73 @@ afterEach(() => {
   jest.resetAllMocks();
 });
 
-it("replies when user is not in a voice channel", async () => {
-  jest
-    .spyOn(joinVoiceChannel, "isValid")
-    .mockReturnValue(Promise.resolve(true));
-  jest.spyOn(VC, "getVoiceChannelFromMessage").mockReturnValue(null);
+describe("isValid", () => {
+  it.each([
+    [false, false],
+    [true, true]
+  ])(
+    "returns %s when isMemberInVoiceChannel returns %",
+    async (expected, input) => {
+      jest
+        .spyOn(VC, "isMemberInVoiceChannel")
+        .mockReturnValue(Promise.resolve(input));
 
-  await joinVoiceChannel.execute();
-  expect(message.reply).toBeCalledWith(
-    "You must be in a voice channel for me to join"
+      const result = await joinVoiceChannel.isValid();
+      expect(result).toBe(expected);
+    }
   );
 });
 
-it("is successful when member and voice channel are correct types", async () => {
-  await joinVoiceChannel.execute();
-  expect(logger.error).toBeCalledTimes(0);
-});
+describe("execute", () => {
+  it("does not run when isValid is false", async () => {
+    jest
+      .spyOn(joinVoiceChannel, "isValid")
+      .mockReturnValue(Promise.resolve(false));
 
-it("logs error when an exception is thrown", async () => {
-  jest
-    .spyOn(joinVoiceChannel, "isValid")
-    .mockReturnValue(Promise.resolve(true));
-  jest.spyOn(VC, "getVoiceChannelFromMessage").mockImplementation(() => {
-    throw new Error("Test");
+    const getVoiceChannelFromMessage = jest.spyOn(
+      VC,
+      "getVoiceChannelFromMessage"
+    );
+    await joinVoiceChannel.execute();
+    expect(getVoiceChannelFromMessage).not.toBeCalled();
   });
-  await joinVoiceChannel.execute();
-  expect(logger.error).toBeCalledWith(
-    "Something went wrong when trying to join a voice channel: Error: Test"
-  );
+
+  it("replies when user is not in a voice channel", async () => {
+    jest
+      .spyOn(joinVoiceChannel, "isValid")
+      .mockReturnValue(Promise.resolve(true));
+    jest.spyOn(VC, "getVoiceChannelFromMessage").mockReturnValue(null);
+
+    await joinVoiceChannel.execute();
+    expect(message.reply).toBeCalledWith(
+      "You must be in a voice channel for me to join"
+    );
+  });
+
+  it("is successful when member and voice channel are correct types", async () => {
+    jest
+      .spyOn(joinVoiceChannel, "isValid")
+      .mockReturnValue(Promise.resolve(true));
+
+    jest
+      .spyOn(VC, "getVoiceChannelFromMessage")
+      .mockReturnValue(new (VoiceChannel as jest.Mock<VoiceChannel>)());
+
+    await joinVoiceChannel.execute();
+    expect(message.reply).not.toBeCalled();
+    expect(VCM.VoiceChannelManager.prototype.joinChannel).toBeCalled();
+  });
+
+  it("logs error when an exception is thrown", async () => {
+    jest
+      .spyOn(joinVoiceChannel, "isValid")
+      .mockReturnValue(Promise.resolve(true));
+    jest.spyOn(VC, "getVoiceChannelFromMessage").mockImplementation(() => {
+      throw new Error("Test");
+    });
+    await joinVoiceChannel.execute();
+    expect(logger.error).toBeCalledWith(
+      "Something went wrong when trying to join a voice channel: Error: Test"
+    );
+  });
 });

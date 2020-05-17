@@ -23,7 +23,7 @@ export class JoinVoiceChannel extends AbstractCommand {
       }
 
       const voiceChannelManager = new VoiceChannelManager(this.logger);
-      voiceChannelManager.joinChannel(channel);
+      await voiceChannelManager.joinChannel(channel);
     } catch (e) {
       this.logger.error(
         `Something went wrong when trying to join a voice channel: ${e}`

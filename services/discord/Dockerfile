@@ -1,16 +1,26 @@
-FROM node:12.16.3-buster-slim
+### Build Image
+FROM node:12-alpine AS builder
 
-RUN apt-get update
-RUN apt-get install -yy python3 build-essential
-
-RUN mkdir -p /home/node/twitch-bot/node_modules && chown -R node:node /home/node/twitch-bot
 WORKDIR /home/node/twitch-bot
+RUN apk add python3 make g++ gcc
+RUN mkdir -p ./node_modules
+RUN chown -R node:node .
 USER node
 
 COPY package.json .
-RUN npm install 
-
+RUN npm install
 COPY --chown=node:node . .
-
 RUN npm run build
+# npm prune --production fails to run
+RUN rm -rf node_modules
+RUN npm install --production
+
+### Production image
+FROM node:12-alpine
+
+WORKDIR /home/node/twitch-bot
+USER node
+COPY --from=builder /home/node/twitch-bot .
+
+ENV NODE_ENV=production
 CMD ["npm", "run", "start"]

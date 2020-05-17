@@ -14,7 +14,6 @@ import {
   getBotVoiceConnection
 } from "../../../src/api/discord/VoiceChannel";
 import { Bot } from "../../../src/enum/Bot";
-import { mocked } from "ts-jest/utils";
 
 jest.mock("discord.js");
 
@@ -97,11 +96,21 @@ describe("isBotInMemberChannel", () => {
 });
 
 describe("getBotVoiceConnection", () => {
-  it("returns false when user doesn't exist", async () => {
+  it("returns null when user doesn't exist", async () => {
     Object.defineProperty(message, "client", { value: jest.fn() });
     Object.defineProperty(message.client, "user", {
-      value: jest.fn().mockReturnValue(null)
+      value: null
     });
+
+    const result = await getBotVoiceConnection(message);
+    expect(result).toBeNull();
+  });
+
+  it("returns false when guild doesn't exist", async () => {
+    Object.defineProperty(message, "client", { value: jest.fn() });
+
+    message.client.user = new (User as jest.Mock<ClientUser>)();
+    Object.defineProperty(message, "guild", { value: null });
 
     const result = await getBotVoiceConnection(message);
     expect(result).toBeNull();

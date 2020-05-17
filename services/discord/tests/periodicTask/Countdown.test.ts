@@ -6,6 +6,7 @@ const momentMock = {
 import { Countdown } from "../../src/periodicTask/Countdown";
 import { Message, TextChannel } from "discord.js";
 import moment from "moment";
+import { Sound } from "../../src/commands/Sound";
 
 jest.mock("winston", () => ({
   createLogger: jest.fn().mockReturnValue({
@@ -15,6 +16,8 @@ jest.mock("winston", () => ({
 
 jest.mock("discord.js");
 jest.mock("moment", () => () => momentMock);
+jest.mock("../../src/commands/Sound");
+
 const message = new (Message as jest.Mock<Message>)();
 
 afterEach(() => jest.resetAllMocks());
@@ -71,14 +74,14 @@ describe("updateCountdownMessage", () => {
 });
 
 describe("sendFinalMessage", () => {
-  it("sends the correct messages", async () => {
+  it("sends the correct message", async () => {
     const countdown = new Countdown(message, 60);
-    const embed = jest.fn();
-    countdown.createEmbedForRemainingTime = jest.fn().mockReturnValue(embed);
-    countdown["countDownMessage"] = new (Message as jest.Mock<Message>)();
+    countdown.updateCountdownMessage = jest.fn();
 
-    countdown.updateCountdownMessage();
-    expect(countdown["countDownMessage"].edit).toBeCalledWith(embed);
+    await countdown.sendFinalMessage();
+    expect(countdown.updateCountdownMessage).toBeCalled();
+    expect(message.reply).toBeCalledWith("Time up yo");
+    expect(Sound);
   });
 });
 
@@ -107,9 +110,15 @@ describe("createEmbedForRemainingTime", () => {
     countdown.getFormattedRemainingTime = jest.fn().mockReturnValue("1m 05s");
     const embed = countdown.createEmbedForRemainingTime();
 
-    expect(embed.setTitle).toBeCalledWith("Countdown timer");
+    expect(embed.setURL).toBeCalledWith(
+      "https://github.com/ColinCee/twitch-bot"
+    );
+    expect(embed.setTitle).toBeCalledWith("Check me out on GitHub!");
     expect(embed.setColor).toBeCalledWith(0xa8ffa8);
-    expect(embed.setDescription).toBeCalledWith("Remaining time: 1m 05s");
+    expect(embed.setDescription).toBeCalledWith(
+      "A countdown because people can't keep track of time"
+    );
+    expect(embed.addField).toBeCalledWith("Remaining time", "1m 05s");
   });
 });
 

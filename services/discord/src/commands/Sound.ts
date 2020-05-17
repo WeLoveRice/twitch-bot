@@ -1,12 +1,9 @@
-import { Runner } from "../periodicTask/Runner";
 import { Message, Speaking, VoiceConnection } from "discord.js";
-import { Logger } from "winston";
 import { AbstractCommand } from "./AbstractCommand";
 import path from "path";
 import fs from "mz/fs";
 import {
   isMemberInVoiceChannel,
-  isBotInMemberChannel,
   getBotVoiceConnection
 } from "../api/discord/VoiceChannel";
 import { JoinVoiceChannel } from "./JoinVoiceChannel";
@@ -51,11 +48,7 @@ export class Sound extends AbstractCommand {
 
   async playSound(voiceConnection: VoiceConnection): Promise<void> {
     const file = getSoundPath(this.message.content);
-    const event = voiceConnection.play(file);
-
-    event.on("finish", () => {
-      event.destroy();
-    });
+    voiceConnection.play(file);
   }
 
   protected async run(): Promise<void> {

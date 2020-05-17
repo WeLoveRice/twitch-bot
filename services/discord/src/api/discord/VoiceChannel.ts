@@ -24,7 +24,7 @@ export const isMemberInVoiceChannel = async (
 export const isBotInMemberChannel = async (
   message: Message
 ): Promise<boolean> => {
-  if (!message?.member?.voice?.channel?.members) {
+  if (!message.member?.voice?.channel?.members) {
     return false;
   }
 
