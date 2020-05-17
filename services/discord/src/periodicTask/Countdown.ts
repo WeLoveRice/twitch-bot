@@ -54,7 +54,9 @@ export class Countdown implements PeriodicTask {
     }
   }
 
-  async sendFinalMessage() {
+  async sendFinalMessage(): Promise<void> {
+    await this.updateCountdownMessage();
+    await this.message.reply("Time up yo");
     return;
   }
 
