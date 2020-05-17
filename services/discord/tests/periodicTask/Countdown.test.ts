@@ -18,8 +18,6 @@ jest.mock("discord.js");
 jest.mock("moment", () => () => momentMock);
 jest.mock("../../src/commands/Sound");
 
-jest.mock("discord.js");
-jest.mock("moment", () => () => momentMock);
 const message = new (Message as jest.Mock<Message>)();
 
 afterEach(() => jest.resetAllMocks());
