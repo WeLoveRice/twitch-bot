@@ -7,8 +7,8 @@ import { AbstractCommand } from "./AbstractCommand";
 export class Timer extends AbstractCommand {
   private runner: Runner;
 
-  public constructor(message: Message, logger: Logger) {
-    super(message, logger);
+  public constructor(message: Message) {
+    super(message);
     this.runner = new Runner();
   }
 

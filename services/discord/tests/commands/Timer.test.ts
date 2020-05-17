@@ -14,7 +14,7 @@ jest.mock("../../src/periodicTask/Countdown");
 
 const countdownMock = Countdown as jest.Mocked<typeof Countdown>;
 const message = new (Message as jest.Mock<Message>)();
-const logger = createLogger();
+const timer = new Timer(message);
 
 afterEach(() => {
   jest.resetAllMocks();
@@ -44,7 +44,6 @@ it.each([
   message.author = new (User as jest.Mock<User>)();
   message.author.bot = false;
 
-  const timer = new Timer(message, logger);
   const isValid = await timer.isValid();
   timer.execute();
 
@@ -65,7 +64,6 @@ it.each([
   message.author = new (User as jest.Mock<User>)();
   message.author.bot = false;
 
-  const timer = new Timer(message, logger);
   const isValid = await timer.isValid();
 
   expect(isValid).toBe(false);
@@ -76,14 +74,11 @@ it("ignores bot user", async () => {
   message.author = new (User as jest.Mock<User>)();
   message.author.bot = true;
 
-  const timer = new Timer(message, logger);
   const isValid = await timer.isValid();
   expect(isValid).toBe(false);
 });
 
 it("does not run when parseSecondsToRun is null", async () => {
-  const timer = new Timer(message, logger);
-
   jest.spyOn(timer, "isValid").mockReturnValue(Promise.resolve(true));
   jest.spyOn(timer, "parseSecondsToRun").mockReturnValue(null);
   timer.execute();
