@@ -5,7 +5,7 @@ services:
     build: 
       context: ./services/discord
     env_file: 
-      ./services/discord/.env
+      ./services/discord/.env.dev
     volumes:
       - ./services/discord:/home/node/twitch-bot
       - /home/node/twitch-bot/node_modules
