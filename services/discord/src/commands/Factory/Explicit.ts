@@ -2,8 +2,8 @@ import { Command } from "../../enum/CommandEnum";
 import { JoinVoiceChannel } from "../JoinVoiceChannel";
 import { Message } from "discord.js";
 import { AbstractCommand } from "../AbstractCommand";
-import { Logger } from "winston";
 import { SoundList } from "../../commands/SoundList";
+import { CoinFlip } from "../../commands/CoinFlip";
 
 const isCommand = (message: Message): boolean => {
   const { content } = message;
@@ -33,6 +33,8 @@ export const createExplicitCommand = (
       return new JoinVoiceChannel(message);
     case Command.SOUNDS:
       return new SoundList(message);
+    case Command.COINFLIP:
+      return new CoinFlip(message);
     default:
       return null;
   }

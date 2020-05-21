@@ -4,7 +4,6 @@ import path from "path";
 import fs from "mz/fs";
 import {
   isMemberInVoiceChannel,
-  getBotVoiceConnection,
   joinVoiceChannel
 } from "../api/discord/VoiceChannel";
 

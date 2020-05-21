@@ -3,6 +3,7 @@ import { createExplicitCommand } from "../../../src/commands/Factory/Explicit";
 import { Message } from "discord.js";
 import { Command } from "../../../src/enum/CommandEnum";
 import { SoundList } from "../../../src/commands/SoundList";
+import { CoinFlip } from "../../../src/commands/CoinFlip";
 
 jest.mock("discord.js");
 jest.mock("../../../src/Logger", () => ({
@@ -31,7 +32,8 @@ it.each([
 
 it.each([
   [Command.JOIN, JoinVoiceChannel],
-  [Command.SOUNDS, SoundList]
+  [Command.SOUNDS, SoundList],
+  [Command.COINFLIP, CoinFlip]
 ])(
   `when command is ${Command.PREFIX}%s returns %s`,
   (commandString, commandClass) => {
