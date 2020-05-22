@@ -8,7 +8,7 @@ export class CoinFlip extends AbstractCommand {
     if (Math.random() >= 0.5) {
       await this.message.reply("You got heads! :regional_indicator_h:");
     } else {
-      await this.message.reply("You got tails! :regional_indicator_h:");
+      await this.message.reply("You got tails! :regional_indicator_t:");
     }
     return;
   }
