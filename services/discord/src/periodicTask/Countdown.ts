@@ -33,7 +33,7 @@ export class Countdown implements PeriodicTask {
   createEmbedForRemainingTime(): MessageEmbed {
     const embed = new MessageEmbed();
 
-    embed.setURL("https://github.com/ColinCee/twitch-bot");
+    embed.setURL("https://github.com/WeLoveRice/twitch-bot");
     embed.setTitle("Check me out on GitHub!");
     embed.setDescription("A countdown because people can't keep track of time");
     embed.addField("Remaining time", this.getFormattedRemainingTime());

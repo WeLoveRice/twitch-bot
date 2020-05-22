@@ -106,7 +106,7 @@ describe("createEmbedForRemainingTime", () => {
     const embed = countdown.createEmbedForRemainingTime();
 
     expect(embed.setURL).toBeCalledWith(
-      "https://github.com/ColinCee/twitch-bot"
+      "https://github.com/WeLoveRice/twitch-bot"
     );
     expect(embed.setTitle).toBeCalledWith("Check me out on GitHub!");
     expect(embed.setColor).toBeCalledWith(0xa8ffa8);
