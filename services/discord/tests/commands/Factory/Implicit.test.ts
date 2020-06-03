@@ -1,17 +1,13 @@
 import * as Implicit from "./../../../src/commands/Factory/Implicit";
 import { Message } from "discord.js";
-import { createLogger, Logger } from "winston";
 import * as TimerMocked from "../../../src/commands/Timer";
 import * as SoundMocked from "../../../src/commands/Sound";
 
 jest.mock("discord.js");
-jest.mock("winston");
-
 jest.mock("../../../src/commands/Timer");
 jest.mock("../../../src/commands/Sound");
 
 const message = new (Message as jest.Mock<Message>)();
-const logger = (createLogger as jest.Mock<Logger>)();
 
 afterEach(() => {
   jest.resetAllMocks();

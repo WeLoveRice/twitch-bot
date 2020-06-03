@@ -1,5 +1,4 @@
 import { Message } from "discord.js";
-import { Logger } from "winston";
 import { Timer } from "../Timer";
 import { AbstractCommand } from "../AbstractCommand";
 import { Sound, doesSoundExist } from "../Sound";
