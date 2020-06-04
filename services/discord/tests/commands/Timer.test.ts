@@ -1,15 +1,18 @@
 import { Message, User } from "discord.js";
+import { redis } from "../../src/api/redis";
 import { Timer } from "../../src/commands/Timer";
 import * as Countdown from "../../src/periodicTask/Countdown";
 
 jest.mock("discord.js");
 jest.mock("../../src/Logger", () => ({
   createLogger: jest.fn().mockReturnValue({
-    info: jest.fn()
+    info: jest.fn(),
+    error: jest.fn()
   })
 }));
 jest.mock("../../src/periodicTask/Runner");
 jest.mock("../../src/periodicTask/Countdown");
+jest.mock("../../src/api/redis");
 
 const countdownMock = Countdown as jest.Mocked<typeof Countdown>;
 const message = new (Message as jest.Mock<Message>)();
@@ -75,6 +78,17 @@ it("ignores bot user", async () => {
 
   const isValid = await timer.isValid();
   expect(isValid).toBe(false);
+});
+
+it("ignores timer when user already has one running", async () => {
+  message.content = "5 mins";
+  message.author = new (User as jest.Mock<User>)();
+  message.author.bot = false;
+
+  redis.GET = jest.fn().mockReturnValue(true);
+  const isValid = await timer.isValid();
+  expect(isValid).toBe(false);
+  expect(redis.GET).toBeCalledWith(message.author.id);
 });
 
 it("does not run when parseSecondsToRun is null", async () => {
