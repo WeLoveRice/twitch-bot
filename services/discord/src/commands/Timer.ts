@@ -5,7 +5,7 @@ import { AbstractCommand } from "./AbstractCommand";
 import { redis } from "../api/redis";
 
 export class Timer extends AbstractCommand {
-  private runner: Runner;
+  runner: Runner;
 
   public constructor(message: Message) {
     super(message);
@@ -58,7 +58,5 @@ export class Timer extends AbstractCommand {
     this.runner.start(countdown);
     this.logger.info(`Countdown started for ${secondsToRun} seconds`);
     await redis.setex(this.message.author.id, secondsToRun, "true");
-
-    return;
   }
 }

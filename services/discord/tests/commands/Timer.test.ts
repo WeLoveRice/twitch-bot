@@ -2,6 +2,7 @@ import { Message, User } from "discord.js";
 import { redis } from "../../src/api/redis";
 import { Timer } from "../../src/commands/Timer";
 import * as Countdown from "../../src/periodicTask/Countdown";
+import { Runner } from "../../src/periodicTask/Runner";
 
 jest.mock("discord.js");
 jest.mock("../../src/Logger", () => ({
@@ -95,7 +96,20 @@ it("ignores timer when user already has one running", async () => {
 it("does not run when parseSecondsToRun is null", async () => {
   jest.spyOn(timer, "isValid").mockReturnValue(Promise.resolve(true));
   jest.spyOn(timer, "parseSecondsToRun").mockReturnValue(null);
-  timer.execute();
+  await timer.execute();
 
   expect(countdownMock.Countdown.mock.instances[0]).toBeUndefined;
+});
+
+it("runs sucessfully", async () => {
+  jest.spyOn(timer, "parseSecondsToRun").mockReturnValue(100);
+  jest.spyOn(timer, "isValid").mockReturnValue(Promise.resolve(true));
+  message.author = new (User as jest.Mock<User>)();
+  message.author.id = "testid";
+
+  await timer.execute();
+  expect(Runner.prototype.start).toBeCalledWith(
+    countdownMock.Countdown.mock.instances[0]
+  );
+  expect(redis.setex).toBeCalledWith("testid", 100, "true");
 });
