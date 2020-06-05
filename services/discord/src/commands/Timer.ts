@@ -3,7 +3,6 @@ import { Runner } from "../periodicTask/Runner";
 import { Message } from "discord.js";
 import { AbstractCommand } from "./AbstractCommand";
 import { redis } from "../api/redis";
-import { promisify } from "util";
 
 export class Timer extends AbstractCommand {
   private runner: Runner;
@@ -37,8 +36,7 @@ export class Timer extends AbstractCommand {
       return false;
     }
 
-    const getAsync = promisify(redis.get).bind(redis);
-    if (await getAsync(this.message.author.id)) {
+    if (await redis.get(this.message.author.id)) {
       return false;
     }
 
@@ -59,7 +57,7 @@ export class Timer extends AbstractCommand {
     const countdown = new Countdown(this.message, secondsToRun);
     this.runner.start(countdown);
     this.logger.info(`Countdown started for ${secondsToRun} seconds`);
-    redis.SETEX(this.message.author.id, secondsToRun, "true");
+    await redis.setex(this.message.author.id, secondsToRun, "true");
 
     return;
   }

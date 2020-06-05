@@ -85,10 +85,11 @@ it("ignores timer when user already has one running", async () => {
   message.author = new (User as jest.Mock<User>)();
   message.author.bot = false;
 
-  redis.GET = jest.fn().mockReturnValue(true);
+  redis.get = jest.fn().mockReturnValue(Promise.resolve(true));
+
   const isValid = await timer.isValid();
   expect(isValid).toBe(false);
-  expect(redis.GET).toBeCalledWith(message.author.id);
+  expect(redis.get).toBeCalledWith(message.author.id);
 });
 
 it("does not run when parseSecondsToRun is null", async () => {
