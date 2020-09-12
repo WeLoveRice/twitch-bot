@@ -11,9 +11,16 @@ jest.mock("../../src/Logger", () => ({
     error: jest.fn()
   })
 }));
-jest.mock("../../src/periodicTask/Runner");
 jest.mock("../../src/periodicTask/Countdown");
+jest.mock("../../src/periodicTask/Runner");
 jest.mock("../../src/api/redis");
+jest.mock("async-redis", () => ({
+  createClient: jest.fn().mockReturnValue({
+    on: jest.fn(),
+    get: jest.fn(),
+    setex: jest.fn()
+  })
+}));
 
 const countdownMock = Countdown as jest.Mocked<typeof Countdown>;
 const message = new (Message as jest.Mock<Message>)();
