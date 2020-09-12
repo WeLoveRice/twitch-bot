@@ -4,16 +4,16 @@ import path from "path";
 
 export const LOG_DIR = path.join(__dirname, "..", "logs");
 
-const dailyRotate = new DailyRotateFile({
-  filename: `${LOG_DIR}/%DATE%.log`,
-  datePattern: "YYYY-MM-DD",
-  zippedArchive: true,
-  maxSize: "20m",
-  maxFiles: "14d"
-});
-
 export const createLogger = (): Logger => {
   const { Console } = transports;
+
+  const dailyRotate = new DailyRotateFile({
+    filename: `${LOG_DIR}/%DATE%.log`,
+    datePattern: "YYYY-MM-DD",
+    zippedArchive: true,
+    maxSize: "20m",
+    maxFiles: "14d"
+  });
 
   return winston.createLogger({
     format: format.combine(format.timestamp(), format.json()),

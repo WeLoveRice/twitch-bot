@@ -22,7 +22,7 @@ export class JoinVoiceChannel extends AbstractCommand {
         return;
       }
 
-      const voiceChannelManager = new VoiceChannelManager(this.logger);
+      const voiceChannelManager = new VoiceChannelManager();
       await voiceChannelManager.joinChannel(channel);
     } catch (e) {
       this.logger.error(

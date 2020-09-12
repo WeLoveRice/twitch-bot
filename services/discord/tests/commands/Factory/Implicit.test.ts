@@ -1,17 +1,20 @@
 import * as Implicit from "./../../../src/commands/Factory/Implicit";
 import { Message } from "discord.js";
-import { createLogger, Logger } from "winston";
 import * as TimerMocked from "../../../src/commands/Timer";
 import * as SoundMocked from "../../../src/commands/Sound";
 
 jest.mock("discord.js");
-jest.mock("winston");
-
 jest.mock("../../../src/commands/Timer");
 jest.mock("../../../src/commands/Sound");
+jest.mock("async-redis", () => ({
+  createClient: jest.fn().mockReturnValue({
+    on: jest.fn(),
+    get: jest.fn(),
+    setex: jest.fn()
+  })
+}));
 
 const message = new (Message as jest.Mock<Message>)();
-const logger = (createLogger as jest.Mock<Logger>)();
 
 afterEach(() => {
   jest.resetAllMocks();
@@ -63,7 +66,7 @@ describe("Timer tests", () => {
 describe("Factory Tests", () => {
   it("returns Timer command when isTimer returns true", async () => {
     jest.spyOn(Implicit, "isTimer").mockReturnValue(true);
-    const command = await Implicit.createImplicitCommand(message, logger);
+    const command = await Implicit.createImplicitCommand(message);
 
     expect(command).toBeInstanceOf(TimerMocked.Timer);
   });
@@ -73,7 +76,7 @@ describe("Factory Tests", () => {
       .spyOn(SoundMocked, "doesSoundExist")
       .mockReturnValue(Promise.resolve(true));
 
-    const command = await Implicit.createImplicitCommand(message, logger);
+    const command = await Implicit.createImplicitCommand(message);
     expect(command).toBeInstanceOf(SoundMocked.Sound);
   });
 
@@ -83,7 +86,7 @@ describe("Factory Tests", () => {
       .spyOn(SoundMocked, "doesSoundExist")
       .mockReturnValue(Promise.resolve(false));
 
-    const command = await Implicit.createImplicitCommand(message, logger);
+    const command = await Implicit.createImplicitCommand(message);
     expect(command).toBeNull();
   });
 });

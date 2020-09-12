@@ -5,17 +5,23 @@ import {
   VoiceState,
   Guild,
   ClientUser,
-  User
+  User,
+  VoiceConnection
 } from "discord.js";
 import {
   isMemberInVoiceChannel,
   getVoiceChannelFromMessage,
   isBotInMemberChannel,
-  getBotVoiceConnection
+  getBotVoiceConnection,
+  joinVoiceChannel
 } from "../../../src/api/discord/VoiceChannel";
 import { Bot } from "../../../src/enum/Bot";
+import { createMock } from "ts-auto-mock";
+import * as VC from "../../../src/api/discord/VoiceChannel";
+import * as JVC from "../../../src/commands/JoinVoiceChannel";
 
 jest.mock("discord.js");
+jest.mock("../../../src/commands/JoinVoiceChannel");
 
 let message = new (Message as jest.Mock<Message>)();
 
@@ -146,5 +152,30 @@ describe("getBotVoiceConnection", () => {
 
     const result = await getBotVoiceConnection(message);
     expect(result).toBe(connection);
+  });
+});
+
+describe("joinVoiceChannel", () => {
+  it("rejoins when voiceconnection is null but the bot is present in the voice channel", async () => {
+    const voiceConnection = createMock<VoiceConnection>();
+    jest
+      .spyOn(VC, "getBotVoiceConnection")
+      .mockReturnValueOnce(Promise.resolve(null))
+      .mockReturnValueOnce(Promise.resolve(voiceConnection));
+
+    const result = await joinVoiceChannel(message);
+    expect(JVC.JoinVoiceChannel.prototype.execute).toBeCalled();
+    expect(result).toBe(voiceConnection);
+  });
+
+  it("returns a voiceconnection when it exists", async () => {
+    const voiceConnection = createMock<VoiceConnection>();
+    jest
+      .spyOn(VC, "getBotVoiceConnection")
+      .mockReturnValueOnce(Promise.resolve(voiceConnection));
+
+    const result = await joinVoiceChannel(message);
+    expect(JVC.JoinVoiceChannel.prototype.execute).not.toBeCalled();
+    expect(result).toBe(voiceConnection);
   });
 });

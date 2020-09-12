@@ -2,13 +2,14 @@ import { VoiceChannelDisconnect } from "./periodicTask/VoiceChannelDisconnect";
 import { Logger } from "winston";
 import { VoiceChannel } from "discord.js";
 import { Runner } from "./periodicTask/Runner";
+import { createLogger } from "./Logger";
 
 export class VoiceChannelManager {
   private logger: Logger;
   private runner: Runner | null;
 
-  public constructor(logger: Logger) {
-    this.logger = logger;
+  public constructor() {
+    this.logger = createLogger();
     this.runner = null;
   }
 
@@ -23,7 +24,7 @@ export class VoiceChannelManager {
 
     await voiceChannel.join();
 
-    const periodicTask = new VoiceChannelDisconnect(voiceChannel, this.logger);
+    const periodicTask = new VoiceChannelDisconnect(voiceChannel);
     this.runner = new Runner();
     this.runner.start(periodicTask);
   }

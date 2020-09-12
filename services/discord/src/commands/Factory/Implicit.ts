@@ -1,5 +1,4 @@
 import { Message } from "discord.js";
-import { Logger } from "winston";
 import { Timer } from "../Timer";
 import { AbstractCommand } from "../AbstractCommand";
 import { Sound, doesSoundExist } from "../Sound";
@@ -10,15 +9,14 @@ export const isTimer = ({ content }: Message): boolean => {
 };
 
 export const createImplicitCommand = async (
-  message: Message,
-  logger: Logger
+  message: Message
 ): Promise<AbstractCommand | null> => {
   if (isTimer(message)) {
-    return new Timer(message, logger);
+    return new Timer(message);
   }
 
   if (await doesSoundExist(message)) {
-    return new Sound(message, logger);
+    return new Sound(message);
   }
 
   return null;

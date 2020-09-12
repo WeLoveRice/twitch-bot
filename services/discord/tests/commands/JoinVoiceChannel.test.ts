@@ -15,7 +15,7 @@ jest.mock("../../src/api/discord/VoiceChannel");
 
 const message = new (Message as jest.Mock<Message>)();
 const logger = createLogger();
-const joinVoiceChannel = new JoinVoiceChannel(message, logger);
+const joinVoiceChannel = new JoinVoiceChannel(message);
 
 afterEach(() => {
   jest.resetAllMocks();

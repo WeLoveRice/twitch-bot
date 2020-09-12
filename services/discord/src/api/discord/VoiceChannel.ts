@@ -1,5 +1,6 @@
 import { Message, VoiceChannel, VoiceConnection } from "discord.js";
 import { Bot } from "../../enum/Bot";
+import { JoinVoiceChannel } from "../../commands/JoinVoiceChannel";
 
 export const getVoiceChannelFromMessage = (
   message: Message
@@ -45,4 +46,17 @@ export const getBotVoiceConnection = async (
     return null;
   }
   return botMember.voice.connection;
+};
+
+export const joinVoiceChannel = async (
+  message: Message
+): Promise<VoiceConnection | null> => {
+  const voiceConnection = await getBotVoiceConnection(message);
+  if (!voiceConnection) {
+    const command = new JoinVoiceChannel(message);
+    await command.execute();
+    return getBotVoiceConnection(message);
+  }
+
+  return voiceConnection;
 };
