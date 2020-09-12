@@ -6,6 +6,13 @@ import * as SoundMocked from "../../../src/commands/Sound";
 jest.mock("discord.js");
 jest.mock("../../../src/commands/Timer");
 jest.mock("../../../src/commands/Sound");
+jest.mock("async-redis", () => ({
+  createClient: jest.fn().mockReturnValue({
+    on: jest.fn(),
+    get: jest.fn(),
+    setex: jest.fn()
+  })
+}));
 
 const message = new (Message as jest.Mock<Message>)();
 
