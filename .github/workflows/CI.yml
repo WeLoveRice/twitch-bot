@@ -17,6 +17,7 @@ jobs:
     - name: lint
       run: npm run lint
       working-directory: services/discord 	
-    - name: test
-      run: npm test
+    - name: coverage
+      run: npm run coverage
       working-directory: services/discord
+    - uses: codecov/codecov-action@v1
