@@ -1,6 +1,6 @@
 # Twitch-Bot
 ![Build Status](https://img.shields.io/github/workflow/status/WeLoveRice/twitch-bot/CI)
-[![codecov](https://codecov.io/gh/ColinCee/twitch-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/ColinCee/twitch-bot)
+![Codecov](https://img.shields.io/codecov/c/github/WeLoveRice/twitch-bot)
 
 A discord bot geared toward memes and other fun stuff
 
