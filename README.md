@@ -1,4 +1,5 @@
 # Twitch-Bot
+![Build Status](https://img.shields.io/github/workflow/status/WeLoveRice/twitch-bot/CI)
 
 A discord bot geared toward memes and other fun stuff
 
