@@ -27,7 +27,7 @@
     "@discordjs/opus": "^0.3.2",
     "async-redis": "^1.1.7",
     "discord.js": "^12.2.0",
-    "ffmpeg-static": "^4.2.1",
+    "ffmpeg-static": "^4.2.7",
     "moment": "^2.25.3",
     "mz": "^2.7.0",
     "pm2": "^4.4.0",
