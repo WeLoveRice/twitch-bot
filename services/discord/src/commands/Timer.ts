@@ -1,4 +1,4 @@
-import { Countdown } from "../periodicTask/Countdown";
+import { Alarm } from "../scheduledTask/Alarm";
 import { Runner } from "../periodicTask/Runner";
 import { Message } from "discord.js";
 import { AbstractCommand } from "./AbstractCommand";
@@ -54,8 +54,8 @@ export class Timer extends AbstractCommand {
       return;
     }
 
-    const countdown = new Countdown(this.message, secondsToRun);
-    this.runner.start(countdown);
+    const alarm = new Alarm(this.message, secondsToRun);
+    await alarm.start();
     this.logger.info(`Countdown started for ${secondsToRun} seconds`);
     await redis.setex(this.message.author.id, secondsToRun, "true");
   }

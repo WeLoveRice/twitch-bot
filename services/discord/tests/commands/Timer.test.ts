@@ -1,7 +1,7 @@
 import { Message, User } from "discord.js";
 import { redis } from "../../src/api/redis";
 import { Timer } from "../../src/commands/Timer";
-import * as Countdown from "../../src/periodicTask/Countdown";
+import * as Alarm from "../../src/scheduledTask/Alarm";
 import { Runner } from "../../src/periodicTask/Runner";
 
 jest.mock("discord.js");
@@ -11,7 +11,7 @@ jest.mock("../../src/Logger", () => ({
     error: jest.fn()
   })
 }));
-jest.mock("../../src/periodicTask/Countdown");
+jest.mock("../../src/periodicTask/Alarm");
 jest.mock("../../src/periodicTask/Runner");
 jest.mock("../../src/api/redis");
 jest.mock("async-redis", () => ({
@@ -22,7 +22,7 @@ jest.mock("async-redis", () => ({
   })
 }));
 
-const countdownMock = Countdown as jest.Mocked<typeof Countdown>;
+const alarmMock = Alarm as jest.Mocked<typeof Alarm>;
 const message = new (Message as jest.Mock<Message>)();
 const timer = new Timer(message);
 
@@ -105,7 +105,7 @@ it("does not run when parseSecondsToRun is null", async () => {
   jest.spyOn(timer, "parseSecondsToRun").mockReturnValue(null);
   await timer.execute();
 
-  expect(countdownMock.Countdown.mock.instances[0]).toBeUndefined;
+  expect(alarmMock.Alarm.mock.instances[0]).toBeUndefined;
 });
 
 it("runs sucessfully", async () => {
@@ -116,7 +116,7 @@ it("runs sucessfully", async () => {
 
   await timer.execute();
   expect(Runner.prototype.start).toBeCalledWith(
-    countdownMock.Countdown.mock.instances[0]
+    alarmMock.Alarm.mock.instances[0]
   );
   expect(redis.setex).toBeCalledWith("testid", 100, "true");
 });

@@ -1,6 +1,4 @@
 # Twitch-Bot
-![Build Status](https://img.shields.io/github/workflow/status/WeLoveRice/twitch-bot/CI)
-![Codecov](https://img.shields.io/codecov/c/github/WeLoveRice/twitch-bot)
 
 A discord bot geared toward memes and other fun stuff
 
@@ -24,6 +22,11 @@ Alternatively you can use [nvm](https://github.com/nvm-sh/nvm) to install things
     - The content of the file should be `DISCORD_TOKEN=xxx`
     - Where `DISCORD_TOKEN` is your token in the discord api [found here](https://discord.com/developers/applications) 
 1. Build and run the stack `$ docker-compose up --build`
+
+#### Dev Server
+
+1. To get into dev mode, create a file named `env.dev` and enter your discord token as above.
+1. Then run `docker-compose -f docker-compose.dev.yml up`
 
 
 ## Running the tests
