@@ -1,16 +1,17 @@
 const momentMock = {
   add: jest.fn(),
   diff: jest.fn(),
-  format: jest.fn()
+  format: jest.fn(),
+  tz: jest.fn()
 };
 
 import { Alarm } from "../../src/scheduledTask/Alarm";
 import { Message } from "discord.js";
-import moment from "moment";
+import moment from "moment-timezone";
 import { Sound } from "../../src/commands/Sound";
 
 jest.mock("discord.js");
-jest.mock("moment", () => () => momentMock);
+jest.mock("moment-timezone", () => () => momentMock);
 jest.mock("../../src/Logger");
 jest.mock("../../src/commands/Sound");
 jest.useFakeTimers();
@@ -24,6 +25,7 @@ describe("start", () => {
     const alarm = new Alarm(message, scheduledTime);
     alarm.sendFinalMessage = jest.fn();
     alarm.getTimeUntilExecution = jest.fn().mockReturnValue(scheduledTime);
+    alarm.createEmbedForRemainingTime = jest.fn();
 
     await alarm.start();
 
@@ -47,7 +49,7 @@ describe("sendFinalMessage", () => {
 describe("getRemainingTime", () => {
   it("calls moment.diff()", () => {
     const countdown = new Alarm(message, 60);
-    countdown.scheduledDate = moment() as jest.Mocked<moment.Moment>;
+    countdown.scheduledDate = moment();
 
     countdown.getTimeUntilExecution();
     expect(countdown.scheduledDate.diff).toBeCalledWith(momentMock, "seconds");
@@ -55,7 +57,7 @@ describe("getRemainingTime", () => {
 
   it("returns 0 when moment.diff returns < 0", () => {
     const countdown = new Alarm(message, 0);
-    countdown.scheduledDate = moment() as jest.Mocked<moment.Moment>;
+    countdown.scheduledDate = moment();
 
     expect(countdown.getTimeUntilExecution()).toBe(0);
   });
@@ -84,9 +86,11 @@ describe("createEmbedForRemainingTime", () => {
 describe("getFormattedScheduledDate", () => {
   it("formats correctly", () => {
     const alarm = new Alarm(message, 60);
-    alarm.scheduledDate = moment() as jest.Mocked<moment.Moment>;
-
+    alarm.scheduledDate = moment();
+    alarm.scheduledDate.tz = jest.fn().mockReturnValue(moment());
     alarm.getFormattedScheduledDate();
-    expect(alarm.scheduledDate.format).toBeCalledWith("HH:mm:ss");
+
+    expect(alarm.scheduledDate.tz).toBeCalledWith("Europe/London");
+    expect(moment().format).toBeCalledWith("HH:mm:ss");
   });
 });

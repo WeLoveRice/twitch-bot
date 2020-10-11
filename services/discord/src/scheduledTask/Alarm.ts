@@ -1,5 +1,5 @@
 import { Message, MessageEmbed } from "discord.js";
-import moment, { Moment } from "moment";
+import moment, { Moment } from "moment-timezone";
 import { ScheduledTask } from ".";
 
 export class Alarm implements ScheduledTask {
@@ -18,7 +18,7 @@ export class Alarm implements ScheduledTask {
   }
 
   getFormattedScheduledDate(): string {
-    return this.scheduledDate.format("HH:mm:ss");
+    return this.scheduledDate.tz("Europe/London").format("HH:mm:ss");
   }
 
   createEmbedForRemainingTime(): MessageEmbed {
@@ -39,6 +39,8 @@ export class Alarm implements ScheduledTask {
   }
 
   async start(): Promise<void> {
+    const embed = this.createEmbedForRemainingTime();
+    await this.message.reply(embed);
     setTimeout(async () => {
       await this.sendFinalMessage();
     }, this.getTimeUntilExecution() * 1000);
