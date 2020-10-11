@@ -87,9 +87,10 @@ describe("start", () => {
     alarm.createEmbedForRemainingTime = jest.fn();
 
     await alarm.start();
+    jest.runAllTimers();
 
     expect(setTimeout).toBeCalledWith(
-      expect.any(Function),
+      alarm.sendAlarmMessage,
       scheduledTime * 1000
     );
   });
