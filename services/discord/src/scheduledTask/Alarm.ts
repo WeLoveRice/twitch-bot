@@ -33,7 +33,7 @@ export class Alarm implements ScheduledTask {
     return embed;
   }
 
-  async sendFinalMessage(): Promise<void> {
+  async sendAlarmMessage(): Promise<void> {
     await this.message.reply("Time up yo");
     return;
   }
@@ -42,7 +42,7 @@ export class Alarm implements ScheduledTask {
     const embed = this.createEmbedForRemainingTime();
     await this.message.reply(embed);
     setTimeout(async () => {
-      await this.sendFinalMessage();
+      await this.sendAlarmMessage();
     }, this.getTimeUntilExecution() * 1000);
   }
 }

@@ -20,33 +20,7 @@ const message = new (Message as jest.Mock<Message>)();
 
 afterEach(() => jest.resetAllMocks());
 
-describe("start", () => {
-  it.each([10, 100, 1000])("schdules correctly", async scheduledTime => {
-    const alarm = new Alarm(message, scheduledTime);
-    alarm.sendFinalMessage = jest.fn();
-    alarm.getTimeUntilExecution = jest.fn().mockReturnValue(scheduledTime);
-    alarm.createEmbedForRemainingTime = jest.fn();
-
-    await alarm.start();
-
-    expect(setTimeout).toBeCalledWith(
-      expect.any(Function),
-      scheduledTime * 1000
-    );
-  });
-});
-
-describe("sendFinalMessage", () => {
-  it("sends the correct message", async () => {
-    const countdown = new Alarm(message, 60);
-
-    await countdown.sendFinalMessage();
-    expect(message.reply).toBeCalledWith("Time up yo");
-    expect(Sound);
-  });
-});
-
-describe("getRemainingTime", () => {
+describe("getTimeUntilExecution", () => {
   it("calls moment.diff()", () => {
     const countdown = new Alarm(message, 60);
     countdown.scheduledDate = moment();
@@ -60,6 +34,18 @@ describe("getRemainingTime", () => {
     countdown.scheduledDate = moment();
 
     expect(countdown.getTimeUntilExecution()).toBe(0);
+  });
+});
+
+describe("getFormattedScheduledDate", () => {
+  it("formats correctly", () => {
+    const alarm = new Alarm(message, 60);
+    alarm.scheduledDate = moment();
+    alarm.scheduledDate.tz = jest.fn().mockReturnValue(moment());
+    alarm.getFormattedScheduledDate();
+
+    expect(alarm.scheduledDate.tz).toBeCalledWith("Europe/London");
+    expect(moment().format).toBeCalledWith("HH:mm:ss");
   });
 });
 
@@ -83,14 +69,28 @@ describe("createEmbedForRemainingTime", () => {
   });
 });
 
-describe("getFormattedScheduledDate", () => {
-  it("formats correctly", () => {
-    const alarm = new Alarm(message, 60);
-    alarm.scheduledDate = moment();
-    alarm.scheduledDate.tz = jest.fn().mockReturnValue(moment());
-    alarm.getFormattedScheduledDate();
+describe("sendAlarmMessage", () => {
+  it("sends the correct message", async () => {
+    const countdown = new Alarm(message, 60);
 
-    expect(alarm.scheduledDate.tz).toBeCalledWith("Europe/London");
-    expect(moment().format).toBeCalledWith("HH:mm:ss");
+    await countdown.sendAlarmMessage();
+    expect(message.reply).toBeCalledWith("Time up yo");
+    expect(Sound);
+  });
+});
+
+describe("start", () => {
+  it.each([10, 100, 1000])("schdules correctly", async scheduledTime => {
+    const alarm = new Alarm(message, scheduledTime);
+    alarm.sendAlarmMessage = jest.fn();
+    alarm.getTimeUntilExecution = jest.fn().mockReturnValue(scheduledTime);
+    alarm.createEmbedForRemainingTime = jest.fn();
+
+    await alarm.start();
+
+    expect(setTimeout).toBeCalledWith(
+      expect.any(Function),
+      scheduledTime * 1000
+    );
   });
 });
