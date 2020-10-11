@@ -1,5 +1,3 @@
-import { Bot } from "./../enum/Bot";
-import { Message } from "discord.js";
 import { AbstractCommand } from "./AbstractCommand";
 import { VoiceChannelManager } from "../VoiceChannelManager";
 import {

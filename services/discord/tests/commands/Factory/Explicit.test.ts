@@ -4,6 +4,8 @@ import { Message } from "discord.js";
 import { Command } from "../../../src/enum/CommandEnum";
 import { SoundList } from "../../../src/commands/SoundList";
 import { CoinFlip } from "../../../src/commands/CoinFlip";
+import { MuteAll } from "../../../src/commands/MuteAll";
+import { UnmuteAll } from "../../../src/commands/UnmuteAll";
 
 jest.mock("discord.js");
 jest.mock("../../../src/Logger", () => ({
@@ -33,9 +35,11 @@ it.each([
 it.each([
   [Command.JOIN, JoinVoiceChannel],
   [Command.SOUNDS, SoundList],
-  [Command.COINFLIP, CoinFlip]
+  [Command.COINFLIP, CoinFlip],
+  [Command.MUTEALL, MuteAll],
+  [Command.UNMUTEALL, UnmuteAll]
 ])(
-  `when command is ${Command.PREFIX}%s returns %s`,
+  `when command is ${Command.PREFIX}%s returns expected class`,
   (commandString, commandClass) => {
     message.content = `${Command.PREFIX}${commandString}`;
     const command = createExplicitCommand(message);

@@ -4,9 +4,12 @@ import { Message } from "discord.js";
 import { AbstractCommand } from "../AbstractCommand";
 import { SoundList } from "../../commands/SoundList";
 import { CoinFlip } from "../../commands/CoinFlip";
+import { MuteAll } from "../../commands/MuteAll";
+import { UnmuteAll } from "../../commands/UnmuteAll";
 
 const isCommand = (message: Message): boolean => {
   const { content } = message;
+
   if (!content.startsWith(Command.PREFIX)) {
     return false;
   }
@@ -15,9 +18,7 @@ const isCommand = (message: Message): boolean => {
 };
 
 const extractCommandFromContent = ({ content }: Message): string | null => {
-  const splitString = content.split(" ");
-
-  return splitString[0].substr(1);
+  return content.substr(1);
 };
 
 export const createExplicitCommand = (
@@ -35,6 +36,10 @@ export const createExplicitCommand = (
       return new SoundList(message);
     case Command.COINFLIP:
       return new CoinFlip(message);
+    case Command.MUTEALL:
+      return new MuteAll(message);
+    case Command.UNMUTEALL:
+      return new UnmuteAll(message);
     default:
       return null;
   }
