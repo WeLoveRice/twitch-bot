@@ -1,6 +1,7 @@
 const momentMock = {
   add: jest.fn(),
-  diff: jest.fn()
+  diff: jest.fn(),
+  format: jest.fn()
 };
 
 import { Alarm } from "../../src/scheduledTask/Alarm";
@@ -12,34 +13,25 @@ jest.mock("discord.js");
 jest.mock("moment", () => () => momentMock);
 jest.mock("../../src/Logger");
 jest.mock("../../src/commands/Sound");
+jest.useFakeTimers();
 
 const message = new (Message as jest.Mock<Message>)();
 
 afterEach(() => jest.resetAllMocks());
 
-describe("execute", () => {
-  it("is sucessfull when remaining time is > 0 ", async () => {
-    const countdown = new Alarm(message, 60);
-    countdown.getTimeUntilExecution = jest.fn();
+describe("start", () => {
+  it.each([10, 100, 1000])("schdules correctly", async scheduledTime => {
+    const alarm = new Alarm(message, scheduledTime);
+    alarm.sendFinalMessage = jest.fn();
+    alarm.getTimeUntilExecution = jest.fn().mockReturnValue(scheduledTime);
 
-    const shouldStop = await countdown.execute();
-    expect(shouldStop).toBe(false);
+    await alarm.start();
+
+    expect(setTimeout).toBeCalledWith(
+      expect.any(Function),
+      scheduledTime * 1000
+    );
   });
-
-  it.each([0, -1, -10])(
-    "calls updateCountdownMessage when remaining time is <= 0 ",
-    async remainingTime => {
-      const countdown = new Alarm(message, 60);
-      countdown.getTimeUntilExecution = jest
-        .fn()
-        .mockReturnValue(remainingTime);
-      countdown.sendFinalMessage = jest.fn();
-
-      const shouldStop = await countdown.execute();
-      expect(shouldStop).toBe(true);
-      expect(countdown.sendFinalMessage).toBeCalled();
-    }
-  );
 });
 
 describe("sendFinalMessage", () => {
@@ -55,15 +47,15 @@ describe("sendFinalMessage", () => {
 describe("getRemainingTime", () => {
   it("calls moment.diff()", () => {
     const countdown = new Alarm(message, 60);
-    countdown.endTime = moment() as jest.Mocked<moment.Moment>;
+    countdown.scheduledDate = moment() as jest.Mocked<moment.Moment>;
 
     countdown.getTimeUntilExecution();
-    expect(countdown.endTime.diff).toBeCalledWith(momentMock, "seconds");
+    expect(countdown.scheduledDate.diff).toBeCalledWith(momentMock, "seconds");
   });
 
   it("returns 0 when moment.diff returns < 0", () => {
     const countdown = new Alarm(message, 0);
-    countdown.endTime = moment() as jest.Mocked<moment.Moment>;
+    countdown.scheduledDate = moment() as jest.Mocked<moment.Moment>;
 
     expect(countdown.getTimeUntilExecution()).toBe(0);
   });
@@ -74,7 +66,7 @@ describe("createEmbedForRemainingTime", () => {
     const countdown = new Alarm(message, 60);
 
     countdown.getTimeUntilExecution = jest.fn().mockReturnValue(100);
-    countdown.getFormattedScheduledDate = jest.fn().mockReturnValue("1m 05s");
+    countdown.getFormattedScheduledDate = jest.fn().mockReturnValue("09:00:15");
     const embed = countdown.createEmbedForRemainingTime();
 
     expect(embed.setURL).toBeCalledWith(
@@ -83,28 +75,18 @@ describe("createEmbedForRemainingTime", () => {
     expect(embed.setTitle).toBeCalledWith("Check me out on GitHub!");
     expect(embed.setColor).toBeCalledWith(0xa8ffa8);
     expect(embed.setDescription).toBeCalledWith(
-      "A countdown because people can't keep track of time"
+      "An alarm because people can't keep track of time"
     );
-    expect(embed.addField).toBeCalledWith("Remaining time", "1m 05s");
+    expect(embed.addField).toBeCalledWith("Alarm will ring at: ", "09:00:15");
   });
 });
 
-describe("getFormattedRemainingTime", () => {
-  it.each([
-    [0, "0m 00s"],
-    [30, "0m 30s"],
-    [45, "0m 45s"],
-    [60, "1m 00s"],
-    [100, "1m 40s"],
-    [150, "2m 30s"],
-    [180, "3m 00s"],
-    [300, "5m 00s"],
-    [2000, "33m 20s"],
-    [3000, "50m 00s"]
-  ])("formats correctly", (time, formatted) => {
-    const countdown = new Alarm(message, 60);
-    countdown.getTimeUntilExecution = jest.fn().mockReturnValue(time);
+describe("getFormattedScheduledDate", () => {
+  it("formats correctly", () => {
+    const alarm = new Alarm(message, 60);
+    alarm.scheduledDate = moment() as jest.Mocked<moment.Moment>;
 
-    expect(countdown.getFormattedScheduledDate()).toBe(formatted);
+    alarm.getFormattedScheduledDate();
+    expect(alarm.scheduledDate.format).toBeCalledWith("HH:mm:ss");
   });
 });

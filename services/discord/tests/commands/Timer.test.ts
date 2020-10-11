@@ -11,8 +11,7 @@ jest.mock("../../src/Logger", () => ({
     error: jest.fn()
   })
 }));
-jest.mock("../../src/periodicTask/Alarm");
-jest.mock("../../src/periodicTask/Runner");
+jest.mock("../../src/scheduledTask/Alarm");
 jest.mock("../../src/api/redis");
 jest.mock("async-redis", () => ({
   createClient: jest.fn().mockReturnValue({
@@ -109,14 +108,14 @@ it("does not run when parseSecondsToRun is null", async () => {
 });
 
 it("runs sucessfully", async () => {
-  jest.spyOn(timer, "parseSecondsToRun").mockReturnValue(100);
-  jest.spyOn(timer, "isValid").mockReturnValue(Promise.resolve(true));
+  timer.parseSecondsToRun = jest.fn().mockReturnValue(100);
+  timer.isValid = jest.fn().mockReturnValue(Promise.resolve(true));
+
   message.author = new (User as jest.Mock<User>)();
   message.author.id = "testid";
 
   await timer.execute();
-  expect(Runner.prototype.start).toBeCalledWith(
-    alarmMock.Alarm.mock.instances[0]
-  );
+  expect(timer.parseSecondsToRun).toBeCalled();
+  expect(alarmMock.Alarm.mock.instances[0].start).toBeCalled();
   expect(redis.setex).toBeCalledWith("testid", 100, "true");
 });

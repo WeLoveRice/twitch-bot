@@ -41,6 +41,6 @@ export class Alarm implements ScheduledTask {
   async start(): Promise<void> {
     setTimeout(async () => {
       await this.sendFinalMessage();
-    }, this.getTimeUntilExecution());
+    }, this.getTimeUntilExecution() * 1000);
   }
 }
