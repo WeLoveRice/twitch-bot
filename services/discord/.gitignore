@@ -3,4 +3,3 @@ build/
 coverage/
 .env
 .env.dev
-sounds/
