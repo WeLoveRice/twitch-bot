@@ -26,7 +26,7 @@ Alternatively you can use [nvm](https://github.com/nvm-sh/nvm) to install things
 #### Dev Server
 
 1. To get into dev mode, create a file named `env.dev` and enter your discord token as above.
-1. Then run `docker-compose -f docker-compose.dev.yml up`
+1. Then run `docker-compose -f docker-compose.dev.yml up --build`
 
 
 ## Running the tests
