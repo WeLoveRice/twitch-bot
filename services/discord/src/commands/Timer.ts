@@ -1,15 +1,11 @@
-import { Countdown } from "../periodicTask/Countdown";
-import { Runner } from "../periodicTask/Runner";
+import { Alarm } from "../scheduledTask/Alarm";
 import { Message } from "discord.js";
 import { AbstractCommand } from "./AbstractCommand";
 import { redis } from "../api/redis";
 
 export class Timer extends AbstractCommand {
-  runner: Runner;
-
   public constructor(message: Message) {
     super(message);
-    this.runner = new Runner();
   }
 
   public parseSecondsToRun(): number | null {
@@ -54,9 +50,9 @@ export class Timer extends AbstractCommand {
       return;
     }
 
-    const countdown = new Countdown(this.message, secondsToRun);
-    this.runner.start(countdown);
-    this.logger.info(`Countdown started for ${secondsToRun} seconds`);
+    const alarm = new Alarm(this.message, secondsToRun);
+    await alarm.start();
+    this.logger.info(`Alarm due in ${secondsToRun} seconds`);
     await redis.setex(this.message.author.id, secondsToRun, "true");
   }
 }
