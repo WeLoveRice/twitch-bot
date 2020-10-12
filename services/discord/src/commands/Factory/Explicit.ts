@@ -16,17 +16,14 @@ const isCommand = (message: Message): boolean => {
   return content.length > 1;
 };
 
-const extractCommandFromContent = ({ content }: Message): string | null => {
-  return content.substr(1);
-};
-
 export const createExplicitCommand = (
   message: Message
 ): AbstractCommand | null => {
   if (!isCommand(message)) {
     return null;
   }
-  const command = extractCommandFromContent(message);
+  const { content } = message;
+  const command = content.substr(1);
 
   switch (command) {
     case Command.JOIN:

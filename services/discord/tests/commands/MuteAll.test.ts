@@ -30,6 +30,14 @@ describe("isValid", () => {
     expect(await muteAll.isValid()).toBe(isAdmin);
     expect(message.member?.permissions.has).toBeCalledWith("ADMINISTRATOR");
   });
+  it.each([true, false])(
+    "returns false when member is undefined",
+    async mute => {
+      Object.defineProperty(message, "member", { value: undefined });
+      const muteAll = new MuteAll(message, mute);
+      expect(await muteAll.isValid()).toBe(false);
+    }
+  );
 });
 
 describe("execute", () => {
