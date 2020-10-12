@@ -5,7 +5,6 @@ import { Command } from "../../../src/enum/CommandEnum";
 import { SoundList } from "../../../src/commands/SoundList";
 import { CoinFlip } from "../../../src/commands/CoinFlip";
 import { MuteAll } from "../../../src/commands/MuteAll";
-import { UnmuteAll } from "../../../src/commands/UnmuteAll";
 
 jest.mock("discord.js");
 jest.mock("../../../src/Logger", () => ({
@@ -36,8 +35,7 @@ it.each([
   [Command.JOIN, JoinVoiceChannel],
   [Command.SOUNDS, SoundList],
   [Command.COINFLIP, CoinFlip],
-  [Command.MUTEALL, MuteAll],
-  [Command.UNMUTEALL, UnmuteAll]
+  [Command.MUTEALL, MuteAll]
 ])(
   `when command is ${Command.PREFIX}%s returns expected class`,
   (commandString, commandClass) => {

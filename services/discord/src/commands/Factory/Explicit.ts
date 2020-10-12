@@ -5,7 +5,6 @@ import { AbstractCommand } from "../AbstractCommand";
 import { SoundList } from "../../commands/SoundList";
 import { CoinFlip } from "../../commands/CoinFlip";
 import { MuteAll } from "../../commands/MuteAll";
-import { UnmuteAll } from "../../commands/UnmuteAll";
 
 const isCommand = (message: Message): boolean => {
   const { content } = message;
@@ -37,9 +36,9 @@ export const createExplicitCommand = (
     case Command.COINFLIP:
       return new CoinFlip(message);
     case Command.MUTEALL:
-      return new MuteAll(message);
+      return new MuteAll(message, true);
     case Command.UNMUTEALL:
-      return new UnmuteAll(message);
+      return new MuteAll(message, false);
     default:
       return null;
   }
