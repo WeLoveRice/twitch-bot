@@ -1,5 +1,5 @@
 # Twitch-Bot
-![Build Status](https://img.shields.io/github/workflow/status/WeLoveRice/twitch-bot/CI)
+![Build Status](https://img.shields.io/github/workflow/status/WeLoveRice/twitch-bot/on_push)
 ![Codecov](https://img.shields.io/codecov/c/github/WeLoveRice/twitch-bot)
 
 A discord bot geared toward memes and other fun stuff
@@ -48,7 +48,14 @@ This repo uses the [official typescript eslint plugin](https://github.com/typesc
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+### Raspberry Pi
+
+Deploy to a raspberry pi running docker by running the following command:
+
+1. On your main machine: `docker buildx build --platform linux/amd64 -t ccheung22/twitch-bot_discord --push .`
+1. On the rasberry pi
+    1. Clone this repo
+    1. `docker-compose pull && docker-compose up`
 
 ## Built With
 
