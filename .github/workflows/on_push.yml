@@ -27,4 +27,4 @@ jobs:
       with:
         version: latest
     - name: build dockerx
-      run: docker buildx build --platform linux/amd64
+      run: docker buildx build --platform linux/arm64
