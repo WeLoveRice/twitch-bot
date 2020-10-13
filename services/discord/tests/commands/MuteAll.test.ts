@@ -1,6 +1,5 @@
 import { MuteAll } from "../../src/commands/MuteAll";
 import { GuildMember, Message, VoiceState } from "discord.js";
-import { Bot } from "../../src/enum/Bot";
 import * as VoiceChannel from "../../src/api/discord/VoiceChannel";
 
 jest.mock("../../src/api/discord/VoiceChannel");
@@ -30,6 +29,29 @@ describe("isValid", () => {
     expect(await muteAll.isValid()).toBe(isAdmin);
     expect(message.member?.permissions.has).toBeCalledWith("ADMINISTRATOR");
   });
+
+  it.each([true, false])(
+    "replies to message when isValid is false",
+    async mute => {
+      const permissions = { has: jest.fn().mockReturnValue(false) };
+      const member = new (GuildMember as jest.Mock<GuildMember>)();
+      Object.defineProperty(member, "permissions", {
+        value: permissions,
+        configurable: true
+      });
+      Object.defineProperty(message, "member", {
+        value: member,
+        configurable: true
+      });
+      const muteAll = new MuteAll(message, mute);
+
+      expect(await muteAll.isValid()).toBe(false);
+      expect(message.member?.permissions.has).toBeCalledWith("ADMINISTRATOR");
+      expect(message.reply).toBeCalledWith(
+        "You must have adminstrator permissions to use this command"
+      );
+    }
+  );
   it.each([true, false])(
     "returns false when member is undefined",
     async mute => {
@@ -48,10 +70,7 @@ describe("execute", () => {
       value: new (VoiceState as jest.Mock<VoiceState>)()
     });
 
-    const members = new Map();
-    members.set(Bot.USER_ID, memberMock);
-    members.set("Test", memberMock);
-    members.set("Cheese", memberMock);
+    const members = [memberMock, memberMock, memberMock];
 
     Object.defineProperty(VoiceChannel, "getVoiceChannelFromMessage", {
       value: jest.fn().mockReturnValue({ members })

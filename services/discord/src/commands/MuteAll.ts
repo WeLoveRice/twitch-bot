@@ -11,16 +11,28 @@ export class MuteAll extends AbstractCommand {
   }
 
   async isValid(): Promise<boolean> {
-    if (!this.message.member) {
-      return false;
+    if (this.message.member?.permissions.has("ADMINISTRATOR")) {
+      return true;
     }
 
-    return this.message.member.permissions.has("ADMINISTRATOR");
+    if (!this.message.member?.permissions.has("ADMINISTRATOR")) {
+      await this.message.reply(
+        "You must have adminstrator permissions to use this command"
+      );
+    }
+
+    return false;
   }
   protected async run(): Promise<void> {
     const channel = getVoiceChannelFromMessage(this.message);
-    channel?.members.forEach(async member => {
-      await member.voice.setMute(this.unmute);
-    });
+    if (!channel) {
+      return;
+    }
+
+    await Promise.all(
+      channel.members.map(async member => {
+        await member.voice.setMute(this.unmute);
+      })
+    );
   }
 }
