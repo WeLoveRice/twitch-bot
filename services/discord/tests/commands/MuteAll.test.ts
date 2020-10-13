@@ -89,10 +89,11 @@ describe("execute", () => {
     "does not call setMute when channel is missing",
     async mute => {
       Object.defineProperty(VoiceChannel, "getVoiceChannelFromMessage", {
-        value: jest.fn().mockReturnValue({ value: undefined })
+        value: jest.fn().mockReturnValue(null)
       });
 
       const muteAll = new MuteAll(message, mute);
+      muteAll.isValid = jest.fn().mockReturnValue(Promise.resolve(true));
       await muteAll.execute();
     }
   );
