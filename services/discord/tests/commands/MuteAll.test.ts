@@ -63,7 +63,7 @@ describe("isValid", () => {
 });
 
 describe("execute", () => {
-  it.each([true, false])("mute: %s", async mute => {
+  it.each([true, false])("calls setmute with mute: %s", async mute => {
     const memberMock = new (GuildMember as jest.Mock<GuildMember>)();
 
     Object.defineProperty(memberMock, "voice", {
@@ -84,4 +84,16 @@ describe("execute", () => {
       expect(member.voice.setMute).toBeCalledWith(mute);
     });
   });
+
+  it.each([true, false])(
+    "does not call setMute when channel is missing",
+    async mute => {
+      Object.defineProperty(VoiceChannel, "getVoiceChannelFromMessage", {
+        value: jest.fn().mockReturnValue({ value: undefined })
+      });
+
+      const muteAll = new MuteAll(message, mute);
+      await muteAll.execute();
+    }
+  );
 });
