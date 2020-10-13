@@ -22,10 +22,9 @@ describe("isValid", () => {
 
 describe("execute", () => {
   it("should run", async () => {
-    const soundFiles = ["test.mp3", "sound.mp3", "hero.mp3"];
-    const soundNames = soundFiles.map(file => {
-      return file.match(/(.*?).mp3/)?.[1];
-    });
+    const soundFiles = [".gitignore", "test.mp3", "sound.mp3", "hero.mp3"];
+    const soundNames = ["test", "sound", "hero"];
+
     const formattedSounds = soundNames.map((name, index) => {
       return `${index + 1}. ${name}`;
     });

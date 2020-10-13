@@ -12,11 +12,12 @@ export class SoundList extends AbstractCommand {
     const files = await fs.readdir(soundDir);
 
     const soundsFormatted = files
-      .map(file => {
-        return file.match(/(.*?).mp3/)?.[1];
+      .filter(file => {
+        return file.endsWith(".mp3");
       })
-      .map((name, index) => {
-        return `${index + 1}. ${name}`;
+      .map((file, index) => {
+        const fileName = file.match(/(.*?).mp3/)?.[1];
+        return `${index + 1}. ${fileName}`;
       });
 
     await this.message.reply(`\n ${soundsFormatted.join("\n")}`);
