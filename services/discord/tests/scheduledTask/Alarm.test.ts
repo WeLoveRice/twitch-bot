@@ -22,18 +22,18 @@ afterEach(() => jest.resetAllMocks());
 
 describe("getTimeUntilExecution", () => {
   it("calls moment.diff()", () => {
-    const countdown = new Alarm(message, 60);
-    countdown.scheduledDate = moment();
+    const alarm = new Alarm(message, 60);
+    alarm.scheduledDate = moment();
 
-    countdown.getTimeUntilExecution();
-    expect(countdown.scheduledDate.diff).toBeCalledWith(momentMock, "seconds");
+    alarm.getTimeUntilExecution();
+    expect(alarm.scheduledDate.diff).toBeCalledWith(momentMock, "seconds");
   });
 
   it("returns 0 when moment.diff returns < 0", () => {
-    const countdown = new Alarm(message, 0);
-    countdown.scheduledDate = moment();
+    const alarm = new Alarm(message, 0);
+    alarm.scheduledDate = moment();
 
-    expect(countdown.getTimeUntilExecution()).toBe(0);
+    expect(alarm.getTimeUntilExecution()).toBe(0);
   });
 });
 
@@ -51,11 +51,11 @@ describe("getFormattedScheduledDate", () => {
 
 describe("createEmbedForRemainingTime", () => {
   it("returns an embed", async () => {
-    const countdown = new Alarm(message, 60);
+    const alarm = new Alarm(message, 60);
 
-    countdown.getTimeUntilExecution = jest.fn().mockReturnValue(100);
-    countdown.getFormattedScheduledDate = jest.fn().mockReturnValue("09:00:15");
-    const embed = countdown.createEmbedForRemainingTime();
+    alarm.getTimeUntilExecution = jest.fn().mockReturnValue(100);
+    alarm.getFormattedScheduledDate = jest.fn().mockReturnValue("09:00:15");
+    const embed = alarm.createEmbedForRemainingTime();
 
     expect(embed.setURL).toBeCalledWith(
       "https://github.com/WeLoveRice/twitch-bot"
@@ -71,9 +71,9 @@ describe("createEmbedForRemainingTime", () => {
 
 describe("sendAlarmMessage", () => {
   it("sends the correct message", async () => {
-    const countdown = new Alarm(message, 60);
+    const alarm = new Alarm(message, 60);
 
-    await countdown.sendAlarmMessage();
+    await alarm.sendAlarmMessage(alarm.message);
     expect(message.reply).toBeCalledWith("Time up yo");
     expect(Sound);
   });
@@ -90,7 +90,7 @@ describe("start", () => {
     jest.runAllTimers();
 
     expect(setTimeout).toBeCalledWith(
-      alarm.sendAlarmMessage,
+      expect.any(Function),
       scheduledTime * 1000
     );
   });
