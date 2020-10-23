@@ -29,10 +29,9 @@ export class MuteAll extends AbstractCommand {
       return;
     }
 
-    await Promise.all(
-      channel.members.map(async member => {
-        await member.voice.setMute(this.unmute);
-      })
-    );
+    const promises = channel.members.map(member => {
+      return member.voice.setMute(this.unmute);
+    });
+    await Promise.all(promises);
   }
 }
