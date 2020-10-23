@@ -33,13 +33,16 @@ export class Alarm implements ScheduledTask {
     return embed;
   }
 
-  async sendAlarmMessage(): Promise<void> {
-    await this.message.reply("Time up yo");
+  async sendAlarmMessage(message: Message): Promise<void> {
+    await message.reply("Time up yo");
   }
 
   async start(): Promise<void> {
     const embed = this.createEmbedForRemainingTime();
     await this.message.reply(embed);
-    setTimeout(this.sendAlarmMessage, this.getTimeUntilExecution() * 1000);
+    setTimeout(
+      () => this.sendAlarmMessage(this.message),
+      this.getTimeUntilExecution() * 1000
+    );
   }
 }
