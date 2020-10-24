@@ -1,8 +1,8 @@
-import { VoiceChannelDisconnect } from "./periodicTask/VoiceChannelDisconnect";
 import { Logger } from "winston";
 import { VoiceChannel } from "discord.js";
-import { Runner } from "./periodicTask/Runner";
-import { createLogger } from "./Logger";
+import { Runner } from "../../periodicTask/Runner";
+import { createLogger } from "../../Logger";
+import { VoiceChannelDisconnect } from "../../periodicTask/VoiceChannelDisconnect";
 
 export class VoiceChannelManager {
   private logger: Logger;

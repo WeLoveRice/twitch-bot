@@ -1,7 +1,7 @@
 import { JoinVoiceChannel } from "./../../src/commands/JoinVoiceChannel";
 import { Message, VoiceChannel } from "discord.js";
 import { createLogger } from "../../src/Logger";
-import * as VCM from "../../src/VoiceChannelManager";
+import * as VCM from "../../src/api/discord/VoiceChannelManager";
 import * as VC from "../../src/api/discord/VoiceChannel";
 
 jest.mock("discord.js");
@@ -10,7 +10,7 @@ jest.mock("../../src/Logger", () => ({
     error: jest.fn()
   })
 }));
-jest.mock("../../src/VoiceChannelManager");
+jest.mock("../../src/api/discord/VoiceChannelManager");
 jest.mock("../../src/api/discord/VoiceChannel");
 
 const message = new (Message as jest.Mock<Message>)();
