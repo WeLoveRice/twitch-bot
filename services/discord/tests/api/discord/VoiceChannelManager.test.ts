@@ -1,16 +1,16 @@
-import { VoiceChannelManager } from "./../src/VoiceChannelManager";
+import { VoiceChannelManager } from "../../../src/api/discord/VoiceChannelManager";
 import { VoiceChannel } from "discord.js";
-import * as Runner from "../src/periodicTask/Runner";
-import { createLogger } from "../src/Logger";
+import * as Runner from "../../../src/periodicTask/Runner";
+import { createLogger } from "../../../src/Logger";
 
-jest.mock("../src/Logger", () => ({
+jest.mock("../../../src/Logger", () => ({
   createLogger: jest.fn().mockReturnValue({
     error: jest.fn()
   })
 }));
 jest.mock("discord.js");
-jest.mock("../src/periodicTask/VoiceChannelDisconnect");
-jest.mock("../src/periodicTask/Runner");
+jest.mock("../../../src/periodicTask/VoiceChannelDisconnect");
+jest.mock("../../../src/periodicTask/Runner");
 
 const mockedRunner = Runner as jest.Mocked<typeof Runner>;
 const voiceChannel = new (VoiceChannel as jest.Mock<VoiceChannel>)();

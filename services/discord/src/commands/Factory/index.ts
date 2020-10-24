@@ -3,7 +3,6 @@ import { createExplicitCommand } from "./Explicit";
 import { Command } from "../../enum/CommandEnum";
 import { Message } from "discord.js";
 import { AbstractCommand } from "../AbstractCommand";
-import { Logger } from "winston";
 
 export const createCommand = async (
   message: Message

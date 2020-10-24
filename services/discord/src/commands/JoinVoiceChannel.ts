@@ -1,9 +1,9 @@
 import { AbstractCommand } from "./AbstractCommand";
-import { VoiceChannelManager } from "../VoiceChannelManager";
 import {
   isMemberInVoiceChannel,
   getVoiceChannelFromMessage
 } from "../api/discord/VoiceChannel";
+import { VoiceChannelManager } from "../api/discord/VoiceChannelManager";
 
 export class JoinVoiceChannel extends AbstractCommand {
   public async isValid(): Promise<boolean> {

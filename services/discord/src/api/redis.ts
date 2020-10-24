@@ -1,13 +1,20 @@
-import { createClient } from "async-redis";
 import { createLogger } from "../Logger";
+import Redis from "ioredis";
 
-const logger = createLogger();
-export const redis = createClient(6379, "redis");
+const connect = () => {
+  const logger = createLogger();
+  const redis = new Redis(6379, "redis");
 
-redis.on("error", error => {
-  logger.error(`redis error: ${error}`);
-});
+  redis.on("ready", async () => {
+    await redis.flushall();
+    logger.info("Connected to redis");
+  });
 
-redis.on("ready", async () => {
-  await redis.flushall();
-});
+  redis.on("error", error => {
+    logger.error(`redis error: ${error}`);
+  });
+
+  return redis;
+};
+
+export default { connect };

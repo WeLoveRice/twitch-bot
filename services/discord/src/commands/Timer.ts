@@ -1,7 +1,7 @@
 import { Alarm } from "../scheduledTask/Alarm";
 import { Message } from "discord.js";
 import { AbstractCommand } from "./AbstractCommand";
-import { redis } from "../api/redis";
+import { redisClient as redis } from "../index";
 
 export class Timer extends AbstractCommand {
   public constructor(message: Message) {
@@ -33,6 +33,9 @@ export class Timer extends AbstractCommand {
     }
 
     if (await redis.get(this.message.author.id)) {
+      this.logger.info(
+        `Alarm already exists for user: ${this.message.author.username}`
+      );
       return false;
     }
 
