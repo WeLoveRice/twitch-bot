@@ -33,6 +33,7 @@
     "mz": "^2.7.0",
     "pg": "^8.4.1",
     "pm2": "^4.5.0",
+    "twisted": "^1.29.0",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.0"
   },

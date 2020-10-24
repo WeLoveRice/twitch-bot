@@ -1,4 +1,4 @@
-import { TftApi, Constants } from "twisted";
+import { TftApi } from "twisted";
 export const getTftApi = () => {
   if (!process.env.RIOT_API) {
     throw "RIOT_API env not defined";
