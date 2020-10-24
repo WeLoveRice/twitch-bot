@@ -7,6 +7,13 @@ services:
       - "6379:6379"
     sysctls:
         - net.core.somaxconn=511
+  postgres:
+    image: postgres:13-alpine
+    env_file: services/postgres/db.env
+    volumes:
+      - ./services/postgres/data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
   discord:
     build: 
       context: ./services/discord
@@ -17,3 +24,4 @@ services:
     command: npm run start:dev
     depends_on:
       - redis
+      - postgres
