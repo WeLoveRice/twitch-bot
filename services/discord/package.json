@@ -41,6 +41,7 @@
     "@types/jest": "^24.9.1",
     "@types/mz": "^2.7.1",
     "@types/node": "^12.12.39",
+    "@types/pg": "^7.14.5",
     "@types/redis": "^2.8.22",
     "@types/redis-mock": "^0.17.0",
     "@types/ws": "^6.0.4",
