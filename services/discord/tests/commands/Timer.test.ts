@@ -1,8 +1,7 @@
 import { Message, User } from "discord.js";
-import { redis } from "../../src/api/redis";
 import { Timer } from "../../src/commands/Timer";
 import * as Alarm from "../../src/scheduledTask/Alarm";
-import { Runner } from "../../src/periodicTask/Runner";
+import { redisClient as redis } from "../../src/index";
 
 jest.mock("discord.js");
 jest.mock("../../src/Logger", () => ({
@@ -12,22 +11,13 @@ jest.mock("../../src/Logger", () => ({
   })
 }));
 jest.mock("../../src/scheduledTask/Alarm");
-jest.mock("../../src/api/redis");
-jest.mock("async-redis", () => ({
-  createClient: jest.fn().mockReturnValue({
-    on: jest.fn(),
-    get: jest.fn(),
-    setex: jest.fn()
-  })
-}));
+jest.mock("ioredis");
+jest.mock("../../src/api/discord");
+jest.mock("../../src/api/postgres");
 
 const alarmMock = Alarm as jest.Mocked<typeof Alarm>;
 const message = new (Message as jest.Mock<Message>)();
 const timer = new Timer(message);
-
-afterEach(() => {
-  jest.resetAllMocks();
-});
 
 it.each([
   "1sec",
