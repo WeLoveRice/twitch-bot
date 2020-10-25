@@ -6,6 +6,7 @@ jest.mock("../../../src/commands/Factory");
 jest.mock("../../../src/Logger");
 jest.mock("../../../src/api/postgres");
 jest.mock("../../../src/api/redis");
+jest.mock("../../../src/DataInitialization");
 
 it("runs as expected", () => {
   discordApi.connect();

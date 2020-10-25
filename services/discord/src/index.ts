@@ -1,9 +1,11 @@
 import { createLogger } from "./Logger";
-import postgres from "./api/postgres";
 import discord from "./api/discord";
+import postgres from "./api/postgres";
 import redis from "./api/redis";
+import { initialiseSummoners } from "./DataInitialization";
 
 export const redisClient = redis.connect();
+
 export const main = async (): Promise<void> => {
   try {
     await postgres.connect();
@@ -15,3 +17,4 @@ export const main = async (): Promise<void> => {
 };
 
 main();
+initialiseSummoners();

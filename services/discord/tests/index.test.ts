@@ -12,6 +12,7 @@ jest.mock("../src/Logger", () => ({
 jest.mock("../src/api/postgres");
 jest.mock("../src/api/discord");
 jest.mock("../src/api/redis");
+jest.mock("../src/DataInitialization");
 
 it("runs expected", async () => {
   await main();

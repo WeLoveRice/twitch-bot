@@ -14,6 +14,7 @@ jest.mock("../../src/scheduledTask/Alarm");
 jest.mock("ioredis");
 jest.mock("../../src/api/discord");
 jest.mock("../../src/api/postgres");
+jest.mock("../../src/DataInitialization");
 
 const alarmMock = Alarm as jest.Mocked<typeof Alarm>;
 const message = new (Message as jest.Mock<Message>)();

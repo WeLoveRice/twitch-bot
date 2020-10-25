@@ -10,6 +10,7 @@ jest.mock("../../../src/commands/Sound");
 jest.mock("../../../src/Logger");
 jest.mock("../../../src/api/discord");
 jest.mock("../../../src/api/postgres");
+jest.mock("../../../src/DataInitialization");
 
 const message = new (Message as jest.Mock<Message>)();
 
