@@ -3,7 +3,6 @@ export const getTftApi = () => {
   if (!process.env.RIOT_API) {
     throw "RIOT_API env not defined";
   }
-
   return new TftApi(process.env.RIOT_API);
 };
 
