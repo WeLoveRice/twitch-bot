@@ -3,3 +3,5 @@ build/
 coverage/
 .env
 .env.dev
+sequelize.json
+models
