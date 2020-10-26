@@ -1,7 +1,8 @@
 import { Message, User } from "discord.js";
+import { Redis as RedisApi } from "../../src/api/redis";
 import { Timer } from "../../src/commands/Timer";
 import * as Alarm from "../../src/scheduledTask/Alarm";
-import { redisClient as redis } from "../../src/index";
+import Redis from "ioredis";
 
 jest.mock("discord.js");
 jest.mock("../../src/Logger", () => ({
@@ -11,14 +12,13 @@ jest.mock("../../src/Logger", () => ({
   })
 }));
 jest.mock("../../src/scheduledTask/Alarm");
+jest.mock("../../src/api/redis");
 jest.mock("ioredis");
-jest.mock("../../src/api/discord");
-jest.mock("../../src/api/postgres");
-jest.mock("../../src/DataInitialization");
 
 const alarmMock = Alarm as jest.Mocked<typeof Alarm>;
 const message = new (Message as jest.Mock<Message>)();
 const timer = new Timer(message);
+RedisApi.connection = new Redis();
 
 it.each([
   "1sec",
@@ -83,11 +83,11 @@ it("ignores timer when user already has one running", async () => {
   message.author = new (User as jest.Mock<User>)();
   message.author.bot = false;
 
-  redis.get = jest.fn().mockReturnValue(Promise.resolve(true));
+  RedisApi.connection.get = jest.fn().mockReturnValue(Promise.resolve(true));
 
   const isValid = await timer.isValid();
   expect(isValid).toBe(false);
-  expect(redis.get).toBeCalledWith(message.author.id);
+  expect(RedisApi.connection.get).toBeCalledWith(message.author.id);
 });
 
 it("does not run when parseSecondsToRun is null", async () => {
@@ -108,5 +108,5 @@ it("runs sucessfully", async () => {
   await timer.execute();
   expect(timer.parseSecondsToRun).toBeCalled();
   expect(alarmMock.Alarm.mock.instances[0].start).toBeCalled();
-  expect(redis.setex).toBeCalledWith("testid", 100, "true");
+  expect(RedisApi.connection.setex).toBeCalledWith("testid", 100, "true");
 });

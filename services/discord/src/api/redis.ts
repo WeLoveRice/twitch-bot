@@ -1,20 +1,30 @@
 import { createLogger } from "../Logger";
-import Redis from "ioredis";
+import * as IORedis from "ioredis";
 
-const connect = () => {
-  const logger = createLogger();
-  const redis = new Redis(6379, "redis");
+export class Redis {
+  static connection: IORedis.Redis;
 
-  redis.on("ready", async () => {
-    await redis.flushall();
-    logger.info("Connected to redis");
-  });
+  static connect = () => {
+    const logger = createLogger();
+    const client = new IORedis.default(6379, "redis");
 
-  redis.on("error", error => {
-    logger.error(`redis error: ${error}`);
-  });
+    client.on("ready", async () => {
+      await client.flushall();
+      logger.info("Connected to redis");
+    });
 
-  return redis;
-};
+    client.on("error", error => {
+      logger.error(`redis error: ${error}`);
+    });
 
-export default { connect };
+    return client;
+  };
+
+  static getConnection = () => {
+    if (Redis.connection) {
+      return Redis.connection;
+    }
+    Redis.connection = Redis.connect();
+    return Redis.connection;
+  };
+}
