@@ -9,6 +9,8 @@ export const main = async (): Promise<void> => {
     await postgres.connect();
     Redis.connect();
     discord.connect();
+
+    initialiseSummoners();
   } catch (e) {
     const logger = createLogger();
     logger.error(e);
@@ -17,4 +19,3 @@ export const main = async (): Promise<void> => {
 };
 
 main();
-initialiseSummoners();
