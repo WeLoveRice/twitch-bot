@@ -4,22 +4,24 @@ import { DataTypes, Model, Sequelize } from 'sequelize';
 
 export interface TftParticipantResultAttributes {
   id?: number;
-  postMatchTier?: string;
-  postMatchRank?: string;
   goldLeft?: number;
   placement?: number;
   lastRound?: number;
   tftSummonerRiotId?: string;
+  postMatchTier?: string;
+  postMatchRank?: string;
+  postMatchLp?: number;
 }
 
 export class TftParticipantResult extends Model<TftParticipantResultAttributes, TftParticipantResultAttributes> implements TftParticipantResultAttributes {
   id?: number;
-  postMatchTier?: string;
-  postMatchRank?: string;
   goldLeft?: number;
   placement?: number;
   lastRound?: number;
   tftSummonerRiotId?: string;
+  postMatchTier?: string;
+  postMatchRank?: string;
+  postMatchLp?: number;
 
   static initModel(sequelize: Sequelize) {
     TftParticipantResult.init({
@@ -28,16 +30,6 @@ export class TftParticipantResult extends Model<TftParticipantResultAttributes, 
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
-    },
-    postMatchTier: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-      field: 'post_match_tier'
-    },
-    postMatchRank: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-      field: 'post_match_rank'
     },
     goldLeft: {
       type: DataTypes.INTEGER,
@@ -55,8 +47,23 @@ export class TftParticipantResult extends Model<TftParticipantResultAttributes, 
     },
     tftSummonerRiotId: {
       type: DataTypes.TEXT,
-      allowNull: true,
+      allowNull: false,
       field: 'tft_summoner_riot_id'
+    },
+    postMatchTier: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      field: 'post_match_tier'
+    },
+    postMatchRank: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      field: 'post_match_rank'
+    },
+    postMatchLp: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      field: 'post_match_lp'
     }
   }, {
     sequelize,

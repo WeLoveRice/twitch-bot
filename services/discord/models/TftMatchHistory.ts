@@ -33,7 +33,7 @@ export class TftMatchHistory extends Model<TftMatchHistoryAttributes, TftMatchHi
     },
     tftMatchDetailsRiotId: {
       type: DataTypes.TEXT,
-      allowNull: true,
+      allowNull: false,
       references: {
         model: 'tft_match_details',
         key: 'riot_id'

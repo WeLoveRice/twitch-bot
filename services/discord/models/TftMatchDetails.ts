@@ -29,7 +29,7 @@ export class TftMatchDetails extends Model<TftMatchDetailsAttributes, TftMatchDe
       field: 'start_time'
     },
     duration: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     riotId: {
