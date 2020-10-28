@@ -2,6 +2,7 @@ import { main } from "../src/index";
 import postgres from "../src/api/postgres";
 import discord from "../src/api/discord";
 import { Redis } from "../src/api/redis";
+import { createLogger } from "../src/Logger";
 
 jest.mock("../src/Logger", () => ({
   createLogger: jest.fn().mockReturnValue({
@@ -20,4 +21,14 @@ it("runs expected", async () => {
   expect(postgres.connect).toBeCalled();
   expect(discord.connect).toBeCalled();
   expect(Redis.connect).toBeCalled();
+});
+
+it("logs error when exception is thrown", async () => {
+  expect(async () => {
+    discord.connect = () => {
+      throw new Error("Test");
+    };
+    await main();
+    expect(createLogger).toBeCalled();
+  }).rejects.toThrowError("Test");
 });
