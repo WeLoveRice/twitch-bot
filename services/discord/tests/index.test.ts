@@ -10,6 +10,7 @@ jest.mock("../src/Logger", () => ({
     error: jest.fn()
   })
 }));
+
 jest.mock("../src/api/postgres");
 jest.mock("../src/api/discord");
 jest.mock("../src/api/redis");
@@ -29,6 +30,6 @@ it("logs error when exception is thrown", async () => {
       throw new Error("Test");
     };
     await main();
-    expect(createLogger).toBeCalled();
+    expect(createLogger().error).toBeCalled();
   }).rejects.toThrowError("Test");
 });
