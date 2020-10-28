@@ -14,9 +14,6 @@ jobs:
     - name: npm ci
       run: npm ci
       working-directory: services/discord 	
-    - name: ORM models
-      run: make generate_models
-      working-directory: services/discord 	
     - name: lint
       run: npm run lint
       working-directory: services/discord 	
