@@ -23,8 +23,10 @@ describe("connect", () => {
 });
 
 describe("getConnection", () => {
-  it("returns a redis connection", () => {
+  it("creates connection when not exist", () => {
+    RedisApi.connect = jest.fn().mockReturnValue(new Redis());
     expect(RedisApi.getConnection()).toBeInstanceOf(Redis);
+    expect(RedisApi.connect).toBeCalled();
   });
 
   it("returns redis connection if already exist", () => {
