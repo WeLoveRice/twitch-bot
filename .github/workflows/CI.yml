@@ -13,6 +13,8 @@ jobs:
         node-version: '12.x'
     - name: npm ci
       run: npm ci
+    - name: ORM models
+      run: make generate_models
       working-directory: services/discord 	
     - name: lint
       run: npm run lint
