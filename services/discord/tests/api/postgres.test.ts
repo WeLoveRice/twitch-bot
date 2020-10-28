@@ -1,28 +1,24 @@
 import postgres from "../../src/api/postgres";
-import * as Postgres from "pg";
+import * as Sequelize from "sequelize";
 
 jest.mock("discord.js");
 jest.mock("../../src/Logger");
-jest.mock("pg");
+jest.mock("sequelize");
 
-it("runs as expected", async () => {
-  process.env.POSTGRES_DB = "TEST_DB";
-  process.env.POSTGRES_USER = "TEST_USER";
-  process.env.POSTGRES_PASSWORD = "TEST_PASS";
+const sequelizeMock = Sequelize as jest.Mocked<typeof Sequelize>;
 
-  await postgres.connect();
+describe("connect", () => {
+  it("connect calls expected", async () => {
+    process.env.POSTGRES_DB = "TEST_DB";
+    process.env.POSTGRES_USER = "TEST_USER";
+    process.env.POSTGRES_PASSWORD = "TEST_PASS";
+    await postgres.connect();
 
-  const postgresMock = Postgres as jest.Mocked<typeof Postgres>;
-
-  expect(postgresMock.Pool).toBeCalledWith({
-    host: "postgres",
-    database: "TEST_DB",
-    user: "TEST_USER",
-    password: "TEST_PASS"
+    expect(sequelizeMock.Sequelize).toBeCalledWith(
+      "TEST_DB",
+      "TEST_USER",
+      "TEST_PASS",
+      { host: "postgres", dialect: "postgres", logging: expect.any(Function) }
+    );
   });
-
-  const poolInstance = postgresMock.Pool.mock.instances[0];
-  expect(poolInstance.on).toBeCalledWith("connect", expect.any(Function));
-  expect(poolInstance.on).toBeCalledWith("error", expect.any(Function));
-  expect(poolInstance.connect).toBeCalled();
 });

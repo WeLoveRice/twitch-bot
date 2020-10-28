@@ -4,12 +4,9 @@ import * as TimerMocked from "../../../src/commands/Timer";
 import * as SoundMocked from "../../../src/commands/Sound";
 
 jest.mock("discord.js");
-jest.mock("ioredis");
 jest.mock("../../../src/commands/Timer");
 jest.mock("../../../src/commands/Sound");
-jest.mock("../../../src/Logger");
-jest.mock("../../../src/api/discord");
-jest.mock("../../../src/api/postgres");
+jest.mock("../../../src/commands/AbstractCommand");
 
 const message = new (Message as jest.Mock<Message>)();
 

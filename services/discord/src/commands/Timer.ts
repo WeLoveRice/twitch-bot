@@ -1,7 +1,7 @@
 import { Alarm } from "../scheduledTask/Alarm";
 import { Message } from "discord.js";
 import { AbstractCommand } from "./AbstractCommand";
-import { redisClient as redis } from "../index";
+import { Redis } from "../api/redis";
 
 export class Timer extends AbstractCommand {
   public constructor(message: Message) {
@@ -32,7 +32,7 @@ export class Timer extends AbstractCommand {
       return false;
     }
 
-    if (await redis.get(this.message.author.id)) {
+    if (await Redis.connection.get(this.message.author.id)) {
       this.logger.info(
         `Alarm already exists for user: ${this.message.author.username}`
       );
@@ -56,6 +56,6 @@ export class Timer extends AbstractCommand {
     const alarm = new Alarm(this.message, secondsToRun);
     await alarm.start();
     this.logger.info(`Alarm due in ${secondsToRun} seconds`);
-    await redis.setex(this.message.author.id, secondsToRun, "true");
+    await Redis.connection.setex(this.message.author.id, secondsToRun, "true");
   }
 }

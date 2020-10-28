@@ -4,8 +4,6 @@ import discordApi from "../../../src/api/discord";
 jest.mock("discord.js");
 jest.mock("../../../src/commands/Factory");
 jest.mock("../../../src/Logger");
-jest.mock("../../../src/api/postgres");
-jest.mock("../../../src/api/redis");
 
 it("runs as expected", () => {
   discordApi.connect();

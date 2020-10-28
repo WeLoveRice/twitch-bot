@@ -5,7 +5,7 @@ import { Bot } from "../enum/Bot";
 import { createLogger } from "../Logger";
 
 export class VoiceChannelDisconnect implements PeriodicTask {
-  public readonly interval: number;
+  interval: number;
   voiceChannel: VoiceChannel;
   logger: Logger;
 

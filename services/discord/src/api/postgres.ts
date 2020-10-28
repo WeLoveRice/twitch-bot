@@ -1,27 +1,28 @@
-import { Pool } from "pg";
+import { Sequelize } from "sequelize";
+import { initModels } from "../../models/init-models";
 import { createLogger } from "../Logger";
 
 const connect = async () => {
-  const logger = createLogger();
   const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB } = process.env;
+  if (!POSTGRES_DB || !POSTGRES_USER || !POSTGRES_PASSWORD) {
+    throw new Error("POSTGRES env not set");
+  }
+  const logger = createLogger();
+  const sequelize = new Sequelize(
+    POSTGRES_DB,
+    POSTGRES_USER,
+    POSTGRES_PASSWORD,
+    {
+      host: "postgres",
+      dialect: "postgres",
+      logging: msg => logger.info(msg)
+    }
+  );
 
-  const pool = new Pool({
-    host: "postgres",
-    database: POSTGRES_DB,
-    user: POSTGRES_USER,
-    password: POSTGRES_PASSWORD
-  });
-
-  pool.on("error", error => {
-    logger.error(`postgres error ${error}`);
-    process.exit(1);
-  });
-
-  pool.on("connect", () => {
-    logger.info(`Connected to postgres`);
-  });
-
-  await pool.connect();
+  await sequelize.authenticate();
+  await sequelize.sync();
+  await initModels(sequelize);
+  return sequelize;
 };
 
 export default { connect };
