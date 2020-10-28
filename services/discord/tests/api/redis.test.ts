@@ -1,15 +1,18 @@
 import { Redis as RedisApi } from "../../src/api/redis";
-import * as Redis from "ioredis";
+import Redis, * as IORedis from "ioredis";
 
 jest.mock("discord.js");
 jest.mock("../../src/Logger");
 jest.mock("ioredis");
 
+beforeEach(() => {
+  jest.resetAllMocks();
+});
 describe("connect", () => {
   it("runs as expected", async () => {
-    expect(RedisApi.connect()).toBeInstanceOf(Redis.default);
+    expect(RedisApi.connect()).toBeInstanceOf(Redis);
 
-    const ioredisMock = Redis as jest.Mocked<typeof Redis>;
+    const ioredisMock = IORedis as jest.Mocked<typeof IORedis>;
 
     expect(ioredisMock).toBeCalledWith(6379, "redis");
 
@@ -21,6 +24,12 @@ describe("connect", () => {
 
 describe("getConnection", () => {
   it("returns a redis connection", () => {
-    expect(RedisApi.getConnection()).toBeInstanceOf(Redis.default);
+    expect(RedisApi.getConnection()).toBeInstanceOf(Redis);
+  });
+
+  it("returns redis connection if already exist", () => {
+    RedisApi.connection = new Redis();
+    expect(RedisApi.getConnection()).toBeInstanceOf(Redis);
+    expect(Redis).toBeCalledWith();
   });
 });

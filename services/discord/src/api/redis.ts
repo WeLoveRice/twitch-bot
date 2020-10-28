@@ -1,12 +1,12 @@
 import { createLogger } from "../Logger";
-import * as IORedis from "ioredis";
+import { default as IORedis } from "ioredis";
 
 export class Redis {
   static connection: IORedis.Redis;
 
   static connect = () => {
     const logger = createLogger();
-    const client = new IORedis.default(6379, "redis");
+    const client = new IORedis(6379, "redis");
 
     client.on("ready", async () => {
       await client.flushall();
