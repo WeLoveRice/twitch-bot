@@ -3,7 +3,7 @@ import { TftSummoner } from "../../models/TftSummoner";
 import { getSummoner } from "../api/riot";
 import { createLogger } from "../Logger";
 
-const initSummoner = async (summonerName: str) => {
+const initSummoner = async (summonerName: string) => {
   const logger = createLogger();
 
   const { id, puuid, name } = await getSummoner(summonerName);
