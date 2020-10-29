@@ -1,5 +1,5 @@
 import * as riotApi from "../../src/api/riot";
-import { initialiseSummoners } from "../../src/data/TftSummoner";
+import { initialiseSummoners } from "../../src/tft/SummonerInit";
 
 jest.mock("sleep-promise");
 jest.mock("../../src/Logger", () => ({

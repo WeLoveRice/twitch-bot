@@ -1,7 +1,12 @@
 import { TftApi, Constants } from "twisted";
+import {
+  ApiResponseDTO,
+  MatchTFTDTO,
+  ParticipantDto
+} from "twisted/dist/models-dto";
+import { TftSummoner } from "../../models/TftSummoner";
 
 export const getTftApi = () => {
-  console.log(process.env.RIOT_API);
   if (!process.env.RIOT_API) {
     throw "RIOT_API env not defined";
   }
@@ -31,4 +36,15 @@ export const getMatchDetail = async (matchId: string) => {
   const api = getTftApi();
   const match = await api.Match.get(matchId, Constants.TftRegions.EUROPE);
   return match;
+};
+
+export const getParticipantFromMatch = (
+  match: ApiResponseDTO<MatchTFTDTO>,
+  summoner: TftSummoner
+): ParticipantDto => {
+  const participantIndex = match.response.metadata.participants.findIndex(
+    id => id == summoner.puuid
+  );
+
+  return match.response.info.participants[participantIndex];
 };
