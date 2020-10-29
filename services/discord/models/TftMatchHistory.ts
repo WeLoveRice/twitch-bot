@@ -32,7 +32,7 @@ export class TftMatchHistory
           primaryKey: true
         },
         tftParticipantResultId: {
-          type: DataTypes.BIGINT,
+          type: DataTypes.INTEGER,
           allowNull: false,
           references: {
             model: "tft_participant_result",
@@ -54,6 +54,10 @@ export class TftMatchHistory
         tftSummonerRiotId: {
           type: DataTypes.TEXT,
           allowNull: false,
+          references: {
+            model: "tft_summoner",
+            key: "riot_id"
+          },
           field: "tft_summoner_riot_id"
         }
       },
