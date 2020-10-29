@@ -14,7 +14,7 @@ jest.mock("../src/Logger", () => ({
 jest.mock("../src/api/postgres");
 jest.mock("../src/api/discord");
 jest.mock("../src/api/redis");
-jest.mock("../src/data/TftSummoner");
+jest.mock("../src/tft/SummonerInit");
 
 it("runs expected", async () => {
   await main();
