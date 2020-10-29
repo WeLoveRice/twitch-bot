@@ -3,7 +3,7 @@ import { PeriodicTask } from ".";
 import { getMatchDetail, getParticipantFromMatch } from "../api/riot";
 import { createLogger } from "../Logger";
 import {
-  fetchLatestUniqueMatch,
+  fetchLatestUnprocessedMatch,
   findSummonerByName,
   insertMatchDetail,
   insertMatchHistory,
@@ -22,7 +22,7 @@ export class TftMatchFetcher implements PeriodicTask {
 
   async execute(): Promise<boolean> {
     const summoner = await findSummonerByName(this.summonerName);
-    const latestMatch = await fetchLatestUniqueMatch(summoner);
+    const latestMatch = await fetchLatestUnprocessedMatch(summoner);
     if (!latestMatch) {
       return false;
     }
