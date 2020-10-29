@@ -2,7 +2,8 @@ import { TftApi, Constants } from "twisted";
 import {
   ApiResponseDTO,
   MatchTFTDTO,
-  ParticipantDto
+  ParticipantDto,
+  SummonerV4DTO
 } from "twisted/dist/models-dto";
 import { TftSummoner } from "../../models/TftSummoner";
 
@@ -13,14 +14,16 @@ export const getTftApi = () => {
   return new TftApi(process.env.RIOT_API);
 };
 
-export const getSummoner = async (summonerName: string) => {
+export const getSummoner = async (
+  summonerName: string
+): Promise<ApiResponseDTO<SummonerV4DTO>> => {
   const api = getTftApi();
   const summoner = await api.Summoner.getByName(
     summonerName,
     Constants.Regions.EU_WEST
   );
 
-  return summoner.response;
+  return summoner;
 };
 
 export const getMatchHistory = async (summonerPUUID: string) => {
