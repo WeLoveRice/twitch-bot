@@ -12,7 +12,7 @@ export const main = async (): Promise<void> => {
     Redis.connect();
     discord.connect();
 
-    // await initialiseSummoners()
+    await initialiseSummoners();
     if (!process.env.LOL_USERS) {
       return;
     }
