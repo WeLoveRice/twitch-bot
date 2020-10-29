@@ -80,7 +80,7 @@ export const insertParticipantResult = async (
 
   const participantResult = await TftParticipantResult.create({
     goldLeft: participant.gold_left,
-    placement: participant.gold_left,
+    placement: participant.placement,
     lastRound: participant.last_round,
     tftSummonerRiotId: summoner.riotId,
     postMatchTier: "PLATINUM",
