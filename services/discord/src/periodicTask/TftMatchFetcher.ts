@@ -36,7 +36,7 @@ export class TftMatchFetcher implements PeriodicTask {
       participant,
       summoner
     );
-    await insertMatchHistory(participantResult, match);
+    await insertMatchHistory(participantResult, match, summoner);
     return false;
   }
 }

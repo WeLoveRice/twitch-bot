@@ -30,8 +30,11 @@ export const fetchLatestUnprocessedMatch = async (
   summoner: TftSummoner
 ): Promise<string | null> => {
   const matches = await getMatchHistory(summoner.puuid);
-  const result = await TftMatchDetails.count({
-    where: { riotId: matches.response[0] }
+  const result = await TftMatchHistory.count({
+    where: {
+      tftMatchDetailsRiotId: matches.response[0],
+      tftSummonerRiotId: summoner.riotId
+    }
   });
 
   if (result > 0) {
@@ -81,7 +84,6 @@ export const insertParticipantResult = async (
     goldLeft: participant.gold_left,
     placement: participant.placement,
     lastRound: participant.last_round,
-    tftSummonerRiotId: summoner.riotId,
     postMatchTier: tier,
     postMatchRank: rank,
     postMatchLp: leaguePoints
@@ -93,12 +95,14 @@ export const insertParticipantResult = async (
 
 export const insertMatchHistory = async (
   { id }: TftParticipantResult,
-  { response }: ApiResponseDTO<MatchTFTDTO>
+  { response }: ApiResponseDTO<MatchTFTDTO>,
+  summoner: TftSummoner
 ): Promise<TftMatchHistory> => {
   const logger = createLogger();
   const result = await TftMatchHistory.create({
     tftParticipantResultId: id,
-    tftMatchDetailsRiotId: response.metadata.match_id
+    tftMatchDetailsRiotId: response.metadata.match_id,
+    tftSummonerRiotId: summoner.riotId
   });
 
   logger.info(`Inserted match_history with ID: ${result.id}`);

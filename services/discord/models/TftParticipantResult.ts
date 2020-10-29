@@ -7,7 +7,6 @@ export interface TftParticipantResultAttributes {
   goldLeft: number;
   placement: number;
   lastRound: number;
-  tftSummonerRiotId: string;
   postMatchTier: string;
   postMatchRank: string;
   postMatchLp: number;
@@ -27,7 +26,6 @@ export class TftParticipantResult
   goldLeft!: number;
   placement!: number;
   lastRound!: number;
-  tftSummonerRiotId!: string;
   postMatchTier!: string;
   postMatchRank!: string;
   postMatchLp!: number;
@@ -54,11 +52,6 @@ export class TftParticipantResult
           type: DataTypes.INTEGER,
           allowNull: false,
           field: "last_round"
-        },
-        tftSummonerRiotId: {
-          type: DataTypes.TEXT,
-          allowNull: false,
-          field: "tft_summoner_riot_id"
         },
         postMatchTier: {
           type: DataTypes.TEXT,
