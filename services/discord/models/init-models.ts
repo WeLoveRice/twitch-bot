@@ -1,14 +1,21 @@
 import { Sequelize } from "sequelize";
 import { TftSummoner, TftSummonerAttributes } from "./TftSummoner";
-import { TftParticipantResult, TftParticipantResultAttributes } from "./TftParticipantResult";
+import {
+  TftParticipantResult,
+  TftParticipantResultAttributes
+} from "./TftParticipantResult";
 import { TftMatchHistory, TftMatchHistoryAttributes } from "./TftMatchHistory";
 import { TftMatchDetails, TftMatchDetailsAttributes } from "./TftMatchDetails";
 
 export {
-  TftSummoner, TftSummonerAttributes,
-  TftParticipantResult, TftParticipantResultAttributes,
-  TftMatchHistory, TftMatchHistoryAttributes,
-  TftMatchDetails, TftMatchDetailsAttributes,
+  TftSummoner,
+  TftSummonerAttributes,
+  TftParticipantResult,
+  TftParticipantResultAttributes,
+  TftMatchHistory,
+  TftMatchHistoryAttributes,
+  TftMatchDetails,
+  TftMatchDetailsAttributes
 };
 
 export function initModels(sequelize: Sequelize) {
@@ -21,6 +28,6 @@ export function initModels(sequelize: Sequelize) {
     TftSummoner,
     TftParticipantResult,
     TftMatchHistory,
-    TftMatchDetails,
+    TftMatchDetails
   };
 }
