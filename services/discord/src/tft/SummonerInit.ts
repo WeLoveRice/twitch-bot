@@ -17,7 +17,6 @@ const initSummoner = async (summonerName: string) => {
     name: response.name,
     riotId: response.id
   });
-  await sleep(2000);
   logger.info(`${summonerName} added to db`);
 };
 

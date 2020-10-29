@@ -56,7 +56,7 @@ export const getParticipantFromMatch = (
 
 export const fetchLeagueBySummoner = async (
   summoner: TftSummoner
-): Promise<ApiResponseDTO<LeagueEntryDTO>> => {
+): Promise<ApiResponseDTO<LeagueEntryDTO[]>> => {
   const api = getTftApi();
   return api.League.get(summoner.riotId, Regions.EU_WEST);
 };

@@ -74,9 +74,8 @@ export const insertParticipantResult = async (
 ): Promise<TftParticipantResult> => {
   const logger = createLogger();
 
-  const {
-    response: { tier, rank, leaguePoints }
-  } = await fetchLeagueBySummoner(summoner);
+  const { response } = await fetchLeagueBySummoner(summoner);
+  const { tier, rank, leaguePoints } = response[0];
 
   const participantResult = await TftParticipantResult.create({
     goldLeft: participant.gold_left,
