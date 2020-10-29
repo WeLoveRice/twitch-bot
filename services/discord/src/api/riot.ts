@@ -1,10 +1,12 @@
 import { TftApi, Constants } from "twisted";
+import { Regions } from "twisted/dist/constants";
 import {
   ApiResponseDTO,
   MatchTFTDTO,
   ParticipantDto,
   SummonerV4DTO
 } from "twisted/dist/models-dto";
+import { LeagueEntryDTO } from "twisted/dist/models-dto/league/tft-league";
 import { TftSummoner } from "../../models/TftSummoner";
 
 export const getTftApi = () => {
@@ -50,4 +52,11 @@ export const getParticipantFromMatch = (
   );
 
   return match.response.info.participants[participantIndex];
+};
+
+export const fetchLeagueBySummoner = async (
+  summoner: TftSummoner
+): Promise<ApiResponseDTO<LeagueEntryDTO>> => {
+  const api = getTftApi();
+  return api.League.get(summoner.riotId, Regions.EU_WEST);
 };

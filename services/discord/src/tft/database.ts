@@ -9,7 +9,7 @@ import {
   TftParticipantResult,
   TftSummoner
 } from "../../models/init-models";
-import { getMatchHistory } from "../api/riot";
+import { fetchLeagueBySummoner, getMatchHistory } from "../api/riot";
 import { createLogger } from "../Logger";
 
 export const findSummonerByName = async (
@@ -29,10 +29,6 @@ export const findSummonerByName = async (
 export const fetchLatestUniqueMatch = async (
   summoner: TftSummoner
 ): Promise<string | null> => {
-  if (!summoner.puuid) {
-    throw new Error(`Puuid is null for ${summoner.name}`);
-  }
-
   const matches = await getMatchHistory(summoner.puuid);
   const result = await TftMatchDetails.count({
     where: { riotId: matches.response[0] }
@@ -78,14 +74,18 @@ export const insertParticipantResult = async (
 ): Promise<TftParticipantResult> => {
   const logger = createLogger();
 
+  const {
+    response: { tier, rank, leaguePoints }
+  } = await fetchLeagueBySummoner(summoner);
+
   const participantResult = await TftParticipantResult.create({
     goldLeft: participant.gold_left,
     placement: participant.placement,
     lastRound: participant.last_round,
     tftSummonerRiotId: summoner.riotId,
-    postMatchTier: "PLATINUM",
-    postMatchRank: "III",
-    postMatchLp: 50
+    postMatchTier: tier,
+    postMatchRank: rank,
+    postMatchLp: leaguePoints
   });
   logger.info(`Inserted participant_detail with ID: ${participantResult.id}`);
 
