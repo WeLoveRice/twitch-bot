@@ -12,7 +12,9 @@ import {
 import { getMatchHistory } from "../api/riot";
 import { createLogger } from "../Logger";
 
-export const findSummonerByName = async (name: string) => {
+export const findSummonerByName = async (
+  name: string
+): Promise<TftSummoner> => {
   const summoner = await TftSummoner.findOne({
     where: { name }
   });
@@ -23,7 +25,10 @@ export const findSummonerByName = async (name: string) => {
 
   return summoner;
 };
-export const fetchLatestUniqueMatch = async (summoner: TftSummoner) => {
+
+export const fetchLatestUniqueMatch = async (
+  summoner: TftSummoner
+): Promise<string | null> => {
   if (!summoner.puuid) {
     throw new Error(`Puuid is null for ${summoner.name}`);
   }
@@ -40,9 +45,21 @@ export const fetchLatestUniqueMatch = async (summoner: TftSummoner) => {
   return matches.response[0];
 };
 
+export const matchDetailExists = async ({
+  response
+}: ApiResponseDTO<MatchTFTDTO>): Promise<boolean> => {
+  const result = await TftMatchDetails.count({
+    where: {
+      riotId: response.metadata.match_id
+    }
+  });
+
+  return result > 0;
+};
+
 export const insertMatchDetail = async ({
   response
-}: ApiResponseDTO<MatchTFTDTO>) => {
+}: ApiResponseDTO<MatchTFTDTO>): Promise<TftMatchDetails> => {
   const logger = createLogger();
   const result = await TftMatchDetails.create({
     startTime: new Date(response.info.game_datetime),
@@ -58,7 +75,7 @@ export const insertMatchDetail = async ({
 export const insertParticipantResult = async (
   participant: ParticipantDto,
   summoner: TftSummoner
-) => {
+): Promise<TftParticipantResult> => {
   const logger = createLogger();
 
   const participantResult = await TftParticipantResult.create({

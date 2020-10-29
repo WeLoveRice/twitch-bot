@@ -7,7 +7,8 @@ import {
   findSummonerByName,
   insertMatchDetail,
   insertMatchHistory,
-  insertParticipantResult
+  insertParticipantResult,
+  matchDetailExists
 } from "../tft/database";
 
 export class TftMatchFetcher implements PeriodicTask {
@@ -27,8 +28,9 @@ export class TftMatchFetcher implements PeriodicTask {
     }
 
     const match = await getMatchDetail(latestMatch);
-    await insertMatchDetail(match);
-
+    if (!(await matchDetailExists(match))) {
+      await insertMatchDetail(match);
+    }
     const participant = await getParticipantFromMatch(match, summoner);
     const participantResult = await insertParticipantResult(
       participant,
