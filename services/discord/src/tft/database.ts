@@ -26,7 +26,7 @@ export const findSummonerByName = async (
   return summoner;
 };
 
-export const fetchLatestUnprocessedMatch = async (
+export const fetchLatestUnprocessedMatchId = async (
   summoner: TftSummoner
 ): Promise<string | null> => {
   const matches = await getMatchHistory(summoner.puuid);

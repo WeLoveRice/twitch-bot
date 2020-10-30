@@ -31,5 +31,6 @@ export const initialiseSummoners = async () => {
   const summoners = process.env.LOL_USERS.split(",");
   for await (const summonerName of summoners) {
     await initSummoner(summonerName);
+    await sleep(1000);
   }
 };

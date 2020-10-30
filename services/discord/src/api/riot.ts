@@ -37,7 +37,9 @@ export const getMatchHistory = async (summonerPUUID: string) => {
   return matches;
 };
 
-export const getMatchDetail = async (matchId: string) => {
+export const getMatchDetail = async (
+  matchId: string
+): Promise<ApiResponseDTO<MatchTFTDTO>> => {
   const api = getTftApi();
   const match = await api.Match.get(matchId, Constants.TftRegions.EUROPE);
   return match;

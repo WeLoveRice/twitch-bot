@@ -5,6 +5,7 @@ import { Redis } from "./api/redis";
 import { initialiseSummoners } from "./tft/SummonerInit";
 import { Runner } from "./periodicTask/Runner";
 import { TftMatchFetcher } from "./periodicTask/TftMatchFetcher";
+import sleep from "sleep-promise";
 
 export const main = async (): Promise<void> => {
   try {
@@ -22,6 +23,7 @@ export const main = async (): Promise<void> => {
       const runner = new Runner();
       const matchFetcher = new TftMatchFetcher(summonerName);
       runner.start(matchFetcher);
+      await sleep(1000);
     }
   } catch (e) {
     const logger = createLogger();
