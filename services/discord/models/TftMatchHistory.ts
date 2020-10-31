@@ -6,7 +6,7 @@ export interface TftMatchHistoryAttributes {
   id: number;
   tftParticipantResultId: number;
   tftMatchDetailsRiotId: string;
-  tftSummonerRiotId: string;
+  tftSummonerId: string;
 }
 
 export type TftMatchHistoryCreationAttributes = Optional<
@@ -20,7 +20,7 @@ export class TftMatchHistory
   id!: number;
   tftParticipantResultId!: number;
   tftMatchDetailsRiotId!: string;
-  tftSummonerRiotId!: string;
+  tftSummonerId!: string;
 
   static initModel(sequelize: Sequelize) {
     TftMatchHistory.init(
@@ -34,31 +34,17 @@ export class TftMatchHistory
         tftParticipantResultId: {
           type: DataTypes.INTEGER,
           allowNull: false,
-          references: {
-            model: "tft_participant_result",
-            key: "id"
-          },
-          unique: "match_participant_unq",
           field: "tft_participant_result_id"
         },
         tftMatchDetailsRiotId: {
           type: DataTypes.TEXT,
           allowNull: false,
-          references: {
-            model: "tft_match_details",
-            key: "riot_id"
-          },
-          unique: "match_participant_unq",
           field: "tft_match_details_riot_id"
         },
-        tftSummonerRiotId: {
-          type: DataTypes.TEXT,
+        tftSummonerId: {
+          type: DataTypes.INTEGER,
           allowNull: false,
-          references: {
-            model: "tft_summoner",
-            key: "riot_id"
-          },
-          field: "tft_summoner_riot_id"
+          field: "tft_summoner_id"
         }
       },
       {
