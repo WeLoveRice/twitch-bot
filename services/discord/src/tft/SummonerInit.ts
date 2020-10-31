@@ -3,9 +3,7 @@ import { TftSummoner } from "../../models/TftSummoner";
 import { getSummoner } from "../api/riot";
 import { createLogger } from "../Logger";
 
-const initSummoner = async (summonerName: string) => {
-  const logger = createLogger();
-
+export const initSummoner = async (summonerName: string) => {
   const { response } = await getSummoner(summonerName);
   const count = await TftSummoner.count({ where: { riotId: response.id } });
   if (count > 0) {
@@ -17,6 +15,8 @@ const initSummoner = async (summonerName: string) => {
     name: response.name,
     riotId: response.id
   });
+
+  const logger = createLogger();
   logger.info(`${summonerName} added to db`);
 };
 
