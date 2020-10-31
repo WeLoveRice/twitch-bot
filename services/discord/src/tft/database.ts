@@ -60,7 +60,7 @@ export const insertMatchDetail = async ({
   response
 }: ApiResponseDTO<MatchTFTDTO>): Promise<TftMatchDetails> => {
   const logger = createLogger();
-  const result = await TftMatchDetails.create({
+  const [result] = await TftMatchDetails.upsert({
     startTime: new Date(response.info.game_datetime),
     duration: Math.round(response.info.game_length),
     riotId: response.metadata.match_id
