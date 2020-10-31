@@ -27,7 +27,6 @@ const connect = async () => {
   await sequelize.authenticate();
   await sequelize.sync();
   await initModels(sequelize);
-  return sequelize;
 };
 
 export default { connect };
