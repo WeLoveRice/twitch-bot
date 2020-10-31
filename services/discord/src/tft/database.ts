@@ -33,7 +33,7 @@ export const fetchLatestUnprocessedMatchId = async (
   const result = await TftMatchHistory.count({
     where: {
       tftMatchDetailsRiotId: matches.response[0],
-      tftSummonerRiotId: summoner.riotId
+      tftSummonerId: summoner.id
     }
   });
 
@@ -102,7 +102,7 @@ export const insertMatchHistory = async (
   const result = await TftMatchHistory.create({
     tftParticipantResultId: id,
     tftMatchDetailsRiotId: response.metadata.match_id,
-    tftSummonerRiotId: summoner.riotId
+    tftSummonerId: summoner.id
   });
 
   logger.info(`Inserted match_history with ID: ${result.id}`);
