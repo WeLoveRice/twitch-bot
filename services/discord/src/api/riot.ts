@@ -11,7 +11,7 @@ import { TftSummoner } from "../../models/TftSummoner";
 
 export const getTftApi = () => {
   if (!process.env.RIOT_API) {
-    throw "RIOT_API env not defined";
+    throw Error("RIOT_API env not defined");
   }
   return new TftApi(process.env.RIOT_API);
 };
