@@ -3,8 +3,13 @@ import { initModels } from "../../models/init-models";
 import { createLogger } from "../Logger";
 
 const connect = async () => {
-  const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB } = process.env;
-  if (!POSTGRES_DB || !POSTGRES_USER || !POSTGRES_PASSWORD) {
+  const {
+    POSTGRES_HOST,
+    POSTGRES_USER,
+    POSTGRES_PASSWORD,
+    POSTGRES_DB
+  } = process.env;
+  if (!POSTGRES_HOST || !POSTGRES_DB || !POSTGRES_USER || !POSTGRES_PASSWORD) {
     throw new Error("POSTGRES env not set");
   }
   const logger = createLogger();
@@ -13,7 +18,7 @@ const connect = async () => {
     POSTGRES_USER,
     POSTGRES_PASSWORD,
     {
-      host: "postgres",
+      host: POSTGRES_HOST,
       dialect: "postgres",
       logging: msg => logger.info(msg)
     }
@@ -22,7 +27,6 @@ const connect = async () => {
   await sequelize.authenticate();
   await sequelize.sync();
   await initModels(sequelize);
-  return sequelize;
 };
 
 export default { connect };

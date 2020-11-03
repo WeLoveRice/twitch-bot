@@ -3,17 +3,20 @@ import { TftSummoner } from "../../models/TftSummoner";
 import { getSummoner } from "../api/riot";
 import { createLogger } from "../Logger";
 
-const initSummoner = async (summonerName: string) => {
-  const logger = createLogger();
-
-  const { id, puuid, name } = await getSummoner(summonerName);
-  const count = await TftSummoner.count({ where: { riotId: id } });
+export const initSummoner = async (summonerName: string) => {
+  const { response } = await getSummoner(summonerName);
+  const count = await TftSummoner.count({ where: { riotId: response.id } });
   if (count > 0) {
     return;
   }
 
-  await TftSummoner.create({ puuid: puuid, name: name, riotId: id });
-  await sleep(2000);
+  await TftSummoner.create({
+    puuid: response.puuid,
+    name: response.name,
+    riotId: response.id
+  });
+
+  const logger = createLogger();
   logger.info(`${summonerName} added to db`);
 };
 
@@ -27,6 +30,7 @@ export const initialiseSummoners = async () => {
 
   const summoners = process.env.LOL_USERS.split(",");
   for await (const summonerName of summoners) {
-    initSummoner(summonerName);
+    await initSummoner(summonerName);
+    await sleep(1000);
   }
 };

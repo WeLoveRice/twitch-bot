@@ -1,5 +1,9 @@
 import { TftApi } from "twisted";
 import { getTftApi } from "../../src/api/riot";
+import * as riotApi from "../../src/api/riot";
+
+jest.mock("twisted");
+jest.mock("../../models/TftSummoner");
 
 describe("getTftpi", () => {
   it("throws an error when RIOT_API key is not set", async () => {

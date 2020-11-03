@@ -1,21 +1,26 @@
 /* jshint indent: 2 */
 
-import { DataTypes, Model, Sequelize } from "sequelize";
+import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 
 export interface TftSummonerAttributes {
-  id?: number;
-  name?: string;
-  puuid?: string;
-  riotId?: string;
+  id: number;
+  name: string;
+  puuid: string;
+  riotId: string;
 }
 
+export type TftSummonerCreationAttributes = Optional<
+  TftSummonerAttributes,
+  "id"
+>;
+
 export class TftSummoner
-  extends Model<TftSummonerAttributes, TftSummonerAttributes>
+  extends Model<TftSummonerAttributes, TftSummonerCreationAttributes>
   implements TftSummonerAttributes {
-  id?: number;
-  name?: string;
-  puuid?: string;
-  riotId?: string;
+  id!: number;
+  name!: string;
+  puuid!: string;
+  riotId!: string;
 
   static initModel(sequelize: Sequelize) {
     TftSummoner.init(

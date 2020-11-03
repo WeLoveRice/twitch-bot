@@ -1,45 +1,43 @@
 /* jshint indent: 2 */
 
-import { DataTypes, Model, Sequelize } from "sequelize";
+import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 
 export interface TftParticipantResultAttributes {
-  id?: number;
-  postMatchTier?: string;
-  postMatchRank?: string;
-  goldLeft?: number;
-  placement?: number;
-  lastRound?: number;
-  tftSummonerRiotId?: string;
+  id: number;
+  goldLeft: number;
+  placement: number;
+  lastRound: number;
+  postMatchTier: string;
+  postMatchRank: string;
+  postMatchLp: number;
 }
 
+export type TftParticipantResultCreationAttributes = Optional<
+  TftParticipantResultAttributes,
+  "id"
+>;
 export class TftParticipantResult
-  extends Model<TftParticipantResultAttributes, TftParticipantResultAttributes>
+  extends Model<
+    TftParticipantResultAttributes,
+    TftParticipantResultCreationAttributes
+  >
   implements TftParticipantResultAttributes {
-  id?: number;
-  postMatchTier?: string;
-  postMatchRank?: string;
-  goldLeft?: number;
-  placement?: number;
-  lastRound?: number;
-  tftSummonerRiotId?: string;
+  id!: number;
+  goldLeft!: number;
+  placement!: number;
+  lastRound!: number;
+  postMatchTier!: string;
+  postMatchRank!: string;
+  postMatchLp!: number;
 
   static initModel(sequelize: Sequelize) {
     TftParticipantResult.init(
       {
         id: {
-          type: DataTypes.BIGINT,
+          autoIncrement: true,
+          type: DataTypes.INTEGER,
           allowNull: false,
           primaryKey: true
-        },
-        postMatchTier: {
-          type: DataTypes.TEXT,
-          allowNull: false,
-          field: "post_match_tier"
-        },
-        postMatchRank: {
-          type: DataTypes.TEXT,
-          allowNull: false,
-          field: "post_match_rank"
         },
         goldLeft: {
           type: DataTypes.INTEGER,
@@ -55,10 +53,20 @@ export class TftParticipantResult
           allowNull: false,
           field: "last_round"
         },
-        tftSummonerRiotId: {
+        postMatchTier: {
           type: DataTypes.TEXT,
-          allowNull: true,
-          field: "tft_summoner_riot_id"
+          allowNull: false,
+          field: "post_match_tier"
+        },
+        postMatchRank: {
+          type: DataTypes.TEXT,
+          allowNull: false,
+          field: "post_match_rank"
+        },
+        postMatchLp: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          field: "post_match_lp"
         }
       },
       {
