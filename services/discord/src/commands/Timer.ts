@@ -32,7 +32,8 @@ export class Timer extends AbstractCommand {
       return false;
     }
 
-    if (await Redis.connection.get(this.message.author.id)) {
+    const conn = await Redis.getConnection();
+    if (await conn.get(this.message.author.id)) {
       this.logger.info(
         `Alarm already exists for user: ${this.message.author.username}`
       );
@@ -56,6 +57,8 @@ export class Timer extends AbstractCommand {
     const alarm = new Alarm(this.message, secondsToRun);
     await alarm.start();
     this.logger.info(`Alarm due in ${secondsToRun} seconds`);
-    await Redis.connection.setex(this.message.author.id, secondsToRun, "true");
+
+    const conn = await Redis.getConnection();
+    await conn.setex(this.message.author.id, secondsToRun, "true");
   }
 }
