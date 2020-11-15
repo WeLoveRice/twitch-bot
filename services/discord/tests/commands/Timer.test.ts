@@ -18,7 +18,9 @@ jest.mock("ioredis");
 const alarmMock = Alarm as jest.Mocked<typeof Alarm>;
 const message = new (Message as jest.Mock<Message>)();
 const timer = new Timer(message);
-RedisApi.connection = new Redis();
+RedisApi.getConnection = jest
+  .fn()
+  .mockReturnValue(Promise.resolve(new Redis()));
 
 it.each([
   "1sec",
@@ -83,11 +85,12 @@ it("ignores timer when user already has one running", async () => {
   message.author = new (User as jest.Mock<User>)();
   message.author.bot = false;
 
-  RedisApi.connection.get = jest.fn().mockReturnValue(Promise.resolve(true));
+  const get = jest.fn().mockReturnValue(Promise.resolve(true));
+  RedisApi.getConnection = jest.fn().mockReturnValue(Promise.resolve({ get }));
 
   const isValid = await timer.isValid();
   expect(isValid).toBe(false);
-  expect(RedisApi.connection.get).toBeCalledWith(message.author.id);
+  expect(get).toBeCalledWith(message.author.id);
 });
 
 it("does not run when parseSecondsToRun is null", async () => {
@@ -105,8 +108,13 @@ it("runs sucessfully", async () => {
   message.author = new (User as jest.Mock<User>)();
   message.author.id = "testid";
 
+  const setex = jest.fn();
+  RedisApi.getConnection = jest
+    .fn()
+    .mockReturnValue(Promise.resolve({ setex }));
+
   await timer.execute();
   expect(timer.parseSecondsToRun).toBeCalled();
   expect(alarmMock.Alarm.mock.instances[0].start).toBeCalled();
-  expect(RedisApi.connection.setex).toBeCalledWith("testid", 100, "true");
+  expect(setex).toBeCalledWith("testid", 100, "true");
 });
