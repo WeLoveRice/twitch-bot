@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import { createCommand } from "../../commands/Factory";
+import { createCommand } from "../../commands/factory";
 import { createLogger } from "../../Logger";
 
 const connect = () => {

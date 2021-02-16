@@ -1,4 +1,4 @@
-import { SoundList } from "../../src/commands/SoundList";
+import { SoundList } from "../../src/commands/explicit/SoundList";
 import { Message } from "discord.js";
 import fs from "mz/fs";
 

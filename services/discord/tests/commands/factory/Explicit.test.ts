@@ -1,13 +1,13 @@
 import { Message } from "discord.js";
 import { Command } from "../../../src/enum/CommandEnum";
 import { JoinVoiceChannel } from "../../../src/commands/JoinVoiceChannel";
-import { createExplicitCommand } from "../../../src/commands/Factory/Explicit";
-import { SoundList } from "../../../src/commands/SoundList";
-import { CoinFlip } from "../../../src/commands/CoinFlip";
-import { MuteAll } from "../../../src/commands/MuteAll";
+import { createExplicitCommand } from "../../../src/commands/factory/Explicit";
+import { SoundList } from "../../../src/commands/explicit/SoundList";
+import { CoinFlip } from "../../../src/commands/explicit/CoinFlip";
+import { MuteAll } from "../../../src/commands/explicit/MuteAll";
 
 jest.mock("discord.js");
-jest.mock("../../../src/commands/MuteAll");
+jest.mock("../../../src/commands/explicit/MuteAll");
 
 const message = new (Message as jest.Mock<Message>)();
 

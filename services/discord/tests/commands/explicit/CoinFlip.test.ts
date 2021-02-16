@@ -1,8 +1,8 @@
-import { CoinFlip } from "../../src/commands/CoinFlip";
+import { CoinFlip } from "../../../src/commands/explicit/CoinFlip";
 import { Message } from "discord.js";
 
 jest.mock("discord.js");
-jest.mock("../../src/Logger");
+jest.mock("../../../src/Logger");
 
 const message = new (Message as jest.Mock<Message>)();
 const coinFlip = new CoinFlip(message);

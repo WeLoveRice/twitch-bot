@@ -1,4 +1,4 @@
-import * as Implicit from "./../../../src/commands/Factory/Implicit";
+import * as Implicit from "./../../../src/commands/factory/Implicit";
 import { Message } from "discord.js";
 import * as TimerMocked from "../../../src/commands/Timer";
 import * as SoundMocked from "../../../src/commands/Sound";

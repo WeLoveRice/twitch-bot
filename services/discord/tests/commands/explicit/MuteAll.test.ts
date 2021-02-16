@@ -1,8 +1,8 @@
-import { MuteAll } from "../../src/commands/MuteAll";
+import { MuteAll } from "../../../src/commands/explicit/MuteAll";
 import { GuildMember, Message, VoiceState } from "discord.js";
-import * as VoiceChannel from "../../src/api/discord/VoiceChannel";
+import * as VoiceChannel from "../../../src/api/discord/VoiceChannel";
 
-jest.mock("../../src/api/discord/VoiceChannel");
+jest.mock("../../../src/api/discord/VoiceChannel");
 jest.mock("discord.js");
 
 const message = new (Message as jest.Mock<Message>)();

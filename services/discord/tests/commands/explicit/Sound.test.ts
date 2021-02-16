@@ -4,18 +4,18 @@ import {
   Speaking,
   StreamDispatcher
 } from "discord.js";
-import * as Sound from "../../src/commands/Sound";
+import * as Sound from "../../../src/commands/Sound";
 import path from "path";
 import fs from "mz/fs";
-import * as VC from "../../src/api/discord/VoiceChannel";
+import * as VC from "../../../src/api/discord/VoiceChannel";
 import { createMock } from "ts-auto-mock";
 
 jest.mock("discord.js");
 jest.mock("path");
 jest.mock("mz/fs");
-jest.mock("../../src/api/discord/VoiceChannel");
-jest.mock("../../src/commands/JoinVoiceChannel");
-jest.mock("../../src/Logger");
+jest.mock("../../../src/api/discord/VoiceChannel");
+jest.mock("../../../src/commands/JoinVoiceChannel");
+jest.mock("../../../src/Logger");
 
 const message = new (Message as jest.Mock<Message>)();
 let sound = new Sound.Sound(message);

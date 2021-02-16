@@ -2,9 +2,9 @@ import { Command } from "../../enum/CommandEnum";
 import { JoinVoiceChannel } from "../JoinVoiceChannel";
 import { Message } from "discord.js";
 import { AbstractCommand } from "../AbstractCommand";
-import { SoundList } from "../../commands/SoundList";
-import { CoinFlip } from "../../commands/CoinFlip";
-import { MuteAll } from "../../commands/MuteAll";
+import { SoundList } from "../../commands/explicit/SoundList";
+import { CoinFlip } from "../../commands/explicit/CoinFlip";
+import { MuteAll } from "../../commands/explicit/MuteAll";
 
 const isCommand = (message: Message): boolean => {
   const { content } = message;

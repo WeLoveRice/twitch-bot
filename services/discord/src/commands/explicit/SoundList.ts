@@ -1,4 +1,4 @@
-import { AbstractCommand } from "./AbstractCommand";
+import { AbstractCommand } from "../AbstractCommand";
 import path from "path";
 import fs from "mz/fs";
 
@@ -8,7 +8,7 @@ export class SoundList extends AbstractCommand {
   }
 
   protected async run(): Promise<void> {
-    const soundDir = path.join(__dirname, "..", "..", "sounds");
+    const soundDir = path.join(__dirname, "..", "..", "..", "sounds");
     const files = await fs.readdir(soundDir);
 
     const soundsFormatted = files

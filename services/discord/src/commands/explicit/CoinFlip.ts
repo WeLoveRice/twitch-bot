@@ -1,4 +1,4 @@
-import { AbstractCommand } from "./AbstractCommand";
+import { AbstractCommand } from "../AbstractCommand";
 
 export class CoinFlip extends AbstractCommand {
   async isValid(): Promise<boolean> {
