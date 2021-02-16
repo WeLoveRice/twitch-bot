@@ -11,6 +11,6 @@ export class Help extends AbstractCommand {
       .map((value, index) => `${index + 1}. ${Command.PREFIX}${value}`)
       .join("\n");
 
-    await this.message.reply(formattedList);
+    await this.message.reply(`\n${formattedList}`);
   }
 }
