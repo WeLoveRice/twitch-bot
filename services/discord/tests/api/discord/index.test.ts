@@ -2,7 +2,7 @@ import * as Discord from "discord.js";
 import discordApi from "../../../src/api/discord";
 
 jest.mock("discord.js");
-jest.mock("../../../src/commands/Factory");
+jest.mock("../../../src/commands/factory");
 jest.mock("../../../src/Logger");
 
 it("runs as expected", () => {

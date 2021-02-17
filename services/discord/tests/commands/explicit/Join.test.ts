@@ -1,17 +1,17 @@
-import { JoinVoiceChannel } from "./../../src/commands/JoinVoiceChannel";
+import { JoinVoiceChannel } from "../../../src/commands/explicit/Join";
 import { Message, VoiceChannel } from "discord.js";
-import { createLogger } from "../../src/Logger";
-import * as VCM from "../../src/api/discord/VoiceChannelManager";
-import * as VC from "../../src/api/discord/VoiceChannel";
+import { createLogger } from "../../../src/Logger";
+import * as VCM from "../../../src/api/discord/VoiceChannelManager";
+import * as VC from "../../../src/api/discord/VoiceChannel";
 
 jest.mock("discord.js");
-jest.mock("../../src/Logger", () => ({
+jest.mock("../../../src/Logger", () => ({
   createLogger: jest.fn().mockReturnValue({
     error: jest.fn()
   })
 }));
-jest.mock("../../src/api/discord/VoiceChannelManager");
-jest.mock("../../src/api/discord/VoiceChannel");
+jest.mock("../../../src/api/discord/VoiceChannelManager");
+jest.mock("../../../src/api/discord/VoiceChannel");
 
 const message = new (Message as jest.Mock<Message>)();
 const logger = createLogger();

@@ -3,6 +3,7 @@ export enum Command {
   JOIN = "join",
   SOUNDS = "sounds",
   COINFLIP = "coinflip",
+  HELP = "help",
   MUTEALL = "muteall",
   UNMUTEALL = "unmuteall"
 }

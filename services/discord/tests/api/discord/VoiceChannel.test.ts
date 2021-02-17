@@ -18,10 +18,10 @@ import {
 import { Bot } from "../../../src/enum/Bot";
 import { createMock } from "ts-auto-mock";
 import * as VC from "../../../src/api/discord/VoiceChannel";
-import * as JVC from "../../../src/commands/JoinVoiceChannel";
+import * as JVC from "../../../src/commands/explicit/Join";
 
 jest.mock("discord.js");
-jest.mock("../../../src/commands/JoinVoiceChannel");
+jest.mock("../../../src/commands/explicit/Join");
 
 let message = new (Message as jest.Mock<Message>)();
 

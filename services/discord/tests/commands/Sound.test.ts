@@ -14,7 +14,7 @@ jest.mock("discord.js");
 jest.mock("path");
 jest.mock("mz/fs");
 jest.mock("../../src/api/discord/VoiceChannel");
-jest.mock("../../src/commands/JoinVoiceChannel");
+jest.mock("../../src/commands/explicit/Join");
 jest.mock("../../src/Logger");
 
 const message = new (Message as jest.Mock<Message>)();

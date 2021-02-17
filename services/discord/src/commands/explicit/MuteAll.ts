@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
-import { getVoiceChannelFromMessage } from "../api/discord/VoiceChannel";
-import { AbstractCommand } from "./AbstractCommand";
+import { getVoiceChannelFromMessage } from "../../api/discord/VoiceChannel";
+import { AbstractCommand } from "../AbstractCommand";
 
 export class MuteAll extends AbstractCommand {
   private unmute: boolean;
@@ -23,6 +23,7 @@ export class MuteAll extends AbstractCommand {
 
     return false;
   }
+
   protected async run(): Promise<void> {
     const channel = getVoiceChannelFromMessage(this.message);
     if (!channel) {
