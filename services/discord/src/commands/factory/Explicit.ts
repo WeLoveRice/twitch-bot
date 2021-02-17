@@ -1,8 +1,8 @@
 import { Command } from "../../enum/CommandEnum";
-import { JoinVoiceChannel } from "../JoinVoiceChannel";
+import { JoinVoiceChannel } from "../explicit/Join";
 import { Message } from "discord.js";
 import { AbstractCommand } from "../AbstractCommand";
-import { SoundList } from "../../commands/explicit/SoundList";
+import { Sounds } from "../explicit/Sounds";
 import { CoinFlip } from "../../commands/explicit/CoinFlip";
 import { MuteAll } from "../../commands/explicit/MuteAll";
 import path from "path";
@@ -27,7 +27,6 @@ const findCommandInDir = async (
   const match = files.filter(
     file => file.replace(".ts", "").toLowerCase() === message.content.substr(1)
   );
-  console.log(match[0]);
   if (match.length > 0) {
     const imports = await import(`../explicit/${match[0]}`);
     const command = Object.keys(imports)[0];

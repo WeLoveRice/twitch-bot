@@ -2,7 +2,7 @@ import { AbstractCommand } from "../AbstractCommand";
 import path from "path";
 import fs from "mz/fs";
 
-export class SoundList extends AbstractCommand {
+export class Sounds extends AbstractCommand {
   public async isValid(): Promise<boolean> {
     return true;
   }

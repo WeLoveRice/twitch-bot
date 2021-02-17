@@ -1,8 +1,8 @@
 import { Message } from "discord.js";
 import { Command } from "../../../src/enum/CommandEnum";
-import { JoinVoiceChannel } from "../../../src/commands/JoinVoiceChannel";
+import { JoinVoiceChannel } from "../../../src/commands/explicit/Join";
 import { createExplicitCommand } from "../../../src/commands/factory/Explicit";
-import { SoundList } from "../../../src/commands/explicit/SoundList";
+import { Sounds } from "../../../src/commands/explicit/Sounds";
 import { CoinFlip } from "../../../src/commands/explicit/CoinFlip";
 import { MuteAll } from "../../../src/commands/explicit/MuteAll";
 
@@ -27,21 +27,21 @@ describe("createExplicitCommand", () => {
     Command.PREFIX.repeat(2),
     Command.JOIN,
     Command.SOUNDS
-  ])("returns null when message content is %s", content => {
+  ])("returns null when message content is %s", async content => {
     message.content = content;
-    const command = createExplicitCommand(message);
+    const command = await createExplicitCommand(message);
     expect(command).toBe(null);
   });
 
   it.each([
     [Command.JOIN, JoinVoiceChannel],
-    [Command.SOUNDS, SoundList],
+    [Command.SOUNDS, Sounds],
     [Command.COINFLIP, CoinFlip]
   ])(
     `when command is ${Command.PREFIX}%s returns expected class`,
-    (commandString, commandClass) => {
+    async (commandString, commandClass) => {
       message.content = `${Command.PREFIX}${commandString}`;
-      const command = createExplicitCommand(message);
+      const command = await createExplicitCommand(message);
       expect(command).toBeInstanceOf(commandClass);
     }
   );
@@ -51,9 +51,9 @@ describe("createExplicitCommand", () => {
     [Command.UNMUTEALL, false]
   ])(
     `when command is ${Command.PREFIX}%s muteall is called with %s`,
-    (commandString, mute) => {
+    async (commandString, mute) => {
       message.content = `${Command.PREFIX}${commandString}`;
-      const command = createExplicitCommand(message);
+      const command = await createExplicitCommand(message);
       expect(command).toBeInstanceOf(MuteAll);
       expect(MuteAll).toBeCalledWith(message, mute);
     }

@@ -1,6 +1,6 @@
 import { Message, VoiceChannel, VoiceConnection } from "discord.js";
 import { Bot } from "../../enum/Bot";
-import { JoinVoiceChannel } from "../../commands/JoinVoiceChannel";
+import { JoinVoiceChannel } from "../../commands/explicit/Join";
 
 export const getVoiceChannelFromMessage = (
   message: Message
