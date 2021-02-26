@@ -16,7 +16,7 @@ RUN rm -rf node_modules
 RUN npm install --production
 
 ### Production image
-FROM node:12-alpine
+FROM node:12-alpine AS prod
 
 WORKDIR /home/node/twitch-bot
 USER node

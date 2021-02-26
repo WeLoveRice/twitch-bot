@@ -8,6 +8,7 @@ services:
   discord:
     build: 
       context: ./services/discord
+      target: prod
     image: ccheung22/twitch-bot_discord
     env_file: 
       ./services/discord/.env
