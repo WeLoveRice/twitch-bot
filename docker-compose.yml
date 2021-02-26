@@ -2,12 +2,13 @@ version: '3.7'
 
 services:
   redis:
-    image: redis:alpine
+    image: redis:6.0.11-alpine
     ports:
       - "6379:6379"
   discord:
     build: 
       context: ./services/discord
+      target: prod
     image: ccheung22/twitch-bot_discord
     env_file: 
       ./services/discord/.env
