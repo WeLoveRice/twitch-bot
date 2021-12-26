@@ -7,13 +7,10 @@ RUN mkdir -p ./node_modules
 RUN chown -R node:node .
 USER node
 
-COPY package.json .
-RUN npm install
+COPY package.json yarn.lock ./
+RUN yarn install
 COPY --chown=node:node . .
-RUN npm run build
-# npm prune --production fails to run
-RUN rm -rf node_modules
-RUN npm install --production
+RUN yarn run build
 
 ### Production image
 FROM node:14-alpine AS prod
@@ -23,4 +20,4 @@ USER node
 COPY --from=builder /home/node/twitch-bot .
 
 ENV NODE_ENV=production
-CMD ["npm", "run", "start"]
+CMD ["yarn", "run", "start"]
