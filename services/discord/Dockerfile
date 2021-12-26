@@ -1,5 +1,5 @@
 ### Build Image
-FROM node:12-alpine AS builder
+FROM node:14-alpine AS builder
 
 WORKDIR /home/node/twitch-bot
 RUN apk add python3 make g++ gcc
@@ -16,7 +16,7 @@ RUN rm -rf node_modules
 RUN npm install --production
 
 ### Production image
-FROM node:12-alpine AS prod
+FROM node:14-alpine AS prod
 
 WORKDIR /home/node/twitch-bot
 USER node
