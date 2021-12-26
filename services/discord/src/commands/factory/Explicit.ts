@@ -21,9 +21,9 @@ const findCommandInDir = async (
   const explicitDir = path.join(__dirname, "..", "explicit");
   const files = await fs.readdir(explicitDir);
   // Need to somehow initalise the class given the command string
+  const command = message.content.split(" ")[0].replace(Command.PREFIX, "");
   const match = files.filter(
-    file =>
-      file.replace(/.ts|.js/g, "").toLowerCase() === message.content.substr(1)
+    file => file.replace(/.ts|.js/g, "").toLowerCase() === command
   );
   if (match.length > 0) {
     const imports = await import(`../explicit/${match[0]}`);

@@ -5,6 +5,7 @@ import { createExplicitCommand } from "../../../src/commands/factory/Explicit";
 import { Sounds } from "../../../src/commands/explicit/Sounds";
 import { CoinFlip } from "../../../src/commands/explicit/CoinFlip";
 import { MuteAll } from "../../../src/commands/explicit/MuteAll";
+import { Play } from "../../../src/commands/explicit/Play";
 
 jest.mock("discord.js");
 jest.mock("../../../src/commands/explicit/MuteAll");
@@ -36,7 +37,9 @@ describe("createExplicitCommand", () => {
   it.each([
     [Command.JOIN, JoinVoiceChannel],
     [Command.SOUNDS, Sounds],
-    [Command.COINFLIP, CoinFlip]
+    [Command.COINFLIP, CoinFlip],
+    [Command.PLAY, Play],
+    [`${Command.PLAY} crazyfrog`, Play]
   ])(
     `when command is ${Command.PREFIX}%s returns expected class`,
     async (commandString, commandClass) => {
