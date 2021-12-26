@@ -17,7 +17,7 @@ export class MuteAll extends AbstractCommand {
 
     if (!this.message.member?.permissions.has("ADMINISTRATOR")) {
       await this.message.reply(
-        "You must have adminstrator permissions to use this command"
+        "You must have administrator permissions to use this command"
       );
     }
 

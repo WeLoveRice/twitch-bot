@@ -48,7 +48,7 @@ This repo uses the [official typescript eslint plugin](https://github.com/typesc
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+docker buildx build --platform linux/arm/v7 -t ccheung22/twitch-bot_discord --push .
 
 ## Built With
 
