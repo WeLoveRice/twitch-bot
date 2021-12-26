@@ -48,7 +48,7 @@ describe("isValid", () => {
       expect(await muteAll.isValid()).toBe(false);
       expect(message.member?.permissions.has).toBeCalledWith("ADMINISTRATOR");
       expect(message.reply).toBeCalledWith(
-        "You must have adminstrator permissions to use this command"
+        "You must have administrator permissions to use this command"
       );
     }
   );
