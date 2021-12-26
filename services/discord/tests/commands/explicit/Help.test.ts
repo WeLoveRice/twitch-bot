@@ -21,11 +21,12 @@ describe("execute", () => {
 
     await help.execute();
     expect(message.reply).toBeCalledWith(`
-1. ^join
-2. ^sounds
-3. ^coinflip
-4. ^help
-5. ^muteall
-6. ^unmuteall`);
+1. ^help
+2. ^play
+3. ^sounds
+4. ^coinflip
+5. ^join
+6. ^muteall
+7. ^unmuteall`);
   });
 });

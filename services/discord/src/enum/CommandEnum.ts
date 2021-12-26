@@ -1,9 +1,10 @@
 export enum Command {
   PREFIX = "^",
-  JOIN = "join",
+  HELP = "help",
+  PLAY = "play",
   SOUNDS = "sounds",
   COINFLIP = "coinflip",
-  HELP = "help",
+  JOIN = "join",
   MUTEALL = "muteall",
   UNMUTEALL = "unmuteall"
 }
