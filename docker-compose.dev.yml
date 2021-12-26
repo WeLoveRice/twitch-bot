@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   redis:
@@ -6,14 +6,14 @@ services:
     ports:
       - "6379:6379"
     sysctls:
-        - net.core.somaxconn=511
+      - net.core.somaxconn=511
   discord:
-    build: 
+    build:
       context: ./services/discord
-    env_file: 
-      ./services/discord/.env.dev
+    env_file: ./services/discord/.env.dev
     volumes:
-      - ./services/discord:/home/node/twitch-bot
-    command: npm run start:dev
+      - ./services/discord/music:/home/node/twitch-bot/music
+      - ./services/discord/src:/home/node/twitch-bot/src
+    command: yarn run start:dev
     depends_on:
       - redis
