@@ -10,9 +10,11 @@ services:
   discord:
     build:
       context: ./services/discord
+      target: dev
     env_file: ./services/discord/.env.dev
     volumes:
       - ./services/discord/music:/home/node/twitch-bot/music
+      - ./services/discord/sounds:/home/node/twitch-bot/sounds
       - ./services/discord/src:/home/node/twitch-bot/src
     command: yarn run start:dev
     depends_on:
